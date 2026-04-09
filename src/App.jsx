@@ -36,13 +36,13 @@ const radarData = [
   { subject: "Удобство UI", tbank: 9.2, tochka: 9.5, sber: 7.8, alfa: 9.0, fullMark: 10 },
   { subject: "Ставки", tbank: 6.8, tochka: 7.0, sber: 8.5, alfa: 7.8, fullMark: 10 },
   { subject: "Лимиты", tbank: 8.5, tochka: 7.5, sber: 9.5, alfa: 8.8, fullMark: 10 },
-  { subject: "Бухгалтерия", tbank: 9.8, tochka: 8.5, sber: 7.5, alfa: 8.0, fullMark: 10 },
+  { subject: "Без залога", tbank: 9.5, tochka: 6.0, sber: 5.5, alfa: 7.0, fullMark: 10 },
 ];
 
 const timelineEvents = [
   { date: "Q4 2024", title: "Пик ключевой ставки 21%", desc: "Максимальная КС за всю историю. Резкий рост стоимости кредитов МСБ, падение спроса.", type: "negative" },
   { date: "Q2 2025", title: "Начало цикла снижения КС", desc: "ЦБ начал снижение с 21% до 20%. Возобновление спроса на кредитование бизнеса.", type: "positive" },
-  { date: "Q4 2025", title: "Markswebb BIBR 2025", desc: "Т-Банк — лучший сервис бухгалтерии среди банков. 6-е место в общем рейтинге.", type: "positive" },
+  { date: "Q4 2025", title: "Рост выдач МСБ-кредитов +35%", desc: "На фоне снижения КС Т-Банк нарастил выдачу кредитов бизнесу на 35% кв/кв. Средний чек заявки вырос до 4.2 млн ₽.", type: "positive" },
   { date: "Q1 2026", title: "КС снижена до 15%", desc: "Два снижения подряд: до 15.5% в феврале и 15% в марте. Кредиты МСБ дешевеют.", type: "positive" },
 ];
 
@@ -58,13 +58,13 @@ const sourcesData = [
 const reviews = [
   { id: 1, author: "ИП (кофейня)", text: "Кредит на кофемашину одобрили за пару часов. Данные по оборотам подтянули сами, хотя эквайринг в другом банке.", rating: 5, date: "28 Мар 2026" },
   { id: 2, author: 'ООО "Текстиль"', text: "Взял оборотный кредит на закупку хлопка. Даже с учетом процентов вышло дешевле — поставщик дал скидку за опт.", rating: 4, date: "13 Мар 2026" },
-  { id: 3, author: "ИП (АУСН)", text: "С 2026 перешла на АУСН по совету менеджера Павла. Процесс автоматизировался, отчетов стало меньше.", rating: 5, date: "28 Мар 2026" },
-  { id: 4, author: "ИП (фрилансер)", text: "Всё онлайн, платежи зачисляются моментально. Минус: с западными заказчиками не поработаешь через РФ банки.", rating: 4, date: "20 Мар 2026" },
-  { id: 5, author: 'ООО "Корейская косметика"', text: "4 переносные кассы, эквайринг подключили быстро. Но доставку терминалов пришлось подождать.", rating: 4, date: "15 Мар 2026" },
+  { id: 3, author: "ИП (автосервис)", text: "Брал кредит на подъёмник и диагностическое оборудование. Одобрили 1.8 млн за 10 минут, деньги пришли в тот же день.", rating: 5, date: "28 Мар 2026" },
+  { id: 4, author: "ИП (доставка еды)", text: "Оборотный кредит на расширение зоны доставки. Подали заявку в приложении, деньги на счету через час. Ставка ощутимая, но скорость решает.", rating: 4, date: "20 Мар 2026" },
+  { id: 5, author: 'ООО "Стройматериалы"', text: "Кредит на пополнение склада перед сезоном. Одобрили 5 млн без залога. Из минусов — ставка указана в месяц, сначала не поняли итоговую переплату.", rating: 4, date: "15 Мар 2026" },
   { id: 6, author: "ИП (новый бизнес)", text: "Единственный банк, одобривший кредит бизнесу младше 6 месяцев без залога. Ставка в месяц — внимательно читайте.", rating: 4, date: "10 Мар 2026" },
   { id: 7, author: "ИП Сидорова", text: "Овердрафт урезали в несколько раз без предупреждения при пересмотре лимита. Неприятный сюрприз.", rating: 2, date: "05 Мар 2026" },
   { id: 8, author: 'ООО "Логист Плюс"', text: "Оборотный кредит до 10 млн оформили прямо в приложении. Решение дали за 15-20 минут.", rating: 5, date: "01 Мар 2026" },
-  { id: 9, author: "ИП (Азербайджан, РВП)", text: "Оформили ИП наравне с гражданами РФ. Документов чуть больше, но всё онлайн.", rating: 5, date: "25 Фев 2026" },
+  { id: 9, author: "ИП (цветочный магазин)", text: "Кредит на закупку к 8 Марта одобрили за 5 минут. Выручка окупила проценты за первую неделю. Рекомендую для сезонных закупок.", rating: 5, date: "25 Фев 2026" },
 ];
 
 const Card = ({ children, className = "" }) => (
@@ -226,7 +226,7 @@ export default function App() {
                   <div className="absolute flex flex-col items-center justify-center"
                     style={{ bottom: "32px", right: "48px", width: "80px", height: "80px", borderRadius: "50%", backgroundColor: "rgba(34,197,94,0.2)", border: "1px solid rgba(34,197,94,0.3)" }}>
                     <span className="text-lg font-bold" style={{ color: "#22C55E" }}>20%</span>
-                    <span className="mt-1" style={{ fontSize: "10px", color: "#22C55E" }}>Бухгалтерия</span>
+                    <span className="mt-1" style={{ fontSize: "10px", color: "#22C55E" }}>Без залога</span>
                   </div>
                   <div className="absolute flex flex-col items-center justify-center"
                     style={{ bottom: "48px", left: "32px", width: "64px", height: "64px", borderRadius: "50%", backgroundColor: "rgba(239,68,68,0.2)", border: "1px solid rgba(239,68,68,0.3)" }}>
@@ -320,14 +320,14 @@ export default function App() {
               </Card>
 
               <Card className="col-span-1">
-                <CardHeader title="Преимущества и зоны роста" subtitle="По данным Markswebb, Banki.ru, Sravni.ru, Klerk.ru" action="Источники" onActionClick={() => setActiveView("sources")} />
+                <CardHeader title="Преимущества и зоны роста" subtitle="По данным Markswebb, Banki.ru, Sravni.ru" action="Источники" onActionClick={() => setActiveView("sources")} />
                 <div className="space-y-5 mt-6">
                   <div>
                     <h4 className="flex items-center gap-2 font-medium mb-3 text-sm" style={{ color: "#FFDD2D" }}><TrendingUp className="w-4 h-4" /> Сильные стороны</h4>
                     <ul className="space-y-2">
                       {[
-                        "Лучший сервис онлайн-бухгалтерии среди банков (Markswebb BIBR 2025).",
-                        "Решение от 2 минут, кредит до 30 млн ₽ без визита в офис.",
+                        "Кредит до 30 млн ₽ с решением от 2 минут — самая быстрая выдача на рынке МСБ.",
+                        "Полностью онлайн-процесс: от заявки до зачисления средств без визита в офис.",
                         "Автоматическое подтягивание оборотов из других банков при скоринге.",
                         "Одобрение бизнесу младше 6 месяцев без залога — уникально на рынке."
                       ].map((text, i) => (
@@ -343,7 +343,7 @@ export default function App() {
                       {[
                         "Ставка указана в месяц — клиенты путают с годовой (от 1% до 4.99%/мес).",
                         "Лимит овердрафта пересматривается ежемесячно, возможно резкое урезание.",
-                        "6-е место в BIBR 2025 — отставание от ПСБ, Альфа и Точки по UX.",
+                        "Максимальный срок кредита 36 мес — короче, чем у Сбера (60 мес) и Альфы (48 мес).",
                         "Непрозрачность отказов: часть клиентов получают отказ без объяснения причин."
                       ].map((text, i) => (
                         <li key={i} className="flex gap-2 text-xs p-2.5 rounded-xl" style={{ color: "#D1D5DB", backgroundColor: "rgba(44,44,46,0.4)", border: "1px solid #374151" }}>
@@ -408,7 +408,7 @@ export default function App() {
 
             {/* Footer */}
             <div className="text-center text-[10px] uppercase tracking-wider font-semibold pt-16 pb-8 select-none" style={{ color: "#333333" }}>
-              Источник: Markswebb BIBR/MBR 2025, ЦБ РФ, SberCIB, Sravni.ru, Banki.ru, Klerk.ru (2024–2026)
+              Источник: Markswebb BIBR/MBR 2025, ЦБ РФ, SberCIB, Sravni.ru, Banki.ru (2024–2026)
             </div>
           </>
         )}
