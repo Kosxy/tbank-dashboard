@@ -40,7 +40,7 @@ const radarData = [
   { subject: "UI/UX", tbank: 9.2, tochka: 9.5, sber: 7.8, alfa: 9.0, fullMark: 10 },
   { subject: "Ставки", tbank: 6.8, tochka: 7.0, sber: 8.5, alfa: 7.8, fullMark: 10 },
   { subject: "Лимиты", tbank: 8.5, tochka: 7.5, sber: 9.5, alfa: 8.8, fullMark: 10 },
-  { subject: "Онлайн", tbank: 9.7, tochka: 9.2, sber: 6.5, alfa: 8.8, fullMark: 10 },
+  { subject: "Без залога", tbank: 9.5, tochka: 6.0, sber: 5.5, alfa: 7.0, fullMark: 10 },
 ];
 
 // 4) KEY FACTORS — horizontal bars
@@ -347,7 +347,7 @@ export default function App() {
             <div className="grid gap-6 pt-4 grid-two-col">
               <Card className="col-span-1 flex flex-col">
                 <CardHeader title="Радар конкурентоспособности" subtitle="Т-Банк vs Сбербанк vs Точка vs Альфа"
-                  methodology="Оценки 0–10 по 5 параметрам кредитования МСБ. Источники: Markswebb BIBR 2025 (UX, скорость), tbank.ru/sber.ru/tochka.ru (ставки, лимиты, онлайн-процесс оформления кредита без визита в офис)." />
+                  methodology="Оценки 0–10 по 5 параметрам кредитования МСБ. Источники: Markswebb BIBR 2025 (UX, скорость), tbank.ru/sber.ru/tochka.ru (ставки, лимиты, возможность получения кредита без залога)." />
                 <div className="flex-1 w-full" style={{ minHeight: "320px" }}>
                   <ResponsiveContainer width="100%" height="100%">
                     <RadarChart cx="50%" cy="50%" outerRadius="75%" data={radarData}>
