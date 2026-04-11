@@ -286,12 +286,14 @@ export default function App() {
                 </div>
                 <div className="mt-5 w-full" style={{ height: "140px" }}>
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={npsMonthly} margin={{ top: 5, right: 0, left: -25, bottom: 0 }} barGap={2}>
+                    <BarChart data={npsMonthly} margin={{ top: 5, right: 0, left: -25, bottom: 0 }} barGap={2}
+                      style={{ cursor: "pointer" }}
+                      onClick={(data) => { if (data && data.activePayload) setSelectedMonth(data.activePayload[0].payload); }}>
                       <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: "#6B7280", fontSize: 11 }} />
                       <YAxis axisLine={false} tickLine={false} tick={{ fill: "#4B5563", fontSize: 10 }} domain={[0, 100]} ticks={[0, 50, 100]} />
                       <Tooltip cursor={{ fill: "#2C2C2E" }} contentStyle={tooltipStyle} formatter={(v, n) => [v + "%", n === "pos" ? "Позитив" : "Негатив"]} />
-                      <Bar dataKey="pos" fill="#FFDD2D" radius={[3, 3, 0, 0]} barSize={14} style={{ cursor: "pointer" }} onClick={(_data, index) => setSelectedMonth(npsMonthly[index])} />
-                      <Bar dataKey="neg" fill="#EF4444" radius={[3, 3, 0, 0]} barSize={14} opacity={0.5} style={{ cursor: "pointer" }} onClick={(_data, index) => setSelectedMonth(npsMonthly[index])} />
+                      <Bar dataKey="pos" fill="#FFDD2D" radius={[3, 3, 0, 0]} barSize={14} />
+                      <Bar dataKey="neg" fill="#EF4444" radius={[3, 3, 0, 0]} barSize={14} opacity={0.5} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -665,6 +667,12 @@ export default function App() {
 
       <style>{`
         @keyframes ping { 75%, 100% { transform: scale(2); opacity: 0; } }
+        .recharts-rectangle:focus, .recharts-rectangle:active,
+        .recharts-bar-rectangle:focus, .recharts-bar-rectangle:active,
+        .recharts-rectangle:focus-visible,
+        .recharts-surface:focus, .recharts-surface:active,
+        .recharts-surface:focus-visible { outline: none !important; stroke: none !important; }
+        .recharts-bar-rectangle { outline: none !important; }
         .grid-top-3 { grid-template-columns: 1fr; }
         .grid-timeline { grid-template-columns: 1fr; }
         .grid-two-col { grid-template-columns: 1fr; }
