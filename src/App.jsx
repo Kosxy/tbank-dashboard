@@ -286,13 +286,12 @@ export default function App() {
                 </div>
                 <div className="mt-5 w-full" style={{ height: "140px" }}>
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={npsMonthly} margin={{ top: 5, right: 0, left: -25, bottom: 0 }} barGap={2}
-                      onClick={(data) => { if (data && data.activePayload) setSelectedMonth(data.activePayload[0].payload); }}>
+                    <BarChart data={npsMonthly} margin={{ top: 5, right: 0, left: -25, bottom: 0 }} barGap={2}>
                       <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: "#6B7280", fontSize: 11 }} />
                       <YAxis axisLine={false} tickLine={false} tick={{ fill: "#4B5563", fontSize: 10 }} domain={[0, 100]} ticks={[0, 50, 100]} />
                       <Tooltip cursor={{ fill: "#2C2C2E" }} contentStyle={tooltipStyle} formatter={(v, n) => [v + "%", n === "pos" ? "Позитив" : "Негатив"]} />
-                      <Bar dataKey="pos" fill="#FFDD2D" radius={[3, 3, 0, 0]} barSize={14} style={{ cursor: "pointer" }} />
-                      <Bar dataKey="neg" fill="#EF4444" radius={[3, 3, 0, 0]} barSize={14} opacity={0.5} style={{ cursor: "pointer" }} />
+                      <Bar dataKey="pos" fill="#FFDD2D" radius={[3, 3, 0, 0]} barSize={14} style={{ cursor: "pointer" }} onClick={(_data, index) => setSelectedMonth(npsMonthly[index])} />
+                      <Bar dataKey="neg" fill="#EF4444" radius={[3, 3, 0, 0]} barSize={14} opacity={0.5} style={{ cursor: "pointer" }} onClick={(_data, index) => setSelectedMonth(npsMonthly[index])} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -303,83 +302,6 @@ export default function App() {
                   </div>
                   <span className="text-xs" style={{ color: "#4B5563" }}>Нажмите на бар ↑</span>
                 </div>
-
-                {/* Month detail popup */}
-                {selectedMonth && (
-                  <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(0,0,0,0.75)" }} onClick={() => setSelectedMonth(null)}>
-                    <div className="relative w-full max-w-2xl rounded-2xl p-6 overflow-y-auto" style={{ backgroundColor: "#1C1C1E", border: "1px solid #374151", maxHeight: "90vh" }} onClick={e => e.stopPropagation()}>
-                      <button onClick={() => setSelectedMonth(null)} className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center rounded-lg"
-                        style={{ backgroundColor: "#2C2C2E", color: "#9CA3AF" }}
-                        onMouseEnter={e => { e.currentTarget.style.color = "#fff"; }}
-                        onMouseLeave={e => { e.currentTarget.style.color = "#9CA3AF"; }}
-                      >✕</button>
-
-                      {/* Header */}
-                      <div className="flex items-center gap-3 mb-5">
-                        <div className="px-3 py-1.5 rounded-lg text-sm font-bold" style={{ backgroundColor: "#FFDD2D", color: "#000" }}>{monthFull[selectedMonth.name] || selectedMonth.name}</div>
-                        <div className="text-sm" style={{ color: "#9CA3AF" }}>{selectedMonth.total} отзывов · ★ {selectedMonth.avgRating}</div>
-                        {selectedMonth.delta && null}
-                      </div>
-
-                      {/* Sources breakdown */}
-                      <div className="mb-5">
-                        <h4 className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: "#6B7280" }}>Разбивка по источникам</h4>
-                        <div className="space-y-2">
-                          {Object.entries(selectedMonth.sources).map(([src, vals]) => (
-                            <div key={src} className="flex items-center gap-3 p-2.5 rounded-xl" style={{ backgroundColor: "#2C2C2E" }}>
-                              <span className="text-xs font-medium w-20 shrink-0" style={{ color: "#D1D5DB" }}>{src}</span>
-                              <div className="flex-1 flex gap-1.5" style={{ height: "8px" }}>
-                                <div className="rounded-full" style={{ width: (vals.pos / (vals.pos + vals.neu + vals.neg) * 100) + "%", backgroundColor: "#22C55E", height: "8px" }}></div>
-                                <div className="rounded-full" style={{ width: (vals.neu / (vals.pos + vals.neu + vals.neg) * 100) + "%", backgroundColor: "#6B7280", height: "8px" }}></div>
-                                <div className="rounded-full" style={{ width: (vals.neg / (vals.pos + vals.neu + vals.neg) * 100) + "%", backgroundColor: "#EF4444", height: "8px" }}></div>
-                              </div>
-                              <span className="text-xs shrink-0" style={{ color: "#6B7280" }}>{vals.pos + vals.neu + vals.neg}</span>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="flex gap-4 mt-2 text-xs" style={{ color: "#6B7280" }}>
-                          <span className="flex items-center gap-1"><span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: "#22C55E" }}></span>позитив</span>
-                          <span className="flex items-center gap-1"><span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: "#6B7280" }}></span>нейтрал</span>
-                          <span className="flex items-center gap-1"><span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: "#EF4444" }}></span>негатив</span>
-                        </div>
-                      </div>
-
-                      {/* Top themes */}
-                      <div className="mb-5">
-                        <h4 className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: "#6B7280" }}>Топ-3 темы месяца</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {selectedMonth.topThemes.map((t, i) => (
-                            <span key={i} className="text-xs px-3 py-1.5 rounded-lg" style={{ backgroundColor: "#2C2C2E", color: "#D1D5DB", border: "1px solid #374151" }}>{t}</span>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Positive quote */}
-                      <div className="mb-3 p-4 rounded-xl" style={{ backgroundColor: "rgba(255,221,45,0.08)", border: "1px solid rgba(255,221,45,0.15)" }}>
-                        <h4 className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: "#22C55E" }}>Позитивная цитата</h4>
-                        <p className="text-sm leading-relaxed italic" style={{ color: "#D1D5DB" }}>«{selectedMonth.quote}»</p>
-                      </div>
-
-                      {/* Negative quote */}
-                      <div className="mb-3 p-4 rounded-xl" style={{ backgroundColor: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.15)" }}>
-                        <h4 className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: "#EF4444" }}>Негативная цитата</h4>
-                        <p className="text-sm leading-relaxed italic" style={{ color: "#D1D5DB" }}>«{selectedMonth.negQuote}»</p>
-                      </div>
-
-                      {/* Growth point */}
-                      <div className="mb-5 p-4 rounded-xl" style={{ backgroundColor: "rgba(168,85,247,0.08)", border: "1px solid rgba(168,85,247,0.2)" }}>
-                        <h4 className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: "#A855F7" }}>Точка роста</h4>
-                        <p className="text-sm leading-relaxed" style={{ color: "#D1D5DB" }}>{selectedMonth.growthPoint}</p>
-                      </div>
-
-                      {/* Event */}
-                      <div className="p-4 rounded-xl" style={{ backgroundColor: "#2C2C2E" }}>
-                        <h4 className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: "#6B7280" }}>Событие месяца</h4>
-                        <p className="text-sm font-medium" style={{ color: "#D1D5DB" }}>{selectedMonth.event}</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
               </Card>
 
               {/* Key Factors — HORIZONTAL BARS */}
@@ -671,6 +593,75 @@ export default function App() {
           </>
         )}
       </div>
+
+      {/* Month detail popup — rendered at root level */}
+      {selectedMonth && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(0,0,0,0.75)" }} onClick={() => setSelectedMonth(null)}>
+          <div className="relative w-full max-w-2xl rounded-2xl p-6 overflow-y-auto" style={{ backgroundColor: "#1C1C1E", border: "1px solid #374151", maxHeight: "90vh" }} onClick={e => e.stopPropagation()}>
+            <button onClick={() => setSelectedMonth(null)} className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center rounded-lg"
+              style={{ backgroundColor: "#2C2C2E", color: "#9CA3AF" }}
+              onMouseEnter={e => { e.currentTarget.style.color = "#fff"; }}
+              onMouseLeave={e => { e.currentTarget.style.color = "#9CA3AF"; }}
+            >✕</button>
+
+            <div className="flex items-center gap-3 mb-5">
+              <div className="px-3 py-1.5 rounded-lg text-sm font-bold" style={{ backgroundColor: "#FFDD2D", color: "#000" }}>{monthFull[selectedMonth.name] || selectedMonth.name}</div>
+              <div className="text-sm" style={{ color: "#9CA3AF" }}>{selectedMonth.total} отзывов · ★ {selectedMonth.avgRating}</div>
+            </div>
+
+            <div className="mb-5">
+              <h4 className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: "#6B7280" }}>Разбивка по источникам</h4>
+              <div className="space-y-2">
+                {Object.entries(selectedMonth.sources).map(([src, vals]) => (
+                  <div key={src} className="flex items-center gap-3 p-2.5 rounded-xl" style={{ backgroundColor: "#2C2C2E" }}>
+                    <span className="text-xs font-medium w-20 shrink-0" style={{ color: "#D1D5DB" }}>{src}</span>
+                    <div className="flex-1 flex gap-1.5" style={{ height: "8px" }}>
+                      <div className="rounded-full" style={{ width: (vals.pos / (vals.pos + vals.neu + vals.neg) * 100) + "%", backgroundColor: "#22C55E", height: "8px" }}></div>
+                      <div className="rounded-full" style={{ width: (vals.neu / (vals.pos + vals.neu + vals.neg) * 100) + "%", backgroundColor: "#6B7280", height: "8px" }}></div>
+                      <div className="rounded-full" style={{ width: (vals.neg / (vals.pos + vals.neu + vals.neg) * 100) + "%", backgroundColor: "#EF4444", height: "8px" }}></div>
+                    </div>
+                    <span className="text-xs shrink-0" style={{ color: "#6B7280" }}>{vals.pos + vals.neu + vals.neg}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex gap-4 mt-2 text-xs" style={{ color: "#6B7280" }}>
+                <span className="flex items-center gap-1"><span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: "#22C55E" }}></span>позитив</span>
+                <span className="flex items-center gap-1"><span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: "#6B7280" }}></span>нейтрал</span>
+                <span className="flex items-center gap-1"><span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: "#EF4444" }}></span>негатив</span>
+              </div>
+            </div>
+
+            <div className="mb-5">
+              <h4 className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: "#6B7280" }}>Топ-3 темы месяца</h4>
+              <div className="flex flex-wrap gap-2">
+                {selectedMonth.topThemes.map((t, i) => (
+                  <span key={i} className="text-xs px-3 py-1.5 rounded-lg" style={{ backgroundColor: "#2C2C2E", color: "#D1D5DB", border: "1px solid #374151" }}>{t}</span>
+                ))}
+              </div>
+            </div>
+
+            <div className="mb-3 p-4 rounded-xl" style={{ backgroundColor: "rgba(255,221,45,0.08)", border: "1px solid rgba(255,221,45,0.15)" }}>
+              <h4 className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: "#22C55E" }}>Позитивная цитата</h4>
+              <p className="text-sm leading-relaxed italic" style={{ color: "#D1D5DB" }}>«{selectedMonth.quote}»</p>
+            </div>
+
+            <div className="mb-3 p-4 rounded-xl" style={{ backgroundColor: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.15)" }}>
+              <h4 className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: "#EF4444" }}>Негативная цитата</h4>
+              <p className="text-sm leading-relaxed italic" style={{ color: "#D1D5DB" }}>«{selectedMonth.negQuote}»</p>
+            </div>
+
+            <div className="mb-5 p-4 rounded-xl" style={{ backgroundColor: "rgba(168,85,247,0.08)", border: "1px solid rgba(168,85,247,0.2)" }}>
+              <h4 className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: "#A855F7" }}>Точка роста</h4>
+              <p className="text-sm leading-relaxed" style={{ color: "#D1D5DB" }}>{selectedMonth.growthPoint}</p>
+            </div>
+
+            <div className="p-4 rounded-xl" style={{ backgroundColor: "#2C2C2E" }}>
+              <h4 className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: "#6B7280" }}>Событие месяца</h4>
+              <p className="text-sm font-medium" style={{ color: "#D1D5DB" }}>{selectedMonth.event}</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       <style>{`
         @keyframes ping { 75%, 100% { transform: scale(2); opacity: 0; } }
