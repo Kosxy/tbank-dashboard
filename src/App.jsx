@@ -285,7 +285,7 @@ export default function App() {
                     <span style={{ color: "#6B7280" }}>с прошлого года</span>
                   </div>
                 </div>
-                <div className="mt-5 w-full" style={{ height: "140px", cursor: "pointer" }}
+                <div className="nps-chart-wrap mt-5 w-full" style={{ height: "140px", cursor: "pointer" }}
                   onClick={() => { if (hoveredBarIndex.current !== null) setSelectedMonth(npsMonthly[hoveredBarIndex.current]); }}>
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={npsMonthly} margin={{ top: 5, right: 0, left: -25, bottom: 0 }} barGap={2}
@@ -677,6 +677,12 @@ export default function App() {
         .recharts-bar-rectangle:active rect,
         rect.recharts-rectangle:focus,
         rect.recharts-rectangle:active { stroke: none !important; outline: none !important; filter: none !important; }
+        .nps-chart-wrap .recharts-wrapper,
+        .nps-chart-wrap .recharts-surface,
+        .nps-chart-wrap .recharts-tooltip-cursor,
+        .nps-chart-wrap .recharts-bar-rectangles,
+        .nps-chart-wrap .recharts-bar-rectangle,
+        .nps-chart-wrap rect { cursor: pointer !important; }
         .grid-top-3 { grid-template-columns: 1fr; }
         .grid-timeline { grid-template-columns: 1fr; }
         .grid-two-col { grid-template-columns: 1fr; }
