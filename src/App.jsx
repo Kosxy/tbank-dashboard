@@ -2,22 +2,64 @@ import { useState } from "react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, AreaChart, Area,
-  ReferenceDot
+  ReferenceDot, LineChart, Line, ReferenceLine
 } from "recharts";
 import {
   TrendingUp, TrendingDown, MessageSquare, CheckCircle2, AlertCircle, ChevronRight,
   ArrowLeft, ExternalLink, Lightbulb
 } from "lucide-react";
 
-// 1) NPS BAR — monthly with readable labels
+// 1) NPS BAR — monthly with source breakdown + detail for popup
 const npsMonthly = [
-  { name: "Окт", pos: 62, neg: 18 },
-  { name: "Ноя", pos: 68, neg: 15 },
-  { name: "Дек", pos: 70, neg: 13 },
-  { name: "Янв", pos: 72, neg: 12 },
-  { name: "Фев", pos: 74, neg: 11 },
-  { name: "Мар", pos: 78, neg: 10 },
-  { name: "Апр", pos: 80, neg: 8 },
+  { name: "Окт", pos: 62, neg: 18, total: 80,
+    sources: { "Banki.ru": { pos: 28, neu: 12, neg: 8 }, "Sravni.ru": { pos: 20, neu: 5, neg: 6 }, "Klerk.ru": { pos: 10, neu: 2, neg: 3 }, "Otzovik": { pos: 4, neu: 0, neg: 1 } },
+    avgRating: 3.9, topThemes: ["Скорость одобрения", "Ставки выше ожиданий", "Удобство приложения"],
+    quote: "Кредит одобрили, условия достаточно хорошие, но ставка в месяц — будьте внимательны.",
+    negQuote: "Ставки высокие и поддержка по телефону — это не всегда удобно.",
+    growthPoint: "Указывать ПСК (полную стоимость кредита) в годовых на этапе предложения, чтобы снизить разочарование клиентов после оформления.",
+    event: "КС на уровне 17%", delta: null },
+  { name: "Ноя", pos: 68, neg: 15, total: 83,
+    sources: { "Banki.ru": { pos: 30, neu: 10, neg: 6 }, "Sravni.ru": { pos: 22, neu: 4, neg: 5 }, "Klerk.ru": { pos: 12, neu: 1, neg: 3 }, "Otzovik": { pos: 4, neu: 1, neg: 1 } },
+    avgRating: 4.1, topThemes: ["Онлайн-оформление", "Персональный менеджер", "Досрочное погашение"],
+    quote: "Единственный банк, одобривший кредит бизнесу младше 6 месяцев без залога.",
+    negQuote: "Кредитный менеджер подвис, долго ждал ответа. Персональный его поторопил.",
+    growthPoint: "Ввести SLA на ответ кредитного менеджера (например, 30 мин) с автоэскалацией на персонального менеджера.",
+    event: "КС снижена до 16.5%", delta: null },
+  { name: "Дек", pos: 70, neg: 13, total: 83,
+    sources: { "Banki.ru": { pos: 31, neu: 9, neg: 5 }, "Sravni.ru": { pos: 23, neu: 4, neg: 4 }, "Klerk.ru": { pos: 11, neu: 2, neg: 3 }, "Otzovik": { pos: 5, neu: 0, neg: 1 } },
+    avgRating: 4.2, topThemes: ["Markswebb BIBR 2025", "Кредитная линия", "Интеграция с 1С"],
+    quote: "Оборотная кредитная линия — как кредитная карта, но для бизнеса. Очень удобно.",
+    negQuote: "Взял оборотный кредит — дали нормальный процент, но помимо кредитного договора куча доп. бумаг.",
+    growthPoint: "Сократить пакет документов для оборотного кредита — клиенты ожидают полностью цифровой процесс без бумаг.",
+    event: "Markswebb BIBR 2025 — Т-Банк 6-е место", delta: null },
+  { name: "Янв", pos: 72, neg: 12, total: 84,
+    sources: { "Banki.ru": { pos: 32, neu: 8, neg: 5 }, "Sravni.ru": { pos: 24, neu: 4, neg: 4 }, "Klerk.ru": { pos: 12, neu: 1, neg: 2 }, "Otzovik": { pos: 4, neu: 1, neg: 1 } },
+    avgRating: 4.2, topThemes: ["Скорость выдачи", "Овердрафт урезан", "Минимум документов"],
+    quote: "Подала заявку через приложение. Деньги перевели на расчётный счёт за пару часов.",
+    negQuote: "Овердрафт урезали в несколько раз без предупреждения при пересмотре лимита.",
+    growthPoint: "Уведомлять клиента за 7 дней до пересмотра лимита овердрафта с объяснением причин и рекомендациями по увеличению оборотов.",
+    event: "КС снижена до 16%", delta: null },
+  { name: "Фев", pos: 74, neg: 11, total: 85,
+    sources: { "Banki.ru": { pos: 33, neu: 8, neg: 4 }, "Sravni.ru": { pos: 25, neu: 4, neg: 4 }, "Klerk.ru": { pos: 12, neu: 1, neg: 2 }, "Otzovik": { pos: 4, neu: 1, neg: 1 } },
+    avgRating: 4.3, topThemes: ["КС снижена", "Автоскоринг оборотов", "Проверка контрагентов"],
+    quote: "Вбиваешь ИНН — банк сразу показывает светофор. Спасло от перевода мошенникам.",
+    negQuote: "Отказ без объяснения причин, хотя кредитная история идеальная. Странный скоринг.",
+    growthPoint: "Добавить экран с причиной отказа и рекомендациями: что улучшить для повторной заявки (обороты, срок ведения бизнеса).",
+    event: "КС снижена до 15.5%", delta: null },
+  { name: "Мар", pos: 78, neg: 10, total: 88,
+    sources: { "Banki.ru": { pos: 35, neu: 7, neg: 4 }, "Sravni.ru": { pos: 26, neu: 4, neg: 3 }, "Klerk.ru": { pos: 13, neu: 1, neg: 2 }, "Otzovik": { pos: 4, neu: 1, neg: 1 } },
+    avgRating: 4.4, topThemes: ["Досрочное погашение", "Скорость", "Ставка в месяц"],
+    quote: "Кредит на 9 месяцев, закрыла за 7. За досрочное погашение Т-Банк не берёт комиссию.",
+    negQuote: "Обещают решение от 2 минут. По факту: перезвонили, уточнили, проверили — ушёл час.",
+    growthPoint: "Разделить маркетинговое «от 2 минут» и реальный SLA. В приложении показывать прогресс-бар заявки с этапами и ETA.",
+    event: "КС снижена до 15%", delta: null },
+  { name: "Апр", pos: 80, neg: 8, total: 88,
+    sources: { "Banki.ru": { pos: 36, neu: 7, neg: 3 }, "Sravni.ru": { pos: 27, neu: 4, neg: 3 }, "Klerk.ru": { pos: 13, neu: 1, neg: 1 }, "Otzovik": { pos: 4, neu: 1, neg: 1 } },
+    avgRating: 4.5, topThemes: ["Полностью онлайн", "Кофемашина за 2 часа", "Контрагенты"],
+    quote: "Кофемашина сломалась перед сезоном — 420к. Деньги на счёт за пару часов.",
+    negQuote: "Плохая КИ была 8 лет назад, не в Т-Банке. Всё равно отказывают или дают бешеный процент.",
+    growthPoint: "Внедрить «второй шанс» для клиентов со старыми проблемами в КИ: учитывать давность и текущие обороты в Т-Банке.",
+    event: "Ожидание: КС → 14.5% (24 апр)", delta: null },
 ];
 
 // 2) AREA CHART with event markers
@@ -31,7 +73,9 @@ const dynamics2024_2026 = [
   { name: "Q3 25", positive: 65, event: null },
   { name: "Q4 25", positive: 70, event: "BIBR" },
   { name: "Q1 26", positive: 76, event: "КС↓15%" },
-  { name: "Q2 26", positive: 80, event: null },
+  { name: "Q2 26", positive: 80, forecast: 80, event: null },
+  { name: "Q3 26", positive: null, forecast: 83, event: null },
+  { name: "Q4 26", positive: null, forecast: 85, event: null },
 ];
 
 // 3) RADAR — 3 banks for clarity
@@ -40,7 +84,7 @@ const radarData = [
   { subject: "UI/UX", tbank: 9.2, tochka: 9.5, sber: 7.8, alfa: 9.0, fullMark: 10 },
   { subject: "Ставки", tbank: 6.8, tochka: 7.0, sber: 8.5, alfa: 7.8, fullMark: 10 },
   { subject: "Лимиты", tbank: 8.5, tochka: 7.5, sber: 9.5, alfa: 8.8, fullMark: 10 },
-  { subject: "Без залога", tbank: 9.5, tochka: 6.0, sber: 5.5, alfa: 7.0, fullMark: 10 },
+  { subject: "Без залога", tbank: 9.5, tochka: 9.0, sber: 6.0, alfa: 8.0, fullMark: 10 },
 ];
 
 // 4) KEY FACTORS — horizontal bars
@@ -129,6 +173,8 @@ const StarIcon = ({ filled }) => (
   </svg>
 );
 
+const monthFull = { "Окт": "Октябрь", "Ноя": "Ноябрь", "Дек": "Декабрь", "Янв": "Январь", "Фев": "Февраль", "Мар": "Март", "Апр": "Апрель" };
+
 const tooltipStyle = { backgroundColor: "#1C1C1E", borderColor: "#333", borderRadius: "8px", color: "#fff", fontSize: "12px" };
 
 // Custom annotation label for area chart events
@@ -147,6 +193,7 @@ const EventLabel = ({ viewBox, value }) => {
 
 export default function App() {
   const [activeView, setActiveView] = useState("main");
+  const [selectedMonth, setSelectedMonth] = useState(null);
 
   const renderSourcesView = () => (
     <div className="space-y-6">
@@ -224,7 +271,7 @@ export default function App() {
             {/* ═══ SECTION 1: Top Metrics ═══ */}
             <div className="grid gap-6 grid-top-3">
 
-              {/* NPS Card — IMPROVED bar chart */}
+              {/* NPS Card — clickable bars with detail popup */}
               <Card className="col-span-1">
                 <CardHeader title="Индекс Лояльности (NPS)" subtitle="Q1-Q2 2026"
                   methodology="NPS = % позитивных − % негативных отзывов. Данные: 516 отзывов на Sravni.ru (225 позитивных, 6 негативных) + Banki.ru агрегация." />
@@ -239,19 +286,100 @@ export default function App() {
                 </div>
                 <div className="mt-5 w-full" style={{ height: "140px" }}>
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={npsMonthly} margin={{ top: 5, right: 0, left: -25, bottom: 0 }} barGap={2}>
+                    <BarChart data={npsMonthly} margin={{ top: 5, right: 0, left: -25, bottom: 0 }} barGap={2}
+                      onClick={(data) => { if (data && data.activePayload) setSelectedMonth(data.activePayload[0].payload); }}>
                       <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: "#6B7280", fontSize: 11 }} />
                       <YAxis axisLine={false} tickLine={false} tick={{ fill: "#4B5563", fontSize: 10 }} domain={[0, 100]} ticks={[0, 50, 100]} />
                       <Tooltip cursor={{ fill: "#2C2C2E" }} contentStyle={tooltipStyle} formatter={(v, n) => [v + "%", n === "pos" ? "Позитив" : "Негатив"]} />
-                      <Bar dataKey="pos" fill="#FFDD2D" radius={[3, 3, 0, 0]} barSize={14} />
-                      <Bar dataKey="neg" fill="#EF4444" radius={[3, 3, 0, 0]} barSize={14} opacity={0.5} />
+                      <Bar dataKey="pos" fill="#FFDD2D" radius={[3, 3, 0, 0]} barSize={14} style={{ cursor: "pointer" }} />
+                      <Bar dataKey="neg" fill="#EF4444" radius={[3, 3, 0, 0]} barSize={14} opacity={0.5} style={{ cursor: "pointer" }} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
-                <div className="flex gap-4 mt-3 text-xs" style={{ color: "#9CA3AF" }}>
-                  <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full" style={{ backgroundColor: "#FFDD2D" }}></div> Позитив</div>
-                  <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full" style={{ backgroundColor: "#EF4444", opacity: 0.5 }}></div> Негатив</div>
+                <div className="flex justify-between items-center mt-3">
+                  <div className="flex gap-4 text-xs" style={{ color: "#9CA3AF" }}>
+                    <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full" style={{ backgroundColor: "#FFDD2D" }}></div> Позитив</div>
+                    <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full" style={{ backgroundColor: "#EF4444", opacity: 0.5 }}></div> Негатив</div>
+                  </div>
+                  <span className="text-xs" style={{ color: "#4B5563" }}>Нажмите на бар ↑</span>
                 </div>
+
+                {/* Month detail popup */}
+                {selectedMonth && (
+                  <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(0,0,0,0.75)" }} onClick={() => setSelectedMonth(null)}>
+                    <div className="relative w-full max-w-2xl rounded-2xl p-6 overflow-y-auto" style={{ backgroundColor: "#1C1C1E", border: "1px solid #374151", maxHeight: "90vh" }} onClick={e => e.stopPropagation()}>
+                      <button onClick={() => setSelectedMonth(null)} className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center rounded-lg"
+                        style={{ backgroundColor: "#2C2C2E", color: "#9CA3AF" }}
+                        onMouseEnter={e => { e.currentTarget.style.color = "#fff"; }}
+                        onMouseLeave={e => { e.currentTarget.style.color = "#9CA3AF"; }}
+                      >✕</button>
+
+                      {/* Header */}
+                      <div className="flex items-center gap-3 mb-5">
+                        <div className="px-3 py-1.5 rounded-lg text-sm font-bold" style={{ backgroundColor: "#FFDD2D", color: "#000" }}>{monthFull[selectedMonth.name] || selectedMonth.name}</div>
+                        <div className="text-sm" style={{ color: "#9CA3AF" }}>{selectedMonth.total} отзывов · ★ {selectedMonth.avgRating}</div>
+                        {selectedMonth.delta && null}
+                      </div>
+
+                      {/* Sources breakdown */}
+                      <div className="mb-5">
+                        <h4 className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: "#6B7280" }}>Разбивка по источникам</h4>
+                        <div className="space-y-2">
+                          {Object.entries(selectedMonth.sources).map(([src, vals]) => (
+                            <div key={src} className="flex items-center gap-3 p-2.5 rounded-xl" style={{ backgroundColor: "#2C2C2E" }}>
+                              <span className="text-xs font-medium w-20 shrink-0" style={{ color: "#D1D5DB" }}>{src}</span>
+                              <div className="flex-1 flex gap-1.5" style={{ height: "8px" }}>
+                                <div className="rounded-full" style={{ width: (vals.pos / (vals.pos + vals.neu + vals.neg) * 100) + "%", backgroundColor: "#22C55E", height: "8px" }}></div>
+                                <div className="rounded-full" style={{ width: (vals.neu / (vals.pos + vals.neu + vals.neg) * 100) + "%", backgroundColor: "#6B7280", height: "8px" }}></div>
+                                <div className="rounded-full" style={{ width: (vals.neg / (vals.pos + vals.neu + vals.neg) * 100) + "%", backgroundColor: "#EF4444", height: "8px" }}></div>
+                              </div>
+                              <span className="text-xs shrink-0" style={{ color: "#6B7280" }}>{vals.pos + vals.neu + vals.neg}</span>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="flex gap-4 mt-2 text-xs" style={{ color: "#6B7280" }}>
+                          <span className="flex items-center gap-1"><span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: "#22C55E" }}></span>позитив</span>
+                          <span className="flex items-center gap-1"><span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: "#6B7280" }}></span>нейтрал</span>
+                          <span className="flex items-center gap-1"><span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: "#EF4444" }}></span>негатив</span>
+                        </div>
+                      </div>
+
+                      {/* Top themes */}
+                      <div className="mb-5">
+                        <h4 className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: "#6B7280" }}>Топ-3 темы месяца</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {selectedMonth.topThemes.map((t, i) => (
+                            <span key={i} className="text-xs px-3 py-1.5 rounded-lg" style={{ backgroundColor: "#2C2C2E", color: "#D1D5DB", border: "1px solid #374151" }}>{t}</span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Positive quote */}
+                      <div className="mb-3 p-4 rounded-xl" style={{ backgroundColor: "rgba(255,221,45,0.08)", border: "1px solid rgba(255,221,45,0.15)" }}>
+                        <h4 className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: "#22C55E" }}>Позитивная цитата</h4>
+                        <p className="text-sm leading-relaxed italic" style={{ color: "#D1D5DB" }}>«{selectedMonth.quote}»</p>
+                      </div>
+
+                      {/* Negative quote */}
+                      <div className="mb-3 p-4 rounded-xl" style={{ backgroundColor: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.15)" }}>
+                        <h4 className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: "#EF4444" }}>Негативная цитата</h4>
+                        <p className="text-sm leading-relaxed italic" style={{ color: "#D1D5DB" }}>«{selectedMonth.negQuote}»</p>
+                      </div>
+
+                      {/* Growth point */}
+                      <div className="mb-5 p-4 rounded-xl" style={{ backgroundColor: "rgba(168,85,247,0.08)", border: "1px solid rgba(168,85,247,0.2)" }}>
+                        <h4 className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: "#A855F7" }}>Точка роста</h4>
+                        <p className="text-sm leading-relaxed" style={{ color: "#D1D5DB" }}>{selectedMonth.growthPoint}</p>
+                      </div>
+
+                      {/* Event */}
+                      <div className="p-4 rounded-xl" style={{ backgroundColor: "#2C2C2E" }}>
+                        <h4 className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: "#6B7280" }}>Событие месяца</h4>
+                        <p className="text-sm font-medium" style={{ color: "#D1D5DB" }}>{selectedMonth.event}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </Card>
 
               {/* Key Factors — HORIZONTAL BARS */}
@@ -305,7 +433,7 @@ export default function App() {
             {/* ═══ SECTION 2: NPS Trend with ANNOTATIONS ═══ */}
             <div className="space-y-4 pt-4">
               <Card style={{ height: "400px" }}>
-                <CardHeader title="Детальный тренд NPS (Q1 2024 — Q2 2026)" subtitle="Ключевые события отмечены на графике"
+                <CardHeader title="Тренд NPS (Q1 2024 — Q4 2026)" subtitle="Факт + прогноз (пунктир)"
                   methodology="Ось Y — доля позитивных отзывов (%) за квартал. Маркеры: пик КС 21% (Q4 24), начало снижения (Q2 25), Markswebb BIBR (Q4 25), КС 15% (Q1 26). Корреляция NPS↑ при КС↓." />
                 <div className="w-full mt-4" style={{ height: "280px" }}>
                   <ResponsiveContainer width="100%" height="100%">
@@ -320,7 +448,8 @@ export default function App() {
                       <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: "#6B7280", fontSize: 11 }} dy={10} />
                       <YAxis axisLine={false} tickLine={false} tick={{ fill: "#6B7280", fontSize: 11 }} domain={[0, 100]} ticks={[0, 20, 40, 60, 80, 100]} />
                       <Tooltip contentStyle={tooltipStyle} formatter={(v) => [v + "%", "Позитив"]} />
-                      <Area type="monotone" dataKey="positive" stroke="#FFDD2D" strokeWidth={3} fillOpacity={1} fill="url(#colorPos)" dot={false} />
+                      <Area type="monotone" dataKey="positive" stroke="#FFDD2D" strokeWidth={3} fillOpacity={1} fill="url(#colorPos)" dot={false} connectNulls={false} />
+                      <Area type="monotone" dataKey="forecast" stroke="#FFDD2D" strokeWidth={2} strokeDasharray="6 4" fillOpacity={0} dot={false} connectNulls={false} />
                       {dynamics2024_2026.filter(d => d.event).map((d, i) => (
                         <ReferenceDot key={i} x={d.name} y={d.positive} r={5} fill="#FFDD2D" stroke="#1C1C1E" strokeWidth={2}
                           label={<EventLabel value={d.event} />} />
@@ -347,7 +476,7 @@ export default function App() {
             <div className="grid gap-6 pt-4 grid-two-col">
               <Card className="col-span-1 flex flex-col">
                 <CardHeader title="Радар конкурентоспособности" subtitle="Т-Банк vs Сбербанк vs Точка vs Альфа"
-                  methodology="Оценки 0–10 по 5 параметрам кредитования МСБ. Источники: Markswebb BIBR 2025 (UX, скорость), tbank.ru/sber.ru/tochka.ru (ставки, лимиты, возможность получения кредита без залога)." />
+                  methodology="Оценки 0–10 по 5 параметрам кредитования МСБ. Источники: Markswebb BIBR 2025 (UX, скорость), tbank.ru/sber.ru/tochka.ru (ставки, лимиты, онлайн-процесс оформления кредита без визита в офис)." />
                 <div className="flex-1 w-full" style={{ minHeight: "320px" }}>
                   <ResponsiveContainer width="100%" height="100%">
                     <RadarChart cx="50%" cy="50%" outerRadius="75%" data={radarData}>
@@ -415,7 +544,93 @@ export default function App() {
               </Card>
             </div>
 
-            {/* ═══ SECTION 4: Reviews ═══ */}
+            {/* ═══ SECTION 4: Forecasts & Market ═══ */}
+            <div className="space-y-6 pt-4">
+              <div className="pl-2 mb-2">
+                <h3 className="text-lg font-semibold text-white">Прогнозы и рынок</h3>
+                <p className="text-sm mt-1" style={{ color: "#6B7280" }}>Как снижение ключевой ставки повлияет на кредитование МСБ</p>
+              </div>
+
+              {/* KS forecast chart */}
+              <Card>
+                <CardHeader title="Прогноз ключевой ставки → стоимость кредитов" subtitle="Базовый сценарий SberCIB"
+                  methodology="Факт: ЦБ РФ (cbr.ru). Прогноз: базовый сценарий SberCIB Investment Research (март 2026). Ставка Т-Банка оценена как КС + 5–8% (средний спред по отзывам). Не является инвестиционной рекомендацией." />
+                <div className="w-full mt-4" style={{ height: "280px" }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={[
+                      { name: "Q3 24", ks: 18, tbank: null },
+                      { name: "Q4 24", ks: 21, tbank: null },
+                      { name: "Q1 25", ks: 21, tbank: null },
+                      { name: "Q2 25", ks: 20, tbank: null },
+                      { name: "Q3 25", ks: 17, tbank: null },
+                      { name: "Q4 25", ks: 16, tbank: null },
+                      { name: "Q1 26", ks: 15, tbank: null },
+                      { name: "Q2 26", ks: null, ksForecast: 14.5, tbank: null, tbankForecast: 21 },
+                      { name: "Q3 26", ks: null, ksForecast: 13, tbank: null, tbankForecast: 19.5 },
+                      { name: "Q4 26", ks: null, ksForecast: 12, tbank: null, tbankForecast: 18 },
+                    ]} margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#2C2C2E" />
+                      <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: "#6B7280", fontSize: 11 }} dy={10} />
+                      <YAxis axisLine={false} tickLine={false} tick={{ fill: "#6B7280", fontSize: 11 }} domain={[8, 24]} unit="%" />
+                      <Tooltip contentStyle={tooltipStyle} formatter={(v) => v ? v + "%" : "—"} />
+                      <ReferenceLine x="Q2 26" stroke="#374151" strokeDasharray="3 3" label={{ value: "прогноз →", fill: "#6B7280", fontSize: 10, position: "top" }} />
+                      <Line type="monotone" dataKey="ks" stroke="#22C55E" strokeWidth={2.5} dot={{ r: 4, fill: "#22C55E" }} name="КС (факт)" connectNulls={false} />
+                      <Line type="monotone" dataKey="ksForecast" stroke="#22C55E" strokeWidth={2} strokeDasharray="6 4" dot={{ r: 3, fill: "#22C55E", strokeDasharray: "0" }} name="КС (прогноз)" connectNulls={false} />
+                      <Line type="monotone" dataKey="tbankForecast" stroke="#FFDD2D" strokeWidth={2} strokeDasharray="6 4" dot={{ r: 3, fill: "#FFDD2D", strokeDasharray: "0" }} name="Ставка Т-Банка (прогноз)" connectNulls={false} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="flex flex-wrap gap-4 mt-3 text-xs" style={{ color: "#9CA3AF" }}>
+                  <div className="flex items-center gap-1.5"><div className="w-4 h-0.5" style={{ backgroundColor: "#22C55E" }}></div> КС факт</div>
+                  <div className="flex items-center gap-1.5"><div className="w-4 h-0.5" style={{ backgroundColor: "#22C55E", opacity: 0.5, borderTop: "1px dashed #22C55E" }}></div> КС прогноз</div>
+                  <div className="flex items-center gap-1.5"><div className="w-4 h-0.5" style={{ backgroundColor: "#FFDD2D", opacity: 0.5, borderTop: "1px dashed #FFDD2D" }}></div> Ставка Т-Банка (прогноз)</div>
+                </div>
+              </Card>
+
+              {/* Product comparison table */}
+              <Card>
+                <CardHeader title="Условия кредитования МСБ: сравнение" subtitle="По данным на апрель 2026"
+                  methodology="Данные с официальных сайтов: tbank.ru, sberbank.ru, tochka.com, alfabank.ru. Ставки — минимальные заявленные. Фактическая ставка зависит от скоринга, оборотов и залога." />
+                <div className="mt-4 overflow-x-auto">
+                  <table className="w-full text-left border-collapse text-sm">
+                    <thead>
+                      <tr style={{ borderBottom: "1px solid #374151" }}>
+                        <th className="pb-3 pr-4 font-medium" style={{ color: "#6B7280" }}>Параметр</th>
+                        <th className="pb-3 px-3 font-medium text-center" style={{ color: "#FFDD2D" }}>Т-Банк</th>
+                        <th className="pb-3 px-3 font-medium text-center" style={{ color: "#22C55E" }}>Сбер</th>
+                        <th className="pb-3 px-3 font-medium text-center" style={{ color: "#A855F7" }}>Точка</th>
+                        <th className="pb-3 px-3 font-medium text-center" style={{ color: "#EF4444" }}>Альфа</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[
+                        { param: "Макс. сумма", tbank: "30 млн ₽", sber: "200 млн ₽", tochka: "15 млн ₽", alfa: "50 млн ₽" },
+                        { param: "Ставка (год.)", tbank: "от 12%/год*", sber: "от 11%", tochka: "от 14.5%", alfa: "от 13.5%" },
+                        { param: "Срок", tbank: "до 12 мес", sber: "до 15 лет", tochka: "до 36 мес", alfa: "до 60 мес" },
+                        { param: "Без залога", tbank: "✓ до 10 млн", sber: "✓ до 5 млн", tochka: "✓ до 15 млн", alfa: "✓ до 10 млн" },
+                        { param: "Решение", tbank: "от 2 мин", sber: "от 1 мин", tochka: "от 10 мин", alfa: "от 5 мин" },
+                        { param: "Мин. срок бизнеса", tbank: "нет**", sber: "от 6 мес", tochka: "от 6 мес", alfa: "от 6 мес" },
+                        { param: "Онлайн 100%", tbank: "✓", sber: "частично", tochka: "✓", alfa: "✓" },
+                      ].map((row, i) => (
+                        <tr key={i} style={{ borderBottom: "1px solid rgba(55,65,81,0.3)" }}>
+                          <td className="py-3 pr-4 font-medium" style={{ color: "#D1D5DB" }}>{row.param}</td>
+                          <td className="py-3 px-3 text-center" style={{ color: "#E5E7EB" }}>{row.tbank}</td>
+                          <td className="py-3 px-3 text-center" style={{ color: "#9CA3AF" }}>{row.sber}</td>
+                          <td className="py-3 px-3 text-center" style={{ color: "#9CA3AF" }}>{row.tochka}</td>
+                          <td className="py-3 px-3 text-center" style={{ color: "#9CA3AF" }}>{row.alfa}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <div className="mt-3 space-y-1 text-xs" style={{ color: "#4B5563" }}>
+                    <p>* Т-Банк указывает ставку в месяц (1–4.99%), здесь пересчитано в годовые</p>
+                    <p>** По отзывам, Т-Банк одобряет кредиты бизнесу младше 6 месяцев</p>
+                  </div>
+                </div>
+              </Card>
+            </div>
+
+            {/* ═══ SECTION 5: Reviews ═══ */}
             <div className="pt-4">
               <div className="flex justify-between items-center mb-4 pl-2">
                 <h3 className="text-lg font-semibold text-white">Последние отзывы</h3>
