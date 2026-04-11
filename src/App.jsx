@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, AreaChart, Area,
@@ -194,6 +194,7 @@ const EventLabel = ({ viewBox, value }) => {
 export default function App() {
   const [activeView, setActiveView] = useState("main");
   const [selectedMonth, setSelectedMonth] = useState(null);
+  const hoveredBarIndex = useRef(null);
 
   const renderSourcesView = () => (
     <div className="space-y-6">
@@ -284,16 +285,17 @@ export default function App() {
                     <span style={{ color: "#6B7280" }}>с прошлого года</span>
                   </div>
                 </div>
-                <div className="mt-5 w-full" style={{ height: "140px" }}>
+                <div className="mt-5 w-full" style={{ height: "140px", cursor: "pointer" }}
+                  onClick={() => { if (hoveredBarIndex.current !== null) setSelectedMonth(npsMonthly[hoveredBarIndex.current]); }}>
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={npsMonthly} margin={{ top: 5, right: 0, left: -25, bottom: 0 }} barGap={2}
-                      style={{ cursor: "pointer" }}
-                      onClick={(data) => { if (data && data.activePayload) setSelectedMonth(data.activePayload[0].payload); }}>
+                      onMouseMove={(state) => { if (state && state.activeTooltipIndex != null) hoveredBarIndex.current = state.activeTooltipIndex; }}
+                      onMouseLeave={() => { hoveredBarIndex.current = null; }}>
                       <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: "#6B7280", fontSize: 11 }} />
                       <YAxis axisLine={false} tickLine={false} tick={{ fill: "#4B5563", fontSize: 10 }} domain={[0, 100]} ticks={[0, 50, 100]} />
                       <Tooltip cursor={{ fill: "#2C2C2E" }} contentStyle={tooltipStyle} formatter={(v, n) => [v + "%", n === "pos" ? "Позитив" : "Негатив"]} />
-                      <Bar dataKey="pos" fill="#FFDD2D" radius={[3, 3, 0, 0]} barSize={14} />
-                      <Bar dataKey="neg" fill="#EF4444" radius={[3, 3, 0, 0]} barSize={14} opacity={0.5} />
+                      <Bar dataKey="pos" fill="#FFDD2D" radius={[3, 3, 0, 0]} barSize={14} activeBar={false} />
+                      <Bar dataKey="neg" fill="#EF4444" radius={[3, 3, 0, 0]} barSize={14} opacity={0.5} activeBar={false} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -667,12 +669,14 @@ export default function App() {
 
       <style>{`
         @keyframes ping { 75%, 100% { transform: scale(2); opacity: 0; } }
-        .recharts-rectangle:focus, .recharts-rectangle:active,
-        .recharts-bar-rectangle:focus, .recharts-bar-rectangle:active,
-        .recharts-rectangle:focus-visible,
-        .recharts-surface:focus, .recharts-surface:active,
-        .recharts-surface:focus-visible { outline: none !important; stroke: none !important; }
+        .recharts-surface, .recharts-surface *,
+        .recharts-wrapper, .recharts-wrapper * { outline: none !important; }
         .recharts-bar-rectangle { outline: none !important; }
+        .recharts-active-bar { stroke: none !important; outline: none !important; }
+        .recharts-bar-rectangle:focus rect,
+        .recharts-bar-rectangle:active rect,
+        rect.recharts-rectangle:focus,
+        rect.recharts-rectangle:active { stroke: none !important; outline: none !important; filter: none !important; }
         .grid-top-3 { grid-template-columns: 1fr; }
         .grid-timeline { grid-template-columns: 1fr; }
         .grid-two-col { grid-template-columns: 1fr; }
