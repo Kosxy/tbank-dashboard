@@ -560,7 +560,7 @@ export default function App() {
             <div className="pt-4">
               <div className="flex justify-between items-center mb-4 pl-2">
                 <h3 className="text-lg font-semibold text-white">Последние отзывы</h3>
-                <a href="https://www.banki.ru/services/responses/bank/tcs/" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.banki.ru/services/responses/bank/tcs/product/businesscredits/?is_countable=on" target="_blank" rel="noopener noreferrer"
                   className="flex items-center gap-1 text-xs font-medium cursor-pointer" style={{ color: "#9CA3AF" }}
                   onMouseEnter={e => { e.currentTarget.style.color = "#FFDD2D"; }}
                   onMouseLeave={e => { e.currentTarget.style.color = "#9CA3AF"; }}
