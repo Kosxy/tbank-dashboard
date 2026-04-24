@@ -498,10 +498,10 @@ export default function App() {
                       ))}
                     </ul>
                   </div>
-                  <div className="flex gap-3 items-start mt-2 p-4 rounded-xl" style={{ backgroundColor: "rgba(255,221,45,0.1)", border: "1px solid rgba(255,221,45,0.2)" }}>
-                    <Lightbulb className="w-5 h-5 shrink-0 mt-0.5" style={{ color: "#FFDD2D" }} />
+                  <div className="flex gap-3 items-start mt-2 p-4 rounded-xl" style={{ backgroundColor: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.28)" }}>
+                    <Lightbulb className="w-5 h-5 shrink-0 mt-0.5" style={{ color: "#22C55E" }} />
                     <div>
-                      <h5 className="text-xs font-bold mb-1 uppercase tracking-wide" style={{ color: "#FFDD2D" }}>Ключевой инсайт</h5>
+                      <h5 className="text-xs font-bold mb-1 uppercase tracking-wide" style={{ color: "#22C55E" }}>Ключевой инсайт</h5>
                       <p className="text-xs leading-relaxed" style={{ color: "#D1D5DB" }}>
                         Сегмент МСБ готов переплачивать 1–1.5% к ставке в обмен на полное отсутствие бумажной волокиты и зачисление средств день в день. На фоне снижения КС с 21% до 14.5% конкуренция за МСБ-заёмщиков обострится — ключевое преимущество Т-Банка (скорость) станет ещё важнее.
                       </p>
