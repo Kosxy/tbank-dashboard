@@ -367,7 +367,7 @@ export default function App() {
                   methodology="Ось Y — доля позитивных отзывов (%) за квартал. Маркеры: пик КС 21% (Q4 24), начало снижения (Q2 25), Markswebb BIBR (Q4 25), КС 15% (Q1 26) и 14.5% (Q2 26). Корреляция NPS↑ при КС↓." />
                 <div className="w-full mt-4" style={{ height: "280px" }}>
                   <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={dynamics2024_2026} margin={{ top: 30, right: 20, left: -20, bottom: 0 }}>
+                    <AreaChart data={dynamics2024_2026} margin={{ top: 34, right: 24, left: 12, bottom: 0 }}>
                       <defs>
                         <linearGradient id="colorPos" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="5%" stopColor="#FFDD2D" stopOpacity={0.4} />
