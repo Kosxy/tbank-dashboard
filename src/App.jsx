@@ -185,7 +185,7 @@ const EventLabel = ({ viewBox, value }) => {
   const w = value.length * 6.5 + 12;
   return (
     <g>
-      <line x1={x} y1={y - 8} x2={x} y2={y - 26} stroke="#6B7280" strokeWidth={1} strokeDasharray="2 2" />
+      <line x1={x} y1={y - 4} x2={x} y2={y - 26} stroke="#FFDD2D" strokeOpacity={0.95} strokeWidth={2} strokeDasharray="2.5 2.5" strokeLinecap="round" />
       <rect x={x - w/2} y={y - 42} width={w} height={16} rx={4} fill="#2C2C2E" stroke="#4B5563" strokeWidth={0.5} />
       <text x={x} y={y - 31} textAnchor="middle" fill="#FFDD2D" fontSize={9} fontWeight="600">{value}</text>
     </g>
