@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, AreaChart, Area,
@@ -235,7 +235,20 @@ const EventLabel = ({ viewBox, value }) => {
 export default function App() {
   const [activeView, setActiveView] = useState("main");
   const [selectedMonth, setSelectedMonth] = useState(null);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const hoveredBarIndex = useRef(null);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const doc = document.documentElement;
+      const bottomDistance = doc.scrollHeight - (scrollY + window.innerHeight);
+      setShowScrollTop(bottomDistance <= 180);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const renderSourcesView = () => (
     <div className="space-y-6">
@@ -284,7 +297,7 @@ export default function App() {
       <div className="max-w-7xl mx-auto space-y-7 md:space-y-8">
 
         {/* Header */}
-        <div className="hero-panel flex flex-col items-center justify-center text-center mb-10">
+        <div className="flex flex-col items-center justify-center text-center mb-10">
           <svg width="44" height="44" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="mb-5" style={{ filter: "drop-shadow(0 4px 6px rgba(0,0,0,0.3))" }}>
             <rect width="40" height="40" rx="10" fill="#FFDD2D" />
             <path d="M13 14H27V18H22V27H18V18H13V14Z" fill="#000000" />
@@ -708,6 +721,15 @@ export default function App() {
         </div>
       )}
 
+      <button
+        type="button"
+        aria-label="Наверх"
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        className={`scroll-top-btn ${showScrollTop ? "is-visible" : ""}`}
+      >
+        ↑
+      </button>
+
       <style>{`
         @keyframes ping { 75%, 100% { transform: scale(2); opacity: 0; } }
         .app-shell {
@@ -716,13 +738,6 @@ export default function App() {
             radial-gradient(780px 360px at 12% 8%, rgba(34,197,94,0.08) 0%, rgba(34,197,94,0) 72%),
             #000000;
           font-family: "Manrope", "IBM Plex Sans", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
-        }
-        .hero-panel {
-          background: linear-gradient(180deg, rgba(28,28,30,0.76) 0%, rgba(18,18,20,0.52) 100%);
-          border: 1px solid rgba(75,85,99,0.45);
-          border-radius: 22px;
-          padding: 20px 18px;
-          backdrop-filter: blur(8px);
         }
         .ui-card {
           transition: transform 180ms ease, border-color 180ms ease, box-shadow 220ms ease;
@@ -740,6 +755,39 @@ export default function App() {
           outline: 2px solid #FFDD2D;
           outline-offset: 2px;
           border-radius: 10px;
+        }
+        .scroll-top-btn {
+          position: fixed;
+          right: 22px;
+          bottom: 22px;
+          width: 44px;
+          height: 44px;
+          border-radius: 999px;
+          border: 1px solid rgba(255,221,45,0.35);
+          background: rgba(28,28,30,0.88);
+          color: #FFDD2D;
+          font-size: 20px;
+          font-weight: 700;
+          line-height: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+          cursor: pointer;
+          opacity: 0;
+          transform: translateY(12px);
+          pointer-events: none;
+          transition: opacity 220ms ease, transform 220ms ease, background-color 180ms ease, border-color 180ms ease;
+          z-index: 70;
+        }
+        .scroll-top-btn.is-visible {
+          opacity: 1;
+          transform: translateY(0);
+          pointer-events: auto;
+        }
+        .scroll-top-btn:hover {
+          background: rgba(255,221,45,0.15);
+          border-color: rgba(255,221,45,0.7);
         }
         .recharts-surface, .recharts-surface *,
         .recharts-wrapper, .recharts-wrapper * { outline: none !important; }
@@ -766,8 +814,11 @@ export default function App() {
           .grid-reviews { grid-template-columns: repeat(3, 1fr); }
         }
         @media (max-width: 639px) {
-          .hero-panel { padding: 16px 14px; border-radius: 18px; }
           .ui-card:hover { transform: none; }
+          .scroll-top-btn {
+            right: 14px;
+            bottom: 14px;
+          }
         }
         @media (prefers-reduced-motion: reduce) {
           .ui-card, button, a { transition: none !important; }
