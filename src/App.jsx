@@ -297,7 +297,10 @@ export default function App() {
       <div className="max-w-7xl mx-auto space-y-7 md:space-y-8">
 
         {/* Header */}
-        <div className="flex flex-col items-center justify-center text-center mb-10">
+        <div
+          className="flex flex-col items-center justify-center text-center mb-10"
+          style={{ background: "transparent", border: "none", boxShadow: "none", borderRadius: 0, padding: 0 }}
+        >
           <svg width="44" height="44" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="mb-5" style={{ filter: "drop-shadow(0 4px 6px rgba(0,0,0,0.3))" }}>
             <rect width="40" height="40" rx="10" fill="#FFDD2D" />
             <path d="M13 14H27V18H22V27H18V18H13V14Z" fill="#000000" />
