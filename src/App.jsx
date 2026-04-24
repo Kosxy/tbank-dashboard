@@ -138,7 +138,7 @@ const reviews = [
 ];
 
 const Card = ({ children, className = "" }) => (
-  <div className={`border rounded-3xl p-6 shadow-2xl ${className}`} style={{ backgroundColor: "#1C1C1E", borderColor: "#374151" }}>
+  <div className={`ui-card border rounded-3xl p-6 shadow-2xl ${className}`} style={{ backgroundColor: "#1C1C1E", borderColor: "#374151" }}>
     {children}
   </div>
 );
@@ -280,17 +280,17 @@ export default function App() {
   );
 
   return (
-    <div className="min-h-screen p-4 md:p-8 overflow-x-hidden" style={{ backgroundColor: "#000000", color: "#E5E7EB", fontFamily: "sans-serif" }}>
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="app-shell min-h-screen p-4 md:p-8 overflow-x-hidden" style={{ color: "#E5E7EB" }}>
+      <div className="max-w-7xl mx-auto space-y-7 md:space-y-8">
 
         {/* Header */}
-        <div className="flex flex-col items-center justify-center text-center mb-10">
+        <div className="hero-panel flex flex-col items-center justify-center text-center mb-10">
           <svg width="44" height="44" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="mb-5" style={{ filter: "drop-shadow(0 4px 6px rgba(0,0,0,0.3))" }}>
             <rect width="40" height="40" rx="10" fill="#FFDD2D" />
             <path d="M13 14H27V18H22V27H18V18H13V14Z" fill="#000000" />
           </svg>
-          <h1 className="text-3xl md:text-4xl font-bold text-white">Аналитика репутации кредитов для бизнеса Т-Банка</h1>
-          <p className="mt-3 mb-5 max-w-2xl" style={{ color: "#9CA3AF" }}>Комплексный анализ репутации, сравнение с рынком и историческая динамика</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-white leading-tight">Аналитика репутации кредитов для бизнеса Т-Банка</h1>
+          <p className="mt-3 mb-5 max-w-2xl leading-relaxed" style={{ color: "#9CA3AF" }}>Комплексный анализ репутации, сравнение с рынком и историческая динамика</p>
           <div className="flex items-center gap-3">
             <div className="px-5 py-2 rounded-xl text-sm font-medium flex items-center gap-2.5" style={{ backgroundColor: "#1C1C1E", border: "1px solid #374151", color: "#D1D5DB" }}>
               <span className="relative flex h-2 w-2">
@@ -710,6 +710,37 @@ export default function App() {
 
       <style>{`
         @keyframes ping { 75%, 100% { transform: scale(2); opacity: 0; } }
+        .app-shell {
+          background:
+            radial-gradient(1200px 520px at 50% -160px, rgba(255,221,45,0.12) 0%, rgba(255,221,45,0) 70%),
+            radial-gradient(780px 360px at 12% 8%, rgba(34,197,94,0.08) 0%, rgba(34,197,94,0) 72%),
+            #000000;
+          font-family: "Manrope", "IBM Plex Sans", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        .hero-panel {
+          background: linear-gradient(180deg, rgba(28,28,30,0.76) 0%, rgba(18,18,20,0.52) 100%);
+          border: 1px solid rgba(75,85,99,0.45);
+          border-radius: 22px;
+          padding: 20px 18px;
+          backdrop-filter: blur(8px);
+        }
+        .ui-card {
+          transition: transform 180ms ease, border-color 180ms ease, box-shadow 220ms ease;
+          box-shadow: 0 14px 42px rgba(0,0,0,0.36);
+        }
+        .ui-card:hover {
+          transform: translateY(-2px);
+          border-color: rgba(255,221,45,0.45) !important;
+          box-shadow: 0 18px 54px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,221,45,0.15) inset;
+        }
+        button, a {
+          transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
+        }
+        button:focus-visible, a:focus-visible {
+          outline: 2px solid #FFDD2D;
+          outline-offset: 2px;
+          border-radius: 10px;
+        }
         .recharts-surface, .recharts-surface *,
         .recharts-wrapper, .recharts-wrapper * { outline: none !important; }
         .recharts-bar-rectangle { outline: none !important; }
@@ -733,6 +764,13 @@ export default function App() {
           .grid-timeline { grid-template-columns: repeat(2, 1fr); }
           .grid-two-col { grid-template-columns: repeat(2, 1fr); }
           .grid-reviews { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 639px) {
+          .hero-panel { padding: 16px 14px; border-radius: 18px; }
+          .ui-card:hover { transform: none; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .ui-card, button, a { transition: none !important; }
         }
       `}</style>
     </div>
