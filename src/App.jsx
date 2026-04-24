@@ -59,7 +59,7 @@ const npsMonthly = [
     quote: "Кофемашина сломалась перед сезоном — 420к. Деньги на счёт за пару часов.",
     negQuote: "Плохая КИ была 8 лет назад, не в Т-Банке. Всё равно отказывают или дают бешеный процент.",
     growthPoint: "Внедрить «второй шанс» для клиентов со старыми проблемами в КИ: учитывать давность и текущие обороты в Т-Банке.",
-    event: "Ожидание: КС → 14.5% (24 апр)", delta: null },
+    event: "ЦБ снизил КС до 14.5% (24 апр)", delta: null },
 ];
 
 // 2) AREA CHART with event markers
@@ -73,7 +73,7 @@ const dynamics2024_2026 = [
   { name: "Q3 25", positive: 65, event: null },
   { name: "Q4 25", positive: 70, event: "BIBR" },
   { name: "Q1 26", positive: 76, event: "КС↓15%" },
-  { name: "Q2 26", positive: 80, forecast: 80, event: null },
+  { name: "Q2 26", positive: 80, event: "КС↓14.5%" },
   { name: "Q3 26", positive: null, forecast: 83, event: null },
   { name: "Q4 26", positive: null, forecast: 85, event: null },
 ];
@@ -100,12 +100,13 @@ const timelineEvents = [
   { date: "Q2 2025", title: "Начало цикла снижения КС", desc: "ЦБ начал снижение с 21% до 20%. Возобновление спроса на кредитование бизнеса.", type: "positive" },
   { date: "Q4 2025", title: "Markswebb BIBR 2025", desc: "Т-Банк — 6-е место среди интернет-банков для бизнеса. Лидеры: ПСБ, Альфа, Точка.", type: "positive" },
   { date: "Q1 2026", title: "КС снижена до 15%", desc: "Два снижения подряд: до 15.5% в феврале и 15% в марте. Кредиты МСБ дешевеют.", type: "positive" },
+  { date: "Q2 2026", title: "КС снижена до 14.5%", desc: "24 апреля 2026 года Банк России снизил ключевую ставку еще на 50 б.п., до 14.5% годовых. Смягчение продолжается.", type: "positive" },
 ];
 
 const sourcesData = [
   { id: 1, name: "Markswebb Business Internet Banking Rank 2025", type: "Рейтинг UX интернет-банков", link: "https://www.markswebb.ru/report/business-internet-banking-rank-2025/", date: "Дек 2025" },
   { id: 2, name: "Markswebb Mobile Banking Rank 2025", type: "Рейтинг мобильных банков", link: "https://www.markswebb.ru/report/mobile-banking-rank-2025/", date: "Янв 2026" },
-  { id: 3, name: "ЦБ РФ: Решения по ключевой ставке", type: "Денежно-кредитная политика", link: "https://www.cbr.ru/press/keypr/", date: "Мар 2026" },
+  { id: 3, name: "ЦБ РФ: Решения по ключевой ставке", type: "Денежно-кредитная политика", link: "https://www.cbr.ru/press/keypr/", date: "24 апр 2026" },
   { id: 4, name: "Sravni.ru: Отзывы о Т-Банк бизнес-кредитование", type: "Агрегированные отзывы", link: "https://www.sravni.ru/bank/t-bank/biznes/otzyvy/", date: "2024–2026" },
   { id: 5, name: "Banki.ru: Народный рейтинг Т-Банк", type: "Отзывы клиентов", link: "https://www.banki.ru/services/responses/bank/tcs/product/businesscredits/", date: "2024–2026" },
   { id: 6, name: "SberCIB: Прогноз ключевой ставки на 2026", type: "Аналитический прогноз", link: "https://sbercib.ru/publication/prognoz-klyuchevoi-stavki-na-2026-god", date: "Мар 2026" },
@@ -360,7 +361,7 @@ export default function App() {
             <div className="space-y-4 pt-4">
               <Card style={{ height: "400px" }}>
                 <CardHeader title="Тренд NPS (Q1 2024 — Q4 2026)" subtitle="Факт + прогноз (пунктир)"
-                  methodology="Ось Y — доля позитивных отзывов (%) за квартал. Маркеры: пик КС 21% (Q4 24), начало снижения (Q2 25), Markswebb BIBR (Q4 25), КС 15% (Q1 26). Корреляция NPS↑ при КС↓." />
+                  methodology="Ось Y — доля позитивных отзывов (%) за квартал. Маркеры: пик КС 21% (Q4 24), начало снижения (Q2 25), Markswebb BIBR (Q4 25), КС 15% (Q1 26) и 14.5% (Q2 26). Корреляция NPS↑ при КС↓." />
                 <div className="w-full mt-4" style={{ height: "280px" }}>
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={dynamics2024_2026} margin={{ top: 30, right: 20, left: -20, bottom: 0 }}>
@@ -462,7 +463,7 @@ export default function App() {
                     <div>
                       <h5 className="text-xs font-bold mb-1 uppercase tracking-wide" style={{ color: "#FFDD2D" }}>Ключевой инсайт</h5>
                       <p className="text-xs leading-relaxed" style={{ color: "#D1D5DB" }}>
-                        Сегмент МСБ готов переплачивать 1–1.5% к ставке в обмен на полное отсутствие бумажной волокиты и зачисление средств день в день. На фоне снижения КС с 21% до 15% конкуренция за МСБ-заёмщиков обострится — ключевое преимущество Т-Банка (скорость) станет ещё важнее.
+                        Сегмент МСБ готов переплачивать 1–1.5% к ставке в обмен на полное отсутствие бумажной волокиты и зачисление средств день в день. На фоне снижения КС с 21% до 14.5% конкуренция за МСБ-заёмщиков обострится — ключевое преимущество Т-Банка (скорость) станет ещё важнее.
                       </p>
                     </div>
                   </div>
@@ -480,7 +481,7 @@ export default function App() {
               {/* KS forecast chart */}
               <Card>
                 <CardHeader title="Прогноз ключевой ставки → стоимость кредитов" subtitle="Базовый сценарий SberCIB"
-                  methodology="Факт: ЦБ РФ (cbr.ru). Прогноз: базовый сценарий SberCIB Investment Research (март 2026). Ставка Т-Банка оценена как КС + 5–8% (средний спред по отзывам). Не является инвестиционной рекомендацией." />
+                  methodology="Факт: решение ЦБ РФ от 24.04.2026 о снижении ключевой ставки до 14.5% годовых. Прогноз: базовый сценарий SberCIB Investment Research (март 2026). Ставка Т-Банка оценена как КС + 5–8% (средний спред по отзывам). Не является инвестиционной рекомендацией." />
                 <div className="w-full mt-4" style={{ height: "280px" }}>
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={[
@@ -491,7 +492,7 @@ export default function App() {
                       { name: "Q3 25", ks: 17, tbank: null },
                       { name: "Q4 25", ks: 16, tbank: null },
                       { name: "Q1 26", ks: 15, tbank: null },
-                      { name: "Q2 26", ks: null, ksForecast: 14.5, tbank: null, tbankForecast: 21 },
+                      { name: "Q2 26", ks: 14.5, tbank: null },
                       { name: "Q3 26", ks: null, ksForecast: 13, tbank: null, tbankForecast: 19.5 },
                       { name: "Q4 26", ks: null, ksForecast: 12, tbank: null, tbankForecast: 18 },
                     ]} margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
@@ -499,7 +500,7 @@ export default function App() {
                       <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: "#6B7280", fontSize: 11 }} dy={10} />
                       <YAxis axisLine={false} tickLine={false} tick={{ fill: "#6B7280", fontSize: 11 }} domain={[8, 24]} unit="%" />
                       <Tooltip contentStyle={tooltipStyle} formatter={(v) => v ? v + "%" : "—"} />
-                      <ReferenceLine x="Q2 26" stroke="#374151" strokeDasharray="3 3" label={{ value: "прогноз →", fill: "#6B7280", fontSize: 10, position: "top" }} />
+                      <ReferenceLine x="Q3 26" stroke="#374151" strokeDasharray="3 3" label={{ value: "прогноз →", fill: "#6B7280", fontSize: 10, position: "top" }} />
                       <Line type="monotone" dataKey="ks" stroke="#22C55E" strokeWidth={2.5} dot={{ r: 4, fill: "#22C55E" }} name="КС (факт)" connectNulls={false} />
                       <Line type="monotone" dataKey="ksForecast" stroke="#22C55E" strokeWidth={2} strokeDasharray="6 4" dot={{ r: 3, fill: "#22C55E", strokeDasharray: "0" }} name="КС (прогноз)" connectNulls={false} />
                       <Line type="monotone" dataKey="tbankForecast" stroke="#FFDD2D" strokeWidth={2} strokeDasharray="6 4" dot={{ r: 3, fill: "#FFDD2D", strokeDasharray: "0" }} name="Ставка Т-Банка (прогноз)" connectNulls={false} />
