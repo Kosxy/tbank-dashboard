@@ -73,7 +73,7 @@ const dynamics2024_2026 = [
   { name: "Q3 25", positive: 65, event: null },
   { name: "Q4 25", positive: 70, event: "BIBR" },
   { name: "Q1 26", positive: 76, event: "КС↓15%" },
-  { name: "Q2 26", positive: 80, event: "КС↓14.5%" },
+  { name: "Q2 26", positive: 80, forecast: 80, event: "КС↓14.5%" },
   { name: "Q3 26", positive: null, forecast: 83, event: null },
   { name: "Q4 26", positive: null, forecast: 85, event: null },
 ];
@@ -416,7 +416,7 @@ export default function App() {
                       <YAxis axisLine={false} tickLine={false} tick={{ fill: "#6B7280", fontSize: 11 }} domain={[0, 100]} ticks={[0, 20, 40, 60, 80, 100]} />
                       <Tooltip contentStyle={tooltipStyle} formatter={(v) => [v + "%", "Позитив"]} />
                       <Area type="monotone" dataKey="positive" stroke="#FFDD2D" strokeWidth={3} fillOpacity={1} fill="url(#colorPos)" dot={false} connectNulls={false} />
-                      <Area type="monotone" dataKey="forecast" stroke="#FFDD2D" strokeWidth={2} strokeDasharray="6 4" fillOpacity={0} dot={false} connectNulls={false} />
+                      <Area type="monotone" dataKey="forecast" stroke="#FFDD2D" strokeWidth={2} strokeDasharray="6 4" strokeLinecap="round" strokeLinejoin="round" fillOpacity={0} dot={false} connectNulls />
                       {dynamics2024_2026.filter(d => d.event).map((d, i) => (
                         <ReferenceDot key={i} x={d.name} y={d.positive} r={5} fill="#FFDD2D" stroke="#1C1C1E" strokeWidth={2}
                           label={<EventLabel value={d.event} />} />
