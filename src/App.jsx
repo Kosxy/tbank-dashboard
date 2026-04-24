@@ -95,6 +95,18 @@ const keyFactors = [
   { label: "Высокие ставки", pct: 17, color: "#EF4444" },
 ];
 
+// Variants to reduce "broken dash" artifact on forecast lines:
+// "bridge"  - small dash offset + rounded caps to hide clipped segment start
+// "rounded" - rounded dash caps and joins
+// "dense"   - denser dash pattern
+const FORECAST_DASH_FIX_MODE = "bridge";
+
+const forecastDashStyle = FORECAST_DASH_FIX_MODE === "dense"
+  ? { strokeDasharray: "3 3", strokeLinecap: "round", strokeLinejoin: "round" }
+  : FORECAST_DASH_FIX_MODE === "rounded"
+    ? { strokeDasharray: "6 4", strokeLinecap: "round", strokeLinejoin: "round" }
+    : { strokeDasharray: "6 4", strokeLinecap: "round", strokeLinejoin: "round", strokeDashoffset: -2 };
+
 const timelineEvents = [
   { date: "Q4 2024", title: "Пик ключевой ставки 21%", desc: "Максимальная КС за всю историю. Резкий рост стоимости кредитов МСБ, падение спроса.", type: "negative" },
   { date: "Q2 2025", title: "Начало цикла снижения КС", desc: "ЦБ начал снижение с 21% до 20%. Возобновление спроса на кредитование бизнеса.", type: "positive" },
@@ -529,8 +541,8 @@ export default function App() {
                       <Tooltip contentStyle={tooltipStyle} formatter={(v) => v ? v + "%" : "—"} />
                       <ReferenceLine x="Q3 26" stroke="#374151" strokeDasharray="3 3" label={{ value: "прогноз →", fill: "#6B7280", fontSize: 10, position: "top" }} />
                       <Line type="monotone" dataKey="ks" stroke="#22C55E" strokeWidth={2.5} dot={{ r: 4, fill: "#22C55E" }} name="КС (факт)" connectNulls={false} />
-                      <Line type="monotone" dataKey="ksForecast" stroke="#22C55E" strokeWidth={2} strokeDasharray="6 4" dot={{ r: 3, fill: "#22C55E", strokeDasharray: "0" }} name="КС (прогноз)" connectNulls={false} />
-                      <Line type="monotone" dataKey="tbankForecast" stroke="#FFDD2D" strokeWidth={2} strokeDasharray="6 4" dot={{ r: 3, fill: "#FFDD2D", strokeDasharray: "0" }} name="Ставка Т-Банка (прогноз)" connectNulls={false} />
+                      <Line type="monotone" dataKey="ksForecast" stroke="#22C55E" strokeWidth={2} {...forecastDashStyle} dot={{ r: 3, fill: "#22C55E", strokeDasharray: "0" }} name="КС (прогноз)" connectNulls={false} />
+                      <Line type="monotone" dataKey="tbankForecast" stroke="#FFDD2D" strokeWidth={2} {...forecastDashStyle} dot={{ r: 3, fill: "#FFDD2D", strokeDasharray: "0" }} name="Ставка Т-Банка (прогноз)" connectNulls={false} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -725,3 +737,6 @@ export default function App() {
     </div>
   );
 }
+
+
+
