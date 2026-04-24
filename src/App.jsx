@@ -471,7 +471,7 @@ export default function App() {
                   methodology="Выводы на основе: Markswebb BIBR 2025 (6-е место), 118 кредитных отзывов Sravni.ru, 22 831 отзыв на Banki.ru, продуктовые страницы tbank.ru." />
                 <div className="space-y-5 mt-6">
                   <div>
-                    <h4 className="flex items-center gap-2 font-medium mb-3 text-sm" style={{ color: "#FFDD2D" }}><TrendingUp className="w-4 h-4" /> Сильные стороны</h4>
+                    <h4 className="flex items-center gap-2 font-medium mb-3 text-sm" style={{ color: "#22C55E" }}><TrendingUp className="w-4 h-4" /> Сильные стороны</h4>
                     <ul className="space-y-2">
                       {["Кредит до 30 млн ₽ полностью онлайн — без визита в офис, решение от 2 минут.",
                         "Овердрафт, оборотный кредит, кредитная линия, кредит под госконтракт — всё в одном приложении.",
