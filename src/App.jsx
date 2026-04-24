@@ -184,9 +184,11 @@ const EventLabel = ({ viewBox, value }) => {
   const { x, y } = viewBox;
   const w = value.length * 6.5 + 12;
   const guideX = Math.round(x) - 1;
+  const guideTop = Math.round(y) - 26;
+  const guideHeight = 22;
   return (
     <g>
-      <rect x={guideX} y={y - 26} width={2} height={22} rx={1} fill="#FFDD2D" />
+      <rect x={guideX} y={guideTop} width={2} height={guideHeight} rx={1} fill="#FFDD2D" />
       <rect x={x - w/2} y={y - 42} width={w} height={16} rx={4} fill="#2C2C2E" stroke="#4B5563" strokeWidth={0.5} />
       <text x={x} y={y - 31} textAnchor="middle" fill="#FFDD2D" fontSize={9} fontWeight="600">{value}</text>
     </g>
