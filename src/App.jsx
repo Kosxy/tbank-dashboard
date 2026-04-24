@@ -181,9 +181,18 @@ const tooltipStyle = { backgroundColor: "#1C1C1E", borderColor: "#333", borderRa
 // Custom annotation label for area chart events
 const EventLabel = ({ viewBox, value }) => {
   if (!value) return null;
-  const { x, y } = viewBox;
-  const anchorX = Math.round(x);
-  const anchorY = Math.round(y);
+  const rawX = Number.isFinite(viewBox?.cx)
+    ? viewBox.cx
+    : Number.isFinite(viewBox?.x)
+      ? viewBox.x + (Number.isFinite(viewBox?.width) ? viewBox.width / 2 : 0)
+      : 0;
+  const rawY = Number.isFinite(viewBox?.cy)
+    ? viewBox.cy
+    : Number.isFinite(viewBox?.y)
+      ? viewBox.y + (Number.isFinite(viewBox?.height) ? viewBox.height / 2 : 0)
+      : 0;
+  const anchorX = Math.round(rawX);
+  const anchorY = Math.round(rawY);
   const w = Math.max(56, Math.ceil(value.length * 6.5 + 12));
   const guideHeight = 22;
   const badgeX = -Math.round(w / 2);
