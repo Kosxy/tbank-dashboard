@@ -113,6 +113,7 @@ const timelineEvents = [
   { date: "Q4 2025", title: "Markswebb BIBR 2025", desc: "Т-Банк — 6-е место среди интернет-банков для бизнеса. Лидеры: ПСБ, Альфа, Точка.", type: "positive" },
   { date: "Q1 2026", title: "КС снижена до 15%", desc: "Два снижения подряд: до 15.5% в феврале и 15% в марте. Кредиты МСБ дешевеют.", type: "positive" },
   { date: "Q2 2026", title: "КС снижена до 14.5%", desc: "24 апреля 2026 года Банк России снизил ключевую ставку еще на 50 б.п., до 14.5% годовых. Смягчение продолжается.", type: "positive" },
+  { date: "Q3-Q4 2026", title: "Прогноз по КС: 13% -> 12%", desc: "По базовому сценарию ожидается продолжение смягчения ДКП. Это может дополнительно снизить стоимость кредитов для МСБ и усилить спрос на финансирование.", type: "forecast" },
 ];
 
 const sourcesData = [
@@ -430,7 +431,7 @@ export default function App() {
                   <Card key={idx} className="p-5 flex flex-col justify-between" style={{ borderRadius: "16px", borderColor: "rgba(55,65,81,0.6)", backgroundColor: "rgba(28,28,30,0.8)", backdropFilter: "blur(8px)" }}>
                     <div>
                       <div className="text-xs font-bold mb-2" style={{ color: "#6B7280" }}>{ev.date}</div>
-                      <h4 className="text-base font-semibold mb-2" style={{ color: ev.type === "positive" ? "#22C55E" : "#EF4444" }}>{ev.title}</h4>
+                      <h4 className="text-base font-semibold mb-2" style={{ color: ev.type === "positive" ? "#22C55E" : ev.type === "forecast" ? "#FFDD2D" : "#EF4444" }}>{ev.title}</h4>
                       <p className="text-sm leading-relaxed" style={{ color: "#9CA3AF" }}>{ev.desc}</p>
                     </div>
                   </Card>
