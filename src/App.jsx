@@ -182,15 +182,16 @@ const tooltipStyle = { backgroundColor: "#1C1C1E", borderColor: "#333", borderRa
 const EventLabel = ({ viewBox, value }) => {
   if (!value) return null;
   const { x, y } = viewBox;
-  const w = value.length * 6.5 + 12;
-  const guideX = Math.round(x) - 1;
-  const guideTop = Math.round(y) - 26;
+  const anchorX = Math.round(x);
+  const anchorY = Math.round(y);
+  const w = Math.max(56, Math.ceil(value.length * 6.5 + 12));
   const guideHeight = 22;
+  const badgeX = -Math.round(w / 2);
   return (
-    <g>
-      <rect x={guideX} y={guideTop} width={2} height={guideHeight} rx={1} fill="#FFDD2D" />
-      <rect x={x - w/2} y={y - 42} width={w} height={16} rx={4} fill="#2C2C2E" stroke="#4B5563" strokeWidth={0.5} />
-      <text x={x} y={y - 31} textAnchor="middle" fill="#FFDD2D" fontSize={9} fontWeight="600">{value}</text>
+    <g transform={`translate(${anchorX}, ${anchorY})`}>
+      <rect x={-1} y={-26} width={2} height={guideHeight} rx={1} fill="#FFDD2D" />
+      <rect x={badgeX} y={-42} width={w} height={16} rx={4} fill="#2C2C2E" stroke="#4B5563" strokeWidth={0.5} />
+      <text x={0} y={-31} textAnchor="middle" fill="#FFDD2D" fontSize={9} fontWeight="600">{value}</text>
     </g>
   );
 };
