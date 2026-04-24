@@ -194,12 +194,26 @@ const EventLabel = ({ viewBox, value }) => {
   const anchorX = Math.round(rawX);
   const anchorY = Math.round(rawY);
   const w = Math.max(56, Math.ceil(value.length * 6.5 + 12));
-  const guideHeight = 22;
+  const badgeY = -44;
+  const badgeHeight = 16;
+  const guideTop = -26;
+  const guideBottomOffset = -4;
+  const guideHeight = Math.abs(guideTop - guideBottomOffset);
   const badgeX = -Math.round(w / 2);
   return (
     <g transform={`translate(${anchorX}, ${anchorY})`}>
-      <rect x={-1} y={-26} width={2} height={guideHeight} rx={1} fill="#FFDD2D" />
-      <rect x={badgeX} y={-42} width={w} height={16} rx={4} fill="#2C2C2E" stroke="#4B5563" strokeWidth={0.5} />
+      <rect x={-1} y={guideTop} width={2} height={guideHeight} rx={1} fill="#FFDD2D" />
+      <rect
+        x={badgeX}
+        y={badgeY}
+        width={w}
+        height={badgeHeight}
+        rx={4}
+        fill="#2C2C2E"
+        stroke="#4B5563"
+        strokeWidth={0.5}
+        style={{ filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.55))" }}
+      />
       <text x={0} y={-31} textAnchor="middle" fill="#FFDD2D" fontSize={9} fontWeight="600">{value}</text>
     </g>
   );
@@ -384,7 +398,7 @@ export default function App() {
                           <stop offset="95%" stopColor="#FFDD2D" stopOpacity={0} />
                         </linearGradient>
                       </defs>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#2C2C2E" />
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#3A3A3D" strokeOpacity={0.85} />
                       <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: "#6B7280", fontSize: 11 }} dy={10} />
                       <YAxis axisLine={false} tickLine={false} tick={{ fill: "#6B7280", fontSize: 11 }} domain={[0, 100]} ticks={[0, 20, 40, 60, 80, 100]} />
                       <Tooltip contentStyle={tooltipStyle} formatter={(v) => [v + "%", "Позитив"]} />
@@ -509,7 +523,7 @@ export default function App() {
                       { name: "Q3 26", ks: null, ksForecast: 13, tbank: null, tbankForecast: 19.5 },
                       { name: "Q4 26", ks: null, ksForecast: 12, tbank: null, tbankForecast: 18 },
                     ]} margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#2C2C2E" />
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#3A3A3D" strokeOpacity={0.85} />
                       <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: "#6B7280", fontSize: 11 }} dy={10} />
                       <YAxis axisLine={false} tickLine={false} tick={{ fill: "#6B7280", fontSize: 11 }} domain={[8, 24]} unit="%" />
                       <Tooltip contentStyle={tooltipStyle} formatter={(v) => v ? v + "%" : "—"} />
