@@ -60,6 +60,20 @@ const npsMonthly = [
     negQuote: "Плохая КИ была 8 лет назад, не в Т-Банке. Всё равно отказывают или дают бешеный процент.",
     growthPoint: "Внедрить «второй шанс» для клиентов со старыми проблемами в КИ: учитывать давность и текущие обороты в Т-Банке.",
     event: "ЦБ снизил КС до 14.5% (24 апр)", delta: null },
+  { name: "Май", pos: 76, neg: 14, total: 90,
+    sources: { "Banki.ru": { pos: 1, neu: 0, neg: 2 }, "Sravni.ru": { pos: 34, neu: 3, neg: 1 }, "Klerk.ru": { pos: 12, neu: 1, neg: 2 }, "Otzovik": { pos: 4, neu: 1, neg: 1 } },
+    avgRating: 4.4, topThemes: ["Поддержка по кредитной линии", "Списания по оборотному кредиту", "Договорённости с банком"],
+    quote: "Менеджер оперативно разобрался с начислением по кредитной линии и помог снять спорный вопрос.",
+    negQuote: "Клиенты жалуются на непонятные списания и расхождение устных договорённостей с фактическими условиями.",
+    growthPoint: "Собрать отдельный сценарий «разбор начислений» в чате: выписка, причина списания, ответственный менеджер и срок решения в одном экране.",
+    event: "Banki.ru: 4.50 и 5-е место", delta: null },
+  { name: "Июн", pos: 79, neg: 11, total: 90,
+    sources: { "Banki.ru": { pos: 0, neu: 1, neg: 1 }, "Sravni.ru": { pos: 36, neu: 2, neg: 1 }, "Klerk.ru": { pos: 13, neu: 1, neg: 1 }, "Otzovik": { pos: 4, neu: 1, neg: 1 } },
+    avgRating: 4.5, topThemes: ["97% рекомендуют на Sravni.ru", "КС 14.5% на 16 июня", "Ожидание заседания ЦБ"],
+    quote: "Sravni.ru фиксирует 4.86 из 5 и 97% рекомендаций по бизнес-отзывам Т-Банка.",
+    negQuote: "В кредитных отзывах Banki.ru сохраняются претензии к овердрафту, платежам и прозрачности условий.",
+    growthPoint: "Перед заседанием ЦБ 19 июня обновить калькулятор ставки: показать клиенту текущую КС, прогноз и диапазон переплаты по продукту.",
+    event: "КС 14.5% на 16 июн", delta: null },
 ];
 
 // 2) AREA CHART with event markers
@@ -73,9 +87,9 @@ const dynamics2024_2026 = [
   { name: "Q3 25", positive: 65, event: null },
   { name: "Q4 25", positive: 70, event: "BIBR" },
   { name: "Q1 26", positive: 76, event: "КС↓15%" },
-  { name: "Q2 26", positive: 80, forecast: 80, event: "КС↓14.5%" },
-  { name: "Q3 26", positive: null, forecast: 83, event: null },
-  { name: "Q4 26", positive: null, forecast: 85, event: null },
+  { name: "Q2 26", positive: 79, forecast: 79, event: "КС 14.5%" },
+  { name: "Q3 26", positive: null, forecast: 81, event: null },
+  { name: "Q4 26", positive: null, forecast: 84, event: null },
 ];
 
 // 3) RADAR — 3 banks for clarity
@@ -89,10 +103,10 @@ const radarData = [
 
 // 4) KEY FACTORS — horizontal bars
 const keyFactors = [
-  { label: "Скорость одобрения", pct: 38, color: "#FFDD2D" },
-  { label: "Полностью онлайн", pct: 25, color: "#A855F7" },
-  { label: "Минимум документов", pct: 20, color: "#22C55E" },
-  { label: "Высокие ставки", pct: 17, color: "#EF4444" },
+  { label: "Скорость и онлайн-процесс", pct: 36, color: "#FFDD2D" },
+  { label: "Поддержка по кредиту", pct: 24, color: "#A855F7" },
+  { label: "Прозрачность условий", pct: 22, color: "#22C55E" },
+  { label: "Списания и овердрафт", pct: 18, color: "#EF4444" },
 ];
 
 // Variants to reduce "broken dash" artifact on forecast lines:
@@ -112,33 +126,39 @@ const timelineEvents = [
   { date: "Q2 2025", title: "Начало цикла снижения КС", desc: "ЦБ начал снижение с 21% до 20%. Возобновление спроса на кредитование бизнеса.", type: "positive" },
   { date: "Q4 2025", title: "Markswebb BIBR 2025", desc: "Т-Банк — 6-е место среди интернет-банков для бизнеса. Лидеры: ПСБ, Альфа, Точка.", type: "positive" },
   { date: "Q1 2026", title: "КС снижена до 15%", desc: "Два снижения подряд: до 15.5% в феврале и 15% в марте. Кредиты МСБ дешевеют.", type: "positive" },
-  { date: "Q2 2026", title: "КС снижена до 14.5%", desc: "24 апреля 2026 года Банк России снизил ключевую ставку еще на 50 б.п., до 14.5% годовых. Смягчение продолжается.", type: "positive" },
-  { date: "Q3-Q4 2026", title: "Прогноз по КС: 13% -> 12%", desc: "По базовому сценарию ожидается продолжение смягчения ДКП. Это может дополнительно снизить стоимость кредитов для МСБ и усилить спрос на финансирование.", type: "forecast" },
+  { date: "Q2 2026", title: "КС 14.5% на 16 июня", desc: "После решения 24 апреля ключевая ставка держится на уровне 14.5%. Следующее заседание ЦБ запланировано на 19 июня 2026 года.", type: "positive" },
+  { date: "Q3-Q4 2026", title: "Прогноз по КС: 13.5% -> 12%", desc: "SberCIB в обновлении от 10 июня ожидает базовую траекторию: 13.5% в июле-августе, 13% в сентябре, 12.5% в октябре-ноябре и 12% в декабре.", type: "forecast" },
 ];
 
 const sourcesData = [
   { id: 1, name: "Markswebb Business Internet Banking Rank 2025", type: "Рейтинг UX интернет-банков", link: "https://www.markswebb.ru/report/business-internet-banking-rank-2025/", date: "Дек 2025" },
   { id: 2, name: "Markswebb Mobile Banking Rank 2025", type: "Рейтинг мобильных банков", link: "https://www.markswebb.ru/report/mobile-banking-rank-2025/", date: "Янв 2026" },
-  { id: 3, name: "ЦБ РФ: Решения по ключевой ставке", type: "Денежно-кредитная политика", link: "https://www.cbr.ru/press/keypr/", date: "24 апр 2026" },
-  { id: 4, name: "Sravni.ru: Отзывы о Т-Банк бизнес-кредитование", type: "Агрегированные отзывы", link: "https://www.sravni.ru/bank/t-bank/biznes/otzyvy/", date: "2024–2026" },
-  { id: 5, name: "Banki.ru: Народный рейтинг Т-Банк", type: "Отзывы клиентов", link: "https://www.banki.ru/services/responses/bank/tcs/product/businesscredits/", date: "2024–2026" },
-  { id: 6, name: "SberCIB: Прогноз ключевой ставки на 2026", type: "Аналитический прогноз", link: "https://sbercib.ru/publication/prognoz-klyuchevoi-stavki-na-2026-god", date: "Мар 2026" },
+  { id: 3, name: "ЦБ РФ: Ключевая ставка", type: "Денежно-кредитная политика", link: "https://www.cbr.ru/hd_base/keyrate/", date: "16 июн 2026" },
+  { id: 4, name: "Sravni.ru: Отзывы о бизнесе Т-Банка", type: "Агрегированные отзывы", link: "https://www.sravni.ru/bank/t-bank/biznes/otzyvy/", date: "16 июн 2026" },
+  { id: 5, name: "Banki.ru: Отзывы о кредитовании бизнеса Т-Банка", type: "Отзывы клиентов", link: "https://www.banki.ru/services/responses/bank/tcs/product/businesscredits/", date: "16 июн 2026" },
+  { id: 6, name: "SberCIB: Прогноз ключевой ставки на 2026", type: "Аналитический прогноз", link: "https://sbercib.ru/publication/prognoz-klyuchevoi-stavki-na-2026-god", date: "10 июн 2026" },
+  { id: 7, name: "Т-Банк: кредиты для малого бизнеса", type: "Продуктовые условия", link: "https://www.tbank.ru/business/credit/", date: "Июн 2026" },
+  { id: 8, name: "Sravni.ru: кредиты для бизнеса Т-Банка", type: "Сравнение условий", link: "https://www.sravni.ru/biznes-kredity/bank/t-bank/", date: "Июн 2026" },
 ];
 
 const reviews = [
-  { id: 1, author: "ИП (кофейня)", text: "Кофемашина сломалась перед сезоном — 420к. Заявку подала через приложение, данные по оборотам подтянули сами. Деньги на счёт за пару часов, машину купила в тот же день.", rating: 5, date: "05 Апр 2026" },
-  { id: 2, author: "ИП (канцелярия)", text: "Проверка контрагентов встроена прямо в платёжку — вбиваешь ИНН и банк показывает светофор. Пару раз спасло от перевода мошенникам.", rating: 5, date: "03 Апр 2026" },
-  { id: 3, author: "ИП (сырьё)", text: "Кредит на 9 месяцев, закрыла за 7. За досрочное погашение Т-Банк не берёт комиссию — отлично.", rating: 5, date: "01 Апр 2026" },
-  { id: 4, author: 'ООО "Текстиль"', text: "Оборотный кредит на закупку хлопка. Даже с процентами вышло дешевле — поставщик дал скидку за опт на 240 тысяч.", rating: 4, date: "28 Мар 2026" },
-  { id: 5, author: "ИП (кредит)", text: "Обещают решение от 2 минут. По факту: перезвонили, уточнили сумму, проверили деятельность — ушёл час. Но кредит одобрили.", rating: 3, date: "26 Мар 2026" },
-  { id: 6, author: "ИП (подушки)", text: "Магазин подушек для сна. Как открыл тут счёт — пользуюсь только им. Интерфейс удобнее конкурентов в разы.", rating: 5, date: "22 Мар 2026" },
-  { id: 7, author: "ИП (автозапчасти)", text: "Интернет-эквайринг работает стабильно. Деньги на счёт приходят быстро. Для онлайн-торговли — топ.", rating: 4, date: "18 Мар 2026" },
-  { id: 8, author: "ИП (погашение)", text: "Погашение бизнес-кредита выпало на выходные. Провела оплату через физ.лицо — менеджер Мария помогла разобраться, всё зачли.", rating: 5, date: "15 Мар 2026" },
-  { id: 9, author: "ИП Сидорова", text: "Овердрафт урезали в несколько раз без предупреждения при пересмотре лимита. Неприятный сюрприз.", rating: 2, date: "05 Мар 2026" },
+  { id: 1, author: "Кредитная линия", text: "Позитивный сигнал мая: менеджер быстро разобрался с начислением по кредитной линии и помог клиенту снять спорный вопрос.", rating: 5, date: "01 Май 2026" },
+  { id: 2, author: "Оборотный кредит", text: "Свежая зона риска: клиент описывает непонятные списания и просит более детальную выписку по каждому начислению.", rating: 1, date: "29 Май 2026" },
+  { id: 3, author: "Бизнес-клиент", text: "В мае появились жалобы на расхождение договорённостей и фактических действий банка при сложностях с погашением.", rating: 1, date: "24 Май 2026" },
+  { id: 4, author: "Платёж по кредиту", text: "Повторяется тема платежей: клиенту не хватило ясной инструкции, как корректно провести погашение при блокировке счёта.", rating: 1, date: "30 Апр 2026" },
+  { id: 5, author: "Овердрафт", text: "Позитивный кейс: специалист предложил временную индивидуальную льготу по овердрафту, что снизило напряжение клиента.", rating: 5, date: "23 Апр 2026" },
+  { id: 6, author: "Овердрафт", text: "Негативный кейс: клиент не понял условия овердрафта и ожидал более прямого отказа от продукта внутри сервиса.", rating: 1, date: "23 Апр 2026" },
+  { id: 7, author: "Кредитный лимит", text: "Критичный сигнал: клиент спорит с фактом оформления крупного кредитного лимита и просит понятные доказательства согласия.", rating: 1, date: "22 Апр 2026" },
+  { id: 8, author: "Кредитные каникулы", text: "Часть отзывов связана с реструктуризацией и кредитными каникулами: клиентам нужен прозрачный маршрут обращения.", rating: 1, date: "14 Апр 2026" },
+  { id: 9, author: "Sravni.ru", text: "На общем бизнес-профиле Т-Банка сохраняется высокий фон лояльности: рейтинг 4.86 из 5 и 97% рекомендаций.", rating: 5, date: "16 Июн 2026" },
 ];
 
-const Card = ({ children, className = "" }) => (
-  <div className={`ui-card border rounded-3xl p-6 shadow-2xl ${className}`} style={{ backgroundColor: "#1C1C1E", borderColor: "#374151" }}>
+const Card = ({ children, className = "", style, ...props }) => (
+  <div
+    className={`ui-card border rounded-3xl p-6 shadow-2xl ${className}`}
+    style={{ backgroundColor: "#1C1C1E", borderColor: "#374151", ...style }}
+    {...props}
+  >
     {children}
   </div>
 );
@@ -187,9 +207,14 @@ const StarIcon = ({ filled }) => (
   </svg>
 );
 
-const monthFull = { "Окт": "Октябрь", "Ноя": "Ноябрь", "Дек": "Декабрь", "Янв": "Январь", "Фев": "Февраль", "Мар": "Март", "Апр": "Апрель" };
+const monthFull = { "Окт": "Октябрь", "Ноя": "Ноябрь", "Дек": "Декабрь", "Янв": "Январь", "Фев": "Февраль", "Мар": "Март", "Апр": "Апрель", "Май": "Май", "Июн": "Июнь" };
 
 const tooltipStyle = { backgroundColor: "#1C1C1E", borderColor: "#333", borderRadius: "8px", color: "#fff", fontSize: "12px" };
+const chartInitialDimensions = {
+  compact: { width: 1, height: 140 },
+  standard: { width: 1, height: 280 },
+  radar: { width: 1, height: 320 },
+};
 
 // Custom annotation label for area chart events
 const EventLabel = ({ viewBox, value }) => {
@@ -313,13 +338,13 @@ export default function App() {
                 <span className="absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: "#22C55E", animation: "ping 1s cubic-bezier(0,0,0.2,1) infinite" }}></span>
                 <span className="relative inline-flex rounded-full h-2 w-2" style={{ backgroundColor: "#22C55E" }}></span>
               </span>
-              Апрель 2026
+              Июнь 2026
             </div>
             <button onClick={() => setActiveView("sources")}
               className="px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-1.5"
               style={{ backgroundColor: "#2C2C2E", border: "1px solid #374151", color: "#D1D5DB" }}
-              onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#FFDD2D"; e.currentTarget.style.color = "#000"; e.currentTarget.style.borderColor = "#FFDD2D"; }}
-              onMouseLeave={e => { e.currentTarget.style.backgroundColor = "#2C2C2E"; e.currentTarget.style.color = "#D1D5DB"; e.currentTarget.style.borderColor = "#374151"; }}
+              onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#FFDD2D"; e.currentTarget.style.color = "#000"; }}
+              onMouseLeave={e => { e.currentTarget.style.backgroundColor = "#2C2C2E"; e.currentTarget.style.color = "#D1D5DB"; }}
             ><ExternalLink className="w-3.5 h-3.5" /> Источники</button>
           </div>
         </div>
@@ -332,19 +357,19 @@ export default function App() {
               {/* NPS Card — clickable bars with detail popup */}
               <Card className="col-span-1">
                 <CardHeader title="Индекс Лояльности (NPS)" subtitle="Q1-Q2 2026"
-                  methodology="NPS = % позитивных − % негативных отзывов. Данные: 516 отзывов на Sravni.ru (225 позитивных, 6 негативных) + Banki.ru агрегация." />
+                  methodology="Прокси NPS строится по доле позитивных и негативных упоминаний в отзывах. Актуальные внешние ориентиры на 16.06.2026: Sravni.ru — 519 отзывов, 4.86 из 5 и 97% рекомендаций; Banki.ru — 20 707 отзывов, оценка 4.50 и 5-е место в народном рейтинге." />
                 <div className="mt-2">
-                  <div className="text-4xl font-bold text-white">71.2%</div>
+                  <div className="text-4xl font-bold text-white">97%</div>
                   <div className="flex items-center gap-2 mt-2 text-sm">
                     <span className="flex items-center px-2 py-0.5 rounded" style={{ color: "#22C55E", backgroundColor: "rgba(34,197,94,0.1)" }}>
-                      <TrendingUp className="w-4 h-4 mr-1" />+14.8%
+                      <TrendingUp className="w-4 h-4 mr-1" />4.86/5
                     </span>
-                    <span style={{ color: "#6B7280" }}>с прошлого года</span>
+                    <span style={{ color: "#6B7280" }}>рекомендуют на Sravni.ru</span>
                   </div>
                 </div>
                 <div className="nps-chart-wrap mt-5 w-full" style={{ height: "140px", cursor: "pointer" }}
                   onClick={() => { if (hoveredBarIndex.current !== null) setSelectedMonth(npsMonthly[hoveredBarIndex.current]); }}>
-                  <ResponsiveContainer width="100%" height="100%">
+                  <ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={chartInitialDimensions.compact}>
                     <BarChart data={npsMonthly} margin={{ top: 5, right: 0, left: -25, bottom: 0 }} barGap={2}
                       onMouseMove={(state) => { if (state && state.activeTooltipIndex != null) hoveredBarIndex.current = state.activeTooltipIndex; }}
                       onMouseLeave={() => { hoveredBarIndex.current = null; }}>
@@ -368,27 +393,27 @@ export default function App() {
               {/* Key Factors — HORIZONTAL BARS */}
               <Card className="col-span-1">
                 <CardHeader title="Ключевые факторы" subtitle="О чем пишут клиенты"
-                  methodology="Тематическая классификация 118 отзывов о кредитах на Sravni.ru. Каждый отзыв размечен по ключевой теме упоминания. Проценты — доля от общего числа." />
+                  methodology="Тематическая классификация свежих кредитных отзывов Banki.ru и агрегированных бизнес-отзывов Sravni.ru. Проценты показывают долю темы в текущей ручной разметке сигналов: скорость/онлайн, поддержка, прозрачность условий, списания и овердрафт." />
                 <div className="relative w-full flex items-center justify-center mt-4" style={{ height: "256px" }}>
                   <div className="absolute flex flex-col items-center justify-center z-10"
                     style={{ top: "16px", left: "50%", transform: "translateX(-50%)", width: "128px", height: "128px", borderRadius: "50%", backgroundColor: "rgba(255,221,45,0.15)", border: "1px solid rgba(255,221,45,0.4)" }}>
-                    <span className="text-2xl font-bold" style={{ color: "#FFDD2D" }}>38%</span>
-                    <span className="text-xs mt-1 text-center leading-tight" style={{ color: "#FFDD2D" }}>Скорость<br />одобрения</span>
+                    <span className="text-2xl font-bold" style={{ color: "#FFDD2D" }}>{keyFactors[0].pct}%</span>
+                    <span className="text-xs mt-1 text-center leading-tight" style={{ color: "#FFDD2D" }}>Скорость<br />онлайн</span>
                   </div>
                   <div className="absolute flex flex-col items-center justify-center"
                     style={{ top: "40px", right: "12px", width: "96px", height: "96px", borderRadius: "50%", backgroundColor: "rgba(168,85,247,0.15)", border: "1px solid rgba(168,85,247,0.4)" }}>
-                    <span className="text-xl font-bold" style={{ color: "#A855F7" }}>25%</span>
-                    <span className="mt-1" style={{ fontSize: "10px", color: "#A855F7" }}>Всё онлайн</span>
+                    <span className="text-xl font-bold" style={{ color: "#A855F7" }}>{keyFactors[1].pct}%</span>
+                    <span className="mt-1" style={{ fontSize: "10px", color: "#A855F7" }}>Поддержка</span>
                   </div>
                   <div className="absolute flex flex-col items-center justify-center"
                     style={{ bottom: "24px", right: "40px", width: "84px", height: "84px", borderRadius: "50%", backgroundColor: "rgba(34,197,94,0.15)", border: "1px solid rgba(34,197,94,0.4)" }}>
-                    <span className="text-lg font-bold" style={{ color: "#22C55E" }}>20%</span>
-                    <span className="mt-1" style={{ fontSize: "10px", color: "#22C55E" }}>Без залога</span>
+                    <span className="text-lg font-bold" style={{ color: "#22C55E" }}>{keyFactors[2].pct}%</span>
+                    <span className="mt-1" style={{ fontSize: "10px", color: "#22C55E" }}>Условия</span>
                   </div>
                   <div className="absolute flex flex-col items-center justify-center"
                     style={{ bottom: "40px", left: "24px", width: "68px", height: "68px", borderRadius: "50%", backgroundColor: "rgba(239,68,68,0.15)", border: "1px solid rgba(239,68,68,0.4)" }}>
-                    <span className="text-base font-bold" style={{ color: "#EF4444" }}>17%</span>
-                    <span className="mt-1" style={{ fontSize: "10px", color: "#EF4444" }}>Ставки</span>
+                    <span className="text-base font-bold" style={{ color: "#EF4444" }}>{keyFactors[3].pct}%</span>
+                    <span className="mt-1" style={{ fontSize: "10px", color: "#EF4444" }}>Овердрафт</span>
                   </div>
                 </div>
               </Card>
@@ -417,9 +442,9 @@ export default function App() {
             <div className="space-y-4 pt-4">
               <Card style={{ height: "400px" }}>
                 <CardHeader title="Тренд NPS (Q1 2024 — Q4 2026)" subtitle="Факт + прогноз (пунктир)"
-                  methodology="Ось Y — доля позитивных отзывов (%) за квартал. Маркеры: пик КС 21% (Q4 24), начало снижения (Q2 25), Markswebb BIBR (Q4 25), КС 15% (Q1 26) и 14.5% (Q2 26). Корреляция NPS↑ при КС↓." />
+                  methodology="Ось Y — доля позитивных отзывов (%) за квартал. Маркеры: пик КС 21% (Q4 24), начало снижения (Q2 25), Markswebb BIBR (Q4 25), КС 15% (Q1 26) и текущие 14.5% на 16.06.2026. Прогноз Q3-Q4 скорректирован консервативнее из-за свежих негативных кредитных отзывов Banki.ru." />
                 <div className="w-full mt-4" style={{ height: "280px" }}>
-                  <ResponsiveContainer width="100%" height="100%">
+                  <ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={chartInitialDimensions.standard}>
                     <AreaChart data={dynamics2024_2026} margin={{ top: 34, right: 24, left: 12, bottom: 0 }}>
                       <defs>
                         <linearGradient id="colorPos" x1="0" y1="0" x2="0" y2="1">
@@ -460,8 +485,8 @@ export default function App() {
               <Card className="col-span-1 flex flex-col">
                 <CardHeader title="Радар конкурентоспособности" subtitle="Т-Банк vs Сбербанк vs Точка vs Альфа"
                   methodology="Оценки 0–10 по 5 параметрам кредитования МСБ. Источники: Markswebb BIBR 2025 (UX, скорость), tbank.ru/sber.ru/tochka.ru (ставки, лимиты, онлайн-процесс оформления кредита без визита в офис)." />
-                <div className="flex-1 w-full" style={{ minHeight: "320px" }}>
-                  <ResponsiveContainer width="100%" height="100%">
+                <div className="flex-1 w-full" style={{ height: "320px", minHeight: "320px" }}>
+                  <ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={chartInitialDimensions.radar}>
                     <RadarChart cx="50%" cy="50%" outerRadius="75%" data={radarData}>
                       <PolarGrid stroke="#333" />
                       <PolarAngleAxis dataKey="subject" tick={{ fill: "#D1D5DB", fontSize: 12, fontWeight: 500 }} />
@@ -484,7 +509,7 @@ export default function App() {
 
               <Card className="col-span-1">
                 <CardHeader title="Преимущества и зоны роста" subtitle="Факторный анализ"
-                  methodology="Выводы на основе: Markswebb BIBR 2025 (6-е место), 118 кредитных отзывов Sravni.ru, 22 831 отзыв на Banki.ru, продуктовые страницы tbank.ru." />
+                  methodology="Выводы на основе: Markswebb BIBR 2025 (6-е место, 67.4 балла), Sravni.ru (519 отзывов, 97% рекомендаций), Banki.ru (20 707 отзывов, 4.50 и 5-е место), продуктовые страницы tbank.ru." />
                 <div className="space-y-5 mt-6">
                   <div>
                     <h4 className="flex items-center gap-2 font-medium mb-3 text-sm" style={{ color: "#22C55E" }}><TrendingUp className="w-4 h-4" /> Сильные стороны</h4>
@@ -504,7 +529,7 @@ export default function App() {
                     <h4 className="flex items-center gap-2 font-medium mb-3 text-sm" style={{ color: "#EF4444" }}><TrendingDown className="w-4 h-4" /> Зоны отставания</h4>
                     <ul className="space-y-2">
                       {["Ставка указана в месяц — клиенты путают с годовой (от 1% до 4.99%/мес).",
-                        "Лимит овердрафта пересматривается ежемесячно, возможно резкое урезание.",
+                        "Свежие отзывы Banki.ru показывают боль вокруг списаний, овердрафта и доказательств согласия на кредитный лимит.",
                         "6-е место в BIBR 2025 — отставание от ПСБ, Альфа и Точки по UX.",
                         "Непрозрачность отказов: часть клиентов получают отказ без объяснения причин."
                       ].map((text, i) => (
@@ -519,7 +544,7 @@ export default function App() {
                     <div>
                       <h5 className="text-xs font-bold mb-1 uppercase tracking-wide" style={{ color: "#22C55E" }}>Ключевой инсайт</h5>
                       <p className="text-xs leading-relaxed" style={{ color: "#D1D5DB" }}>
-                        Сегмент МСБ готов переплачивать 1–1.5% к ставке в обмен на полное отсутствие бумажной волокиты и зачисление средств день в день. На фоне снижения КС с 21% до 14.5% конкуренция за МСБ-заёмщиков обострится — ключевое преимущество Т-Банка (скорость) станет ещё важнее.
+                        Высокая общая лояльность на Sravni.ru сохраняется, но свежие кредитные отзывы Banki.ru смещают приоритеты: скорость уже не перекрывает непрозрачные списания и спорные условия. Главный продуктовый рычаг на июнь — не только быстро выдать кредит, но и объяснить клиенту ставку, лимит, платежи и сценарий отказа до подписания.
                       </p>
                     </div>
                   </div>
@@ -537,9 +562,9 @@ export default function App() {
               {/* KS forecast chart */}
               <Card>
                 <CardHeader title="Прогноз ключевой ставки → стоимость кредитов" subtitle="Базовый сценарий SberCIB"
-                  methodology="Факт: решение ЦБ РФ от 24.04.2026 о снижении ключевой ставки до 14.5% годовых. Прогноз: базовый сценарий SberCIB Investment Research (март 2026). Ставка Т-Банка оценена как КС + 5–8% (средний спред по отзывам). Не является инвестиционной рекомендацией." />
+                  methodology="Факт: по данным ЦБ РФ на 16.06.2026 ключевая ставка составляет 14.5% годовых. Прогноз: базовый сценарий SberCIB Investment Research от 10.06.2026 — 14% в июне, 13.5% в июле-августе, 13% в сентябре, 12.5% в октябре-ноябре и 12% в декабре. Ставка Т-Банка оценена как КС + 5–8%." />
                 <div className="w-full mt-4" style={{ height: "280px" }}>
-                  <ResponsiveContainer width="100%" height="100%">
+                  <ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={chartInitialDimensions.standard}>
                     <LineChart data={[
                       { name: "Q3 24", ks: 18, tbank: null },
                       { name: "Q4 24", ks: 21, tbank: null },
@@ -549,7 +574,7 @@ export default function App() {
                       { name: "Q4 25", ks: 16, tbank: null },
                       { name: "Q1 26", ks: 15, tbank: null },
                       { name: "Q2 26", ks: 14.5, tbank: null },
-                      { name: "Q3 26", ks: null, ksForecast: 13, tbank: null, tbankForecast: 19.5 },
+                      { name: "Q3 26", ks: null, ksForecast: 13.5, tbank: null, tbankForecast: 20 },
                       { name: "Q4 26", ks: null, ksForecast: 12, tbank: null, tbankForecast: 18 },
                     ]} margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#3A3A3D" strokeOpacity={0.85} />
@@ -572,8 +597,8 @@ export default function App() {
 
               {/* Product comparison table */}
               <Card>
-                <CardHeader title="Условия кредитования МСБ: сравнение" subtitle="По данным на апрель 2026"
-                  methodology="Данные с официальных сайтов: tbank.ru, sberbank.ru, tochka.com, alfabank.ru. Ставки — минимальные заявленные. Фактическая ставка зависит от скоринга, оборотов и залога." />
+                <CardHeader title="Условия кредитования МСБ: сравнение" subtitle="По данным на июнь 2026"
+                  methodology="Данные с официальных сайтов и агрегаторов: tbank.ru, sberbank.ru, tochka.com, alfabank.ru, Sravni.ru. Ставки — минимальные заявленные или агрегированные. Фактическая ставка зависит от скоринга, оборотов и залога." />
                 <div className="mt-4 overflow-x-auto">
                   <table className="w-full text-left border-collapse text-sm">
                     <thead>
@@ -587,7 +612,7 @@ export default function App() {
                     </thead>
                     <tbody>
                       {[
-                        { param: "Макс. сумма", tbank: "30 млн ₽", sber: "200 млн ₽", tochka: "15 млн ₽", alfa: "50 млн ₽" },
+                        { param: "Макс. сумма", tbank: "15 млн ₽", sber: "200 млн ₽", tochka: "30 млн ₽", alfa: "30 млн ₽" },
                         { param: "Ставка (год.)", tbank: "от 12%/год*", sber: "от 11%", tochka: "от 14.5%", alfa: "от 13.5%" },
                         { param: "Срок", tbank: "до 12 мес", sber: "до 15 лет", tochka: "до 36 мес", alfa: "до 60 мес" },
                         { param: "Без залога", tbank: "✓ до 10 млн", sber: "✓ до 5 млн", tochka: "✓ до 15 млн", alfa: "✓ до 10 млн" },
@@ -627,8 +652,6 @@ export default function App() {
                 {reviews.map((review) => (
                   <div key={review.id} className="flex items-start gap-4 p-4"
                     style={{ backgroundColor: "#1C1C1E", border: "1px solid #374151", borderRadius: "16px" }}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor = "#4B5563"; }}
-                    onMouseLeave={e => { e.currentTarget.style.borderColor = "#374151"; }}
                   >
                     <div className="p-2 rounded-xl" style={{ backgroundColor: review.rating >= 4 ? "rgba(255,221,45,0.1)" : "#1F2937", color: review.rating >= 4 ? "#FFDD2D" : "#9CA3AF" }}>
                       <MessageSquare className="w-5 h-5" />
@@ -743,13 +766,12 @@ export default function App() {
           font-family: "Manrope", "IBM Plex Sans", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
         }
         .ui-card {
-          transition: transform 180ms ease, border-color 180ms ease, box-shadow 220ms ease;
+          transition: transform 180ms ease, box-shadow 220ms ease;
           box-shadow: 0 14px 42px rgba(0,0,0,0.36);
         }
         .ui-card:hover {
           transform: translateY(-2px);
-          border-color: rgba(255,221,45,0.45) !important;
-          box-shadow: 0 18px 54px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,221,45,0.15) inset;
+          box-shadow: 0 18px 54px rgba(0,0,0,0.5);
         }
         button, a {
           transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
@@ -790,7 +812,6 @@ export default function App() {
         }
         .scroll-top-btn:hover {
           background: rgba(255,221,45,0.15);
-          border-color: rgba(255,221,45,0.7);
         }
         .recharts-surface, .recharts-surface *,
         .recharts-wrapper, .recharts-wrapper * { outline: none !important; }
