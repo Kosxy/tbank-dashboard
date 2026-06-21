@@ -551,6 +551,7 @@ const SermOverviewWidget = ({ widget }) => (
   <div className="rounded-3xl p-4 h-full flex flex-col" style={{ backgroundColor: "#1C1C1E", border: "1px solid transparent", boxShadow: "0 14px 42px rgba(0,0,0,0.32)" }}>
     <div className="mb-4">
       <div className="text-sm font-semibold text-white">{widget.title}</div>
+      <div className="text-xs leading-relaxed mt-1" style={{ color: "#F9FAFB" }}>{widget.caption}</div>
     </div>
     <div className={`grid gap-0 flex-1 ${widget.items.length > 1 ? "grid-serm-overview-items" : ""}`} style={{ gridTemplateColumns: widget.items.length > 1 ? undefined : "1fr" }}>
       {widget.items.map((item) => {
@@ -598,7 +599,6 @@ const SermOverviewWidget = ({ widget }) => (
         );
       })}
     </div>
-    <p className="text-xs leading-relaxed mt-4" style={{ color: "#F9FAFB" }}>{widget.caption}</p>
   </div>
 );
 
@@ -1395,8 +1395,8 @@ export default function App() {
                         <span className="text-sm font-semibold text-white">{entry.label}</span>
                         <ChevronRight className="w-4 h-4 shrink-0 mt-0.5" style={{ color: "#6B7280" }} />
                       </div>
+                      <p className="text-xs leading-relaxed mt-2" style={{ color: "#F9FAFB" }}>{entry.insight}</p>
                       <SermEntryMiniChart entry={entry} />
-                      <p className="text-xs leading-relaxed mt-4" style={{ color: "#F9FAFB" }}>{entry.insight}</p>
                     </button>
                   );
                 })}
