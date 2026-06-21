@@ -436,24 +436,30 @@ const sermOverviewWidgets = [
   {
     title: "Здоровье выдачи",
     caption: "индекс 0-100, выше - лучше",
+    max: 100,
+    scale: "direct",
     items: [
-      { label: "Яндекс", value: "92.9%", zone: "отлично", previous: "было 90.9%", delta: "+2 п.п.", color: "#22C55E", deltaColor: "#22C55E", note: "выдача почти чистая" },
-      { label: "Google", value: "85.2%", zone: "норма", previous: "было 89%", delta: "-3.8 п.п.", color: "#60A5FA", deltaColor: "#EF4444", note: "есть просадка" },
+      { label: "Яндекс", score: 92.9, display: "92.9%", zone: "отлично", previous: "было 90.9%", delta: "+2 п.п.", color: "#22C55E", deltaColor: "#22C55E", note: "выдача почти чистая" },
+      { label: "Google", score: 85.2, display: "85.2%", zone: "норма", previous: "было 89%", delta: "-3.8 п.п.", color: "#60A5FA", deltaColor: "#EF4444", note: "есть просадка" },
     ],
   },
   {
     title: "Негатив",
     caption: "доля негатива, ниже - лучше",
+    max: 10,
+    scale: "inverse",
     items: [
-      { label: "Яндекс", value: "2.7%", zone: "контроль", previous: "было 3.6%", delta: "-0.9 п.п.", color: "#22C55E", deltaColor: "#22C55E", note: "негатив снижается" },
-      { label: "Google", value: "7.3%", zone: "риск", previous: "было 5.5%", delta: "+1.8 п.п.", color: "#EF4444", deltaColor: "#EF4444", note: "banki.ru в ТОП-10" },
+      { label: "Яндекс", score: 2.7, display: "2.7%", zone: "контроль", previous: "было 3.6%", delta: "-0.9 п.п.", color: "#22C55E", deltaColor: "#22C55E", note: "негатив снижается" },
+      { label: "Google", score: 7.3, display: "7.3%", zone: "риск", previous: "было 5.5%", delta: "+1.8 п.п.", color: "#EF4444", deltaColor: "#EF4444", note: "banki.ru в ТОП-10" },
     ],
   },
   {
     title: "Публикации",
     caption: "выполнение контентного плана",
+    max: 20,
+    scale: "direct",
     items: [
-      { label: "Контент", value: "20/20", zone: "выполнено", previous: "план 20", delta: "100%", color: "#F59E0B", zoneColor: "#22C55E", deltaColor: "#22C55E", note: "объем закрыт" },
+      { label: "Контент", score: 20, display: "20/20", zone: "выполнено", previous: "план 20", delta: "100%", color: "#F59E0B", zoneColor: "#22C55E", deltaColor: "#22C55E", note: "объем закрыт" },
     ],
   },
 ];
@@ -560,23 +566,40 @@ const SermOverviewWidget = ({ widget }) => (
         <div className="w-3 h-3 rounded-full" style={{ backgroundColor: widget.items[0].color }} />
       </div>
     </div>
-    <div className="grid gap-3" style={{ gridTemplateColumns: widget.items.length > 1 ? "repeat(auto-fit, minmax(128px, 1fr))" : "1fr" }}>
+    <div className="grid gap-3">
       {widget.items.map((item) => {
         const zoneColor = item.zoneColor || item.color;
+        const rawRatio = widget.max ? item.score / widget.max : 0;
+        const normalizedRatio = widget.scale === "inverse" ? 1 - rawRatio : rawRatio;
+        const gaugePercent = Math.max(0, Math.min(100, normalizedRatio * 100));
+        const gaugeAngle = `${gaugePercent * 3.6}deg`;
+        const gaugeSize = widget.items.length > 1 ? 88 : 108;
 
         return (
-          <div key={item.label} className="rounded-2xl p-4 min-w-0" style={{ backgroundColor: `${item.color}12`, border: `1px solid ${item.color}40` }}>
-            <div className="flex items-start justify-between gap-2">
-              <span className="text-xs font-semibold truncate" style={{ color: "#D1D5DB" }}>{item.label}</span>
-              <span className="text-[10px] font-semibold px-2 py-1 rounded-lg shrink-0" style={{ color: zoneColor, backgroundColor: `${zoneColor}1F` }}>{item.zone}</span>
+          <div key={item.label} className="rounded-2xl p-4 min-w-0 flex items-center gap-4" style={{ backgroundColor: `${item.color}12`, border: `1px solid ${item.color}40` }}>
+            <div className="relative shrink-0" style={{ width: `${gaugeSize}px`, height: `${gaugeSize}px` }}>
+              <div
+                className="absolute inset-0 rounded-full"
+                style={{
+                  background: `conic-gradient(${item.color} 0deg ${gaugeAngle}, rgba(255,255,255,0.08) ${gaugeAngle} 360deg)`,
+                  boxShadow: `0 0 22px ${item.color}22`,
+                }}
+              />
+              <div className="absolute inset-[10px] rounded-full" style={{ backgroundColor: "#161618", border: "1px solid rgba(255,255,255,0.06)" }} />
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-2">
+                <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: "#6B7280" }}>{item.label}</span>
+                <span className="text-lg font-bold mt-1 leading-none" style={{ color: item.color }}>{item.display}</span>
+              </div>
             </div>
-            <div className="text-3xl font-bold mt-3 leading-none" style={{ color: item.color }}>{item.value}</div>
-            <div className="flex items-center justify-between gap-2 mt-3">
-              <span className="text-[10px] truncate" style={{ color: "#6B7280" }}>{item.previous}</span>
-              <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-md shrink-0" style={{ color: item.deltaColor, backgroundColor: `${item.deltaColor}1A` }}>{item.delta}</span>
-            </div>
-            <div className="text-[10px] mt-2 leading-snug" style={{ color: "#9CA3AF" }}>
-              {item.note}
+            <div className="min-w-0 flex-1">
+              <div className="flex items-start justify-between gap-2">
+                <span className="text-[10px] font-semibold px-2 py-1 rounded-lg shrink-0" style={{ color: zoneColor, backgroundColor: `${zoneColor}1F` }}>{item.zone}</span>
+                <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-md shrink-0" style={{ color: item.deltaColor, backgroundColor: `${item.deltaColor}1A` }}>{item.delta}</span>
+              </div>
+              <div className="text-[11px] mt-3" style={{ color: "#6B7280" }}>{item.previous}</div>
+              <div className="text-[11px] mt-2 leading-snug" style={{ color: "#D1D5DB" }}>
+                {item.note}
+              </div>
             </div>
           </div>
         );
