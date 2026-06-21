@@ -554,8 +554,8 @@ const SermOverviewWidget = ({ widget }) => (
         <div className="text-xs mt-1" style={{ color: "#6B7280" }}>{widget.caption}</div>
       </div>
     </div>
-    <div>
-      {widget.items.map((item, index) => {
+    <div className="grid gap-4" style={{ gridTemplateColumns: widget.items.length > 1 ? "repeat(2, minmax(0, 1fr))" : "1fr" }}>
+      {widget.items.map((item) => {
         const zoneColor = item.zoneColor || item.color;
         const rawRatio = widget.max ? item.score / widget.max : 0;
         const normalizedRatio = widget.scale === "inverse" ? 1 - rawRatio : rawRatio;
@@ -567,29 +567,30 @@ const SermOverviewWidget = ({ widget }) => (
           <div
             key={item.label}
             className="min-w-0 flex items-center gap-4"
-            style={{
-              paddingTop: index === 0 ? 0 : "16px",
-              marginTop: index === 0 ? 0 : "16px",
-              borderTop: index === 0 ? "none" : "1px solid #2F3137",
-            }}
+            style={{ minHeight: "104px" }}
           >
             <div className="relative shrink-0" style={{ width: `${gaugeSize}px`, height: `${gaugeSize}px` }}>
               <div
                 className="absolute inset-0 rounded-full"
                 style={{
-                  background: `conic-gradient(#E5E7EB 0deg ${gaugeAngle}, rgba(255,255,255,0.08) ${gaugeAngle} 360deg)`,
+                  background: `conic-gradient(${item.color} 0deg ${gaugeAngle}, rgba(255,255,255,0.08) ${gaugeAngle} 360deg)`,
+                  boxShadow: `0 0 18px ${item.color}22`,
                 }}
               />
               <div className="absolute inset-[10px] rounded-full" style={{ backgroundColor: "#1C1C1E", border: "1px solid rgba(255,255,255,0.06)" }} />
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-2">
                 <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: "#6B7280" }}>{item.label}</span>
-                <span className="text-lg font-bold mt-1 leading-none" style={{ color: "#F3F4F6" }}>{item.display}</span>
+                <span className="text-lg font-bold mt-1 leading-none" style={{ color: item.color }}>{item.display}</span>
               </div>
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-start justify-between gap-2">
-                <span className="text-[10px] font-semibold px-2 py-1 rounded-lg shrink-0" style={{ color: zoneColor, backgroundColor: `${zoneColor}1F` }}>{item.zone}</span>
-                <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-md shrink-0" style={{ color: item.deltaColor, backgroundColor: `${item.deltaColor}1A` }}>{item.delta}</span>
+                <span
+                  className="text-[10px] font-semibold px-2 py-1 rounded-lg shrink-0"
+                  style={{ color: zoneColor, backgroundColor: `${zoneColor}1F` }}
+                >
+                  {item.zone} {item.delta}
+                </span>
               </div>
               <div className="text-[11px] mt-3" style={{ color: "#6B7280" }}>{item.previous}</div>
               <div className="text-[11px] mt-2 leading-snug" style={{ color: "#D1D5DB" }}>
