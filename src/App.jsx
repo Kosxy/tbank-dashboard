@@ -554,7 +554,7 @@ const SermOverviewWidget = ({ widget }) => (
         <div className="text-xs mt-1" style={{ color: "#6B7280" }}>{widget.caption}</div>
       </div>
     </div>
-    <div className="grid gap-4" style={{ gridTemplateColumns: widget.items.length > 1 ? "repeat(2, minmax(0, 1fr))" : "1fr" }}>
+    <div className={`grid gap-0 ${widget.items.length > 1 ? "grid-serm-overview-items" : ""}`} style={{ gridTemplateColumns: widget.items.length > 1 ? undefined : "1fr" }}>
       {widget.items.map((item) => {
         const zoneColor = item.zoneColor || item.color;
         const rawRatio = widget.max ? item.score / widget.max : 0;
@@ -566,7 +566,7 @@ const SermOverviewWidget = ({ widget }) => (
         return (
           <div
             key={item.label}
-            className="min-w-0 flex items-center gap-4"
+            className={`min-w-0 flex items-center gap-4 ${widget.items.length > 1 ? "serm-overview-item" : ""}`}
             style={{ minHeight: "104px" }}
           >
             <div className="relative shrink-0" style={{ width: `${gaugeSize}px`, height: `${gaugeSize}px` }}>
@@ -579,7 +579,7 @@ const SermOverviewWidget = ({ widget }) => (
               />
               <div className="absolute inset-[10px] rounded-full" style={{ backgroundColor: "#1C1C1E", border: "1px solid rgba(255,255,255,0.06)" }} />
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-2">
-                <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: "#6B7280" }}>{item.label}</span>
+                <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: "#E5E7EB" }}>{item.label}</span>
                 <span className="text-lg font-bold mt-1 leading-none" style={{ color: item.color }}>{item.display}</span>
               </div>
             </div>
@@ -1684,6 +1684,12 @@ export default function App() {
         .grid-timeline { grid-template-columns: 1fr; }
         .grid-two-col { grid-template-columns: 1fr; }
         .grid-serm-overview { grid-template-columns: 1fr; }
+        .grid-serm-overview-items { grid-template-columns: 1fr; }
+        .serm-overview-item + .serm-overview-item {
+          border-top: 1px solid #2F3137;
+          margin-top: 16px;
+          padding-top: 16px;
+        }
         .grid-serm-entry { grid-template-columns: 1fr; }
         .grid-serm-tabs { grid-template-columns: 1fr; }
         .grid-serm-metrics { grid-template-columns: 1fr; }
@@ -1695,6 +1701,15 @@ export default function App() {
           .grid-timeline { grid-template-columns: repeat(2, 1fr); }
           .grid-two-col { grid-template-columns: repeat(2, 1fr); }
           .grid-serm-overview { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+          .grid-serm-overview-items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+          .serm-overview-item + .serm-overview-item {
+            border-top: none;
+            margin-top: 0;
+            padding-top: 0;
+            border-left: 1px solid #2F3137;
+            margin-left: 16px;
+            padding-left: 16px;
+          }
           .grid-serm-entry { grid-template-columns: repeat(2, 1fr); }
           .grid-serm-tabs { grid-template-columns: repeat(2, 1fr); }
           .grid-serm-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
