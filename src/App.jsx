@@ -425,8 +425,8 @@ const sermEntryPoints = [
     visual: {
       max: 100,
       rows: [
-        { label: "Контент", value: 100, display: "100%", delta: "20/20", color: "#22C55E" },
-        { label: "Фокус", value: 50, display: "2", delta: "системы", color: "#F59E0B" },
+        { label: "Контент", value: 100, display: "100%", delta: "20/20", secondaryLabel: "план 20", color: "#22C55E" },
+        { label: "Фокус", value: 50, display: "2", delta: "системы", secondaryLabel: "2 системы", color: "#F59E0B" },
       ],
     },
   },
@@ -519,6 +519,7 @@ const SermEntryMiniChart = ({ entry }) => (
     {entry.visual.rows.map((row) => {
       const width = Math.min(100, (row.value / entry.visual.max) * 100);
       const previousWidth = row.previous === undefined ? null : Math.min(100, (row.previous / entry.visual.max) * 100);
+      const secondaryLabel = row.secondaryLabel || row.previousLabel;
 
       return (
         <div key={row.label}>
@@ -535,11 +536,11 @@ const SermEntryMiniChart = ({ entry }) => (
               <div className="absolute top-[-3px] h-4 w-[2px] rounded-full" style={{ left: `${previousWidth}%`, backgroundColor: "#9CA3AF", opacity: 0.9 }} />
             )}
           </div>
-          {row.previousLabel && (
-            <div className="flex justify-end mt-1">
-              <span className="text-[10px]" style={{ color: "#6B7280" }}>{row.previousLabel}</span>
-            </div>
-          )}
+          <div className="flex justify-end mt-1" style={{ minHeight: "14px" }}>
+            {secondaryLabel && (
+              <span className="text-[10px]" style={{ color: "#6B7280" }}>{secondaryLabel}</span>
+            )}
+          </div>
         </div>
       );
     })}
