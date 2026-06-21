@@ -534,14 +534,14 @@ const SermEntryMiniChart = ({ entry }) => (
           <div className="flex items-center justify-between gap-3 mb-1.5">
             <span className="text-xs font-medium truncate" style={{ color: "#D1D5DB" }}>{row.label}</span>
             <span className="flex items-center gap-2 shrink-0">
-              <span className="text-xs font-bold" style={{ color: row.color }}>{row.display}</span>
+              <span className="text-xs font-bold" style={{ color: "#F3F4F6" }}>{row.display}</span>
               <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-md" style={{ color: row.color, backgroundColor: `${row.color}1A` }}>{row.delta}</span>
             </span>
           </div>
           <div className="relative h-2.5 rounded-full overflow-visible" style={{ backgroundColor: "#2C2C2E" }}>
-            <div className="h-full rounded-full" style={{ width: `${width}%`, backgroundColor: row.color }} />
+            <div className="h-full rounded-full" style={{ width: `${width}%`, backgroundColor: "#E5E7EB" }} />
             {previousWidth !== null && (
-              <div className="absolute top-[-3px] h-4 w-[2px] rounded-full" style={{ left: `${previousWidth}%`, backgroundColor: "#F3F4F6", opacity: 0.85 }} />
+              <div className="absolute top-[-3px] h-4 w-[2px] rounded-full" style={{ left: `${previousWidth}%`, backgroundColor: "#9CA3AF", opacity: 0.9 }} />
             )}
           </div>
           {row.previousLabel && (
@@ -562,8 +562,8 @@ const SermOverviewWidget = ({ widget }) => (
         <div className="text-sm font-semibold text-white">{widget.title}</div>
         <div className="text-xs mt-1" style={{ color: "#6B7280" }}>{widget.caption}</div>
       </div>
-      <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: `${widget.items[0].color}1A` }}>
-        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: widget.items[0].color }} />
+      <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: "#2C2C2E" }}>
+        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: "#D1D5DB" }} />
       </div>
     </div>
     <div className="grid gap-3">
@@ -576,19 +576,18 @@ const SermOverviewWidget = ({ widget }) => (
         const gaugeSize = widget.items.length > 1 ? 88 : 108;
 
         return (
-          <div key={item.label} className="rounded-2xl p-4 min-w-0 flex items-center gap-4" style={{ backgroundColor: `${item.color}12`, border: `1px solid ${item.color}40` }}>
+          <div key={item.label} className="rounded-2xl p-4 min-w-0 flex items-center gap-4" style={{ backgroundColor: "#17181B", border: "1px solid #2F3137" }}>
             <div className="relative shrink-0" style={{ width: `${gaugeSize}px`, height: `${gaugeSize}px` }}>
               <div
                 className="absolute inset-0 rounded-full"
                 style={{
-                  background: `conic-gradient(${item.color} 0deg ${gaugeAngle}, rgba(255,255,255,0.08) ${gaugeAngle} 360deg)`,
-                  boxShadow: `0 0 22px ${item.color}22`,
+                  background: `conic-gradient(#E5E7EB 0deg ${gaugeAngle}, rgba(255,255,255,0.08) ${gaugeAngle} 360deg)`,
                 }}
               />
               <div className="absolute inset-[10px] rounded-full" style={{ backgroundColor: "#161618", border: "1px solid rgba(255,255,255,0.06)" }} />
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-2">
                 <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: "#6B7280" }}>{item.label}</span>
-                <span className="text-lg font-bold mt-1 leading-none" style={{ color: item.color }}>{item.display}</span>
+                <span className="text-lg font-bold mt-1 leading-none" style={{ color: "#F3F4F6" }}>{item.display}</span>
               </div>
             </div>
             <div className="min-w-0 flex-1">
