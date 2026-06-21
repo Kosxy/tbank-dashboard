@@ -435,28 +435,25 @@ const sermEntryPoints = [
 const sermOverviewWidgets = [
   {
     title: "Здоровье выдачи",
-    caption: "выше - лучше",
-    max: 100,
-    rows: [
-      { label: "Яндекс", value: 92.9, previous: 90.9, display: "92.9%", previousLabel: "было 90.9%", delta: "+2 п.п.", color: "#22C55E", deltaColor: "#22C55E" },
-      { label: "Google", value: 85.2, previous: 89, display: "85.2%", previousLabel: "было 89%", delta: "-3.8 п.п.", color: "#60A5FA", deltaColor: "#EF4444" },
+    caption: "индекс 0-100, выше - лучше",
+    items: [
+      { label: "Яндекс", value: "92.9%", zone: "отлично", previous: "было 90.9%", delta: "+2 п.п.", color: "#22C55E", deltaColor: "#22C55E", note: "выдача почти чистая" },
+      { label: "Google", value: "85.2%", zone: "норма", previous: "было 89%", delta: "-3.8 п.п.", color: "#60A5FA", deltaColor: "#EF4444", note: "есть просадка" },
     ],
   },
   {
     title: "Негатив",
-    caption: "ниже - лучше",
-    max: 10,
-    rows: [
-      { label: "Яндекс", value: 2.7, previous: 3.6, display: "2.7%", previousLabel: "было 3.6%", delta: "-0.9 п.п.", color: "#22C55E", deltaColor: "#22C55E" },
-      { label: "Google", value: 7.3, previous: 5.5, display: "7.3%", previousLabel: "было 5.5%", delta: "+1.8 п.п.", color: "#EF4444", deltaColor: "#EF4444" },
+    caption: "доля негатива, ниже - лучше",
+    items: [
+      { label: "Яндекс", value: "2.7%", zone: "контроль", previous: "было 3.6%", delta: "-0.9 п.п.", color: "#22C55E", deltaColor: "#22C55E", note: "негатив снижается" },
+      { label: "Google", value: "7.3%", zone: "риск", previous: "было 5.5%", delta: "+1.8 п.п.", color: "#EF4444", deltaColor: "#EF4444", note: "banki.ru в ТОП-10" },
     ],
   },
   {
     title: "Публикации",
-    caption: "выполнение плана",
-    max: 20,
-    rows: [
-      { label: "Контент", value: 20, display: "20/20", delta: "100%", color: "#F59E0B", deltaColor: "#22C55E" },
+    caption: "выполнение контентного плана",
+    items: [
+      { label: "Контент", value: "20/20", zone: "выполнено", previous: "план 20", delta: "100%", color: "#F59E0B", zoneColor: "#22C55E", deltaColor: "#22C55E", note: "объем закрыт" },
     ],
   },
 ];
@@ -559,35 +556,28 @@ const SermOverviewWidget = ({ widget }) => (
         <div className="text-sm font-semibold text-white">{widget.title}</div>
         <div className="text-xs mt-1" style={{ color: "#6B7280" }}>{widget.caption}</div>
       </div>
-      <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: `${widget.rows[0].color}1A` }}>
-        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: widget.rows[0].color }} />
+      <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: `${widget.items[0].color}1A` }}>
+        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: widget.items[0].color }} />
       </div>
     </div>
-    <div className="space-y-3">
-      {widget.rows.map((row) => {
-        const width = Math.min(100, (row.value / widget.max) * 100);
-        const previousWidth = row.previous === undefined ? null : Math.min(100, (row.previous / widget.max) * 100);
+    <div className="grid gap-3" style={{ gridTemplateColumns: widget.items.length > 1 ? "repeat(auto-fit, minmax(128px, 1fr))" : "1fr" }}>
+      {widget.items.map((item) => {
+        const zoneColor = item.zoneColor || item.color;
 
         return (
-          <div key={row.label}>
-            <div className="flex items-center justify-between gap-3 mb-1.5">
-              <span className="text-xs font-medium" style={{ color: "#D1D5DB" }}>{row.label}</span>
-              <span className="flex items-center gap-2 shrink-0">
-                <span className="text-sm font-bold" style={{ color: row.color }}>{row.display}</span>
-                <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-md" style={{ color: row.deltaColor, backgroundColor: `${row.deltaColor}1A` }}>{row.delta}</span>
-              </span>
+          <div key={item.label} className="rounded-2xl p-4 min-w-0" style={{ backgroundColor: `${item.color}12`, border: `1px solid ${item.color}40` }}>
+            <div className="flex items-start justify-between gap-2">
+              <span className="text-xs font-semibold truncate" style={{ color: "#D1D5DB" }}>{item.label}</span>
+              <span className="text-[10px] font-semibold px-2 py-1 rounded-lg shrink-0" style={{ color: zoneColor, backgroundColor: `${zoneColor}1F` }}>{item.zone}</span>
             </div>
-            <div className="relative h-3 rounded-full overflow-visible" style={{ backgroundColor: "#2C2C2E" }}>
-              <div className="h-full rounded-full" style={{ width: `${width}%`, backgroundColor: row.color }} />
-              {previousWidth !== null && (
-                <div className="absolute top-[-3px] h-[18px] w-[2px] rounded-full" style={{ left: `${previousWidth}%`, backgroundColor: "#F3F4F6", opacity: 0.85 }} />
-              )}
+            <div className="text-3xl font-bold mt-3 leading-none" style={{ color: item.color }}>{item.value}</div>
+            <div className="flex items-center justify-between gap-2 mt-3">
+              <span className="text-[10px] truncate" style={{ color: "#6B7280" }}>{item.previous}</span>
+              <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-md shrink-0" style={{ color: item.deltaColor, backgroundColor: `${item.deltaColor}1A` }}>{item.delta}</span>
             </div>
-            {row.previousLabel && (
-              <div className="flex justify-end mt-1">
-                <span className="text-[10px]" style={{ color: "#6B7280" }}>{row.previousLabel}</span>
-              </div>
-            )}
+            <div className="text-[10px] mt-2 leading-snug" style={{ color: "#9CA3AF" }}>
+              {item.note}
+            </div>
           </div>
         );
       })}
