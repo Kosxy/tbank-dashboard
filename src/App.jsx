@@ -141,15 +141,277 @@ const sourcesData = [
   { id: 8, name: "Sravni.ru: кредиты для бизнеса Т-Банка", type: "Сравнение условий", link: "https://www.sravni.ru/biznes-kredity/bank/t-bank/", date: "Июн 2026" },
 ];
 
-const sermReportPath = `${import.meta.env.BASE_URL}reports/credit-report-may-2026.html`;
+const sermReportMeta = {
+  period: "Май 2026",
+  date: "31 мая 2026",
+  compareDate: "2 мая 2026",
+  depth: "ТОП-10",
+};
+
+const sermData = {
+  engines: [
+    {
+      id: "yandex",
+      name: "Яндекс",
+      region: "Россия",
+      color: "#FFDD2D",
+      bsh: 92.9,
+      bshDelta: "+2 п.п.",
+      positive: 72.7,
+      positiveDelta: "+1.8 п.п.",
+      negative: 2.7,
+      negativeDelta: "-0.9 п.п.",
+      uniquePositive: 28,
+      uniqueNegative: 1,
+      negativePages: 3,
+      negativePagesDelta: "-1",
+      totalPages: 110,
+      target: { positive: 70, neutral: 15, negative: 2, own: 13 },
+      insight: "Негатив снизился до 3%, позитив вырос до 73%, BSH поднялся до 93%. Полностью вытеснен негатив по запросу «т банк оборотный кредит».",
+    },
+    {
+      id: "google",
+      name: "Google",
+      region: "Россия",
+      color: "#60A5FA",
+      bsh: 85.2,
+      bshDelta: "-3.8 п.п.",
+      positive: 50.9,
+      positiveDelta: "0 п.п.",
+      negative: 7.3,
+      negativeDelta: "+1.8 п.п.",
+      uniquePositive: 16,
+      uniqueNegative: 4,
+      negativePages: 8,
+      negativePagesDelta: "+2",
+      totalPages: 110,
+      target: { positive: 39, neutral: 25, negative: 3, own: 33 },
+      insight: "Негатив вырос до 7% из-за выхода banki.ru в ТОП-10, BSH снизился до 85%. Нерелевант по запросу «т банк оборотный кредит» вытеснен полностью.",
+    },
+  ],
+  keywords: [
+    { query: "т банк кредит для бизнеса", freq: 251, delta: -86 },
+    { query: "тинькофф кредит для бизнеса", freq: 123, delta: -32 },
+    { query: "т банк оборотный кредит", freq: 57, delta: 0 },
+    { query: "т бизнес кредит", freq: 31, delta: -14 },
+    { query: "оборотный кредит тинькофф бизнес", freq: 12, delta: 11 },
+    { query: "оборотный кредит тбанк", freq: 8, delta: -14 },
+    { query: "кредит для бизнеса т банк отзывы", freq: 8, delta: -2 },
+    { query: "оборотный кредит т банк отзывы", freq: 6, delta: -5 },
+  ],
+  traffic: [
+    {
+      engine: "Яндекс",
+      total: 488,
+      ownShare: 53,
+      series: [
+        { label: "Собственные", value: 260, share: 53, color: "#FACC15" },
+        { label: "Позитив", value: 175, share: 36, color: "#22C55E" },
+        { label: "Нейтральные", value: 49, share: 10, color: "#9CA3AF" },
+        { label: "Негатив", value: 4, share: 1, color: "#EF4444" },
+      ],
+      types: [
+        { type: "Официальный сайт", traffic: 260, share: 53, delta: 14 },
+        { type: "Агрегатор", traffic: 208, share: 43, delta: -13 },
+        { type: "Контентный", traffic: 11, share: 2, delta: 0 },
+        { type: "Отзовик", traffic: 5, share: 1, delta: 0 },
+      ],
+    },
+    {
+      engine: "Google",
+      total: 390.4,
+      ownShare: 75,
+      series: [
+        { label: "Собственные", value: 291.2, share: 75, color: "#FACC15" },
+        { label: "Позитив", value: 61.6, share: 16, color: "#22C55E" },
+        { label: "Нейтральные", value: 27.2, share: 7, color: "#9CA3AF" },
+        { label: "Негатив", value: 8, share: 2, color: "#EF4444" },
+      ],
+      types: [
+        { type: "Официальный сайт", traffic: 291, share: 75, delta: -2 },
+        { type: "Агрегатор", traffic: 65, share: 17, delta: 2 },
+        { type: "Контентный", traffic: 25, share: 6, delta: 0 },
+        { type: "Сервис", traffic: 6, share: 1, delta: 0 },
+      ],
+    },
+  ],
+  domains: [
+    { domain: "www.tbank.ru", uniqueUrls: 14, totalUrls: 42, type: "Официальный сайт" },
+    { domain: "www.banki.ru", uniqueUrls: 9, totalUrls: 31, type: "Агрегатор" },
+    { domain: "www.vbr.ru", uniqueUrls: 4, totalUrls: 16, type: "Агрегатор" },
+    { domain: "bankiros.ru", uniqueUrls: 4, totalUrls: 10, type: "Агрегатор" },
+    { domain: "www.sravni.ru", uniqueUrls: 3, totalUrls: 21, type: "Агрегатор" },
+  ],
+  negativeSources: [
+    {
+      domain: "www.banki.ru",
+      url: "banki.ru/services/responses/bank/response/10611108",
+      appearances: 4,
+      traffic: 4,
+      bestPosition: 1,
+      engines: "Яндекс, Google",
+      queries: "оборотный кредит тинькофф отзывы, оборотный кредит т банк отзывы",
+    },
+    {
+      domain: "www.banki.ru",
+      url: "banki.ru/services/responses/bank/response/11749593",
+      appearances: 4,
+      traffic: 2.4,
+      bestPosition: 1,
+      engines: "Google",
+      queries: "оборотный кредит от тинькофф банка отзывы, т банк оборотный кредит",
+    },
+    {
+      domain: "www.banki.ru",
+      url: "banki.ru/services/responses/bank/response/12126074",
+      appearances: 2,
+      traffic: 4.8,
+      bestPosition: 4,
+      engines: "Google",
+      queries: "т банк оборотный кредит, оборотный кредит тбанк",
+    },
+    {
+      domain: "www.banki.ru",
+      url: "banki.ru/services/responses/bank/response/11598649",
+      appearances: 1,
+      traffic: 0.8,
+      bestPosition: 4,
+      engines: "Google",
+      queries: "оборотный кредит от тинькофф банка отзывы",
+    },
+  ],
+  ratings: [
+    { site: "www.sravni.ru", rating: 4.69, tone: "Позитив", position: 3 },
+    { site: "www.vbr.ru", rating: 4.3, tone: "Позитив", position: 7 },
+    { site: "www.banki.ru", rating: 4.5, tone: "Позитив", position: 1 },
+    { site: "otzovik.com", rating: 4.6, tone: "Позитив", position: 6 },
+    { site: "irecommend.ru", rating: 3.8, tone: "Нейтрально", position: 10 },
+  ],
+  ormSources: [
+    { source: "telegram.org", total: 97, negative: 8, neutral: 79, positive: 10 },
+    { source: "vk.com", total: 78, negative: 2, neutral: 76, positive: 0 },
+    { source: "banki.ru", total: 27, negative: 16, neutral: 1, positive: 10 },
+    { source: "instagram.com", total: 24, negative: 24, neutral: 0, positive: 0 },
+    { source: "youtube.com", total: 14, negative: 3, neutral: 7, positive: 4 },
+    { source: "threads.com", total: 16, negative: 5, neutral: 1, positive: 10 },
+  ],
+  topics: {
+    negative: [
+      { label: "Списание средств", value: 38 },
+      { label: "Поддержка и консультация", value: 26 },
+      { label: "ТБизнес", value: 15 },
+      { label: "Решение проблемы", value: 11 },
+      { label: "Кредитный лимит", value: 8 },
+      { label: "Блокировка карты или счета", value: 7 },
+    ],
+    positive: [
+      { label: "Поддержка и консультация", value: 12 },
+      { label: "Одобрение", value: 7 },
+      { label: "Компетентность сотрудников", value: 6 },
+      { label: "Оперативность ответа", value: 5 },
+      { label: "Подробность консультации", value: 5 },
+      { label: "ТБизнес", value: 4 },
+    ],
+  },
+  competitors: {
+    categories: ["Качество услуг", "Поддержка", "Условия", "Спам"],
+    positive: [
+      { bank: "Альфа банк", values: [2, 10, 3, 0], total: 15 },
+      { bank: "Т-Банк", values: [0, 12, 1, 0], total: 13 },
+      { bank: "ВТБ", values: [2, 0, 0, 0], total: 2 },
+      { bank: "Точка", values: [0, 2, 0, 0], total: 2 },
+      { bank: "Сбер", values: [0, 1, 0, 0], total: 1 },
+    ],
+    negative: [
+      { bank: "Т-Банк", values: [0, 12, 1, 0], total: 13 },
+      { bank: "Сбер", values: [2, 5, 3, 0], total: 10 },
+      { bank: "Альфа банк", values: [0, 7, 2, 0], total: 9 },
+      { bank: "ВТБ", values: [1, 0, 0, 0], total: 1 },
+      { bank: "Точка", values: [0, 0, 1, 0], total: 1 },
+    ],
+    positiveConclusion: "По объему позитивного контента лидирует Альфа банк, основная тематика позитива - поддержка.",
+    negativeConclusion: "По объему негативного контента лидирует Т-Банк, далее Сбер и Альфа банк. Основная зона напряжения - поддержка и условия.",
+  },
+  plan: [
+    { engine: "Яндекс", priority: "Продвинуть позитивный отзыв на banki.ru", actions: ["Накрутка поведенческих факторов для позитивного отзыва", "Вытеснение негативных и нерелевантных площадок"], accent: "#FFDD2D" },
+    { engine: "Google", priority: "Снизить видимость негативных отзывов banki.ru", actions: ["Усилить позитивные агрегаторы в ТОП-10", "Работать с URL, которые вышли по оборотным запросам"], accent: "#60A5FA" },
+  ],
+  kpiInsight: "За май 2026 опубликовано 20 единиц контента, плановый объем отзывов размещен полностью. Banki.ru вырос с 4.47 до 4.5, Sravni.ru слегка снизился с 4.7 до 4.69.",
+};
 
 const sermEntryPoints = [
-  { label: "Сводка репутации", anchor: "kpi-root", icon: CheckCircle2, tone: "#22C55E", meta: "Ключевые показатели и общий вывод" },
-  { label: "Поисковая выдача", anchor: "summary-wrap", icon: ExternalLink, tone: "#FFDD2D", meta: "Сводка по запросам и тональности" },
-  { label: "Проблемные источники", anchor: "top-negative-wrap", icon: AlertCircle, tone: "#EF4444", meta: "ТОП URL с негативными позициями" },
-  { label: "Рейтинги и отзывы", anchor: "ratings-root", icon: MessageSquare, tone: "#A855F7", meta: "Отзовики, оценки и тональность" },
-  { label: "Конкуренты", anchor: "competitors-block", icon: TrendingUp, tone: "#60A5FA", meta: "Позитив и негатив по конкурентам" },
-  { label: "План работ", anchor: "conclusions-plan-yandex", icon: Lightbulb, tone: "#F59E0B", meta: "Действия по Яндексу и Google" },
+  {
+    id: "summary",
+    label: "Сводка репутации",
+    icon: CheckCircle2,
+    tone: "#22C55E",
+    meta: "Ключевые показатели и общий вывод",
+    stats: [
+      { label: "BSH Яндекс", value: "92.9%" },
+      { label: "BSH Google", value: "85.2%" },
+      { label: "Негатив", value: "2.7% / 7.3%" },
+    ],
+  },
+  {
+    id: "serp",
+    label: "Поисковая выдача",
+    icon: ExternalLink,
+    tone: "#FFDD2D",
+    meta: "Запросы, домены и распределение трафика",
+    stats: [
+      { label: "Запросов", value: "10" },
+      { label: "ТОП-домен", value: "tbank.ru" },
+      { label: "Свой трафик", value: "53% / 75%" },
+    ],
+  },
+  {
+    id: "problems",
+    label: "Проблемные источники",
+    icon: AlertCircle,
+    tone: "#EF4444",
+    meta: "URL с негативом в ТОП-10",
+    stats: [
+      { label: "Негативных URL", value: "4" },
+      { label: "Домен", value: "banki.ru" },
+      { label: "Лучшая позиция", value: "#1" },
+    ],
+  },
+  {
+    id: "ratings",
+    label: "Рейтинги и отзывы",
+    icon: MessageSquare,
+    tone: "#A855F7",
+    meta: "Отзовики, оценки и темы ORM",
+    stats: [
+      { label: "Карточек", value: "5" },
+      { label: "Banki.ru", value: "4.5" },
+      { label: "Sravni", value: "4.69" },
+    ],
+  },
+  {
+    id: "competitors",
+    label: "Конкуренты",
+    icon: TrendingUp,
+    tone: "#60A5FA",
+    meta: "Позитив и негатив по банкам",
+    stats: [
+      { label: "Позитив Т-Банка", value: "13" },
+      { label: "Негатив Т-Банка", value: "13" },
+      { label: "Лидер позитива", value: "Альфа" },
+    ],
+  },
+  {
+    id: "plan",
+    label: "План работ",
+    icon: Lightbulb,
+    tone: "#F59E0B",
+    meta: "Приоритеты по Яндексу и Google",
+    stats: [
+      { label: "Контента", value: "20" },
+      { label: "Направлений", value: "2" },
+      { label: "Фокус", value: "banki.ru" },
+    ],
+  },
 ];
 
 const reviews = [
@@ -274,7 +536,6 @@ export default function App() {
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const hoveredBarIndex = useRef(null);
-  const reportFrameRef = useRef(null);
 
   useEffect(() => {
     const onScroll = () => {
@@ -336,27 +597,356 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const scrollSermReportToAnchor = () => {
-    const frame = reportFrameRef.current;
-    const anchor = selectedSermEntry.anchor;
-
-    try {
-      const doc = frame?.contentDocument || frame?.contentWindow?.document;
-      const scrollToTarget = () => {
-        const target = doc?.getElementById(anchor);
-        if (target) target.scrollIntoView({ block: "start" });
-        frame?.contentWindow?.history.replaceState(null, "", `#${anchor}`);
-      };
-
-      window.setTimeout(scrollToTarget, 160);
-      window.setTimeout(scrollToTarget, 700);
-    } catch {
-      // If the browser blocks iframe access, the hash in src still opens the report.
-    }
-  };
-
   const renderSermView = () => {
-    const reportSrc = `${sermReportPath}#${selectedSermEntry.anchor}`;
+    const maxNegativeTopic = Math.max(...sermData.topics.negative.map(item => item.value));
+    const maxPositiveTopic = Math.max(...sermData.topics.positive.map(item => item.value));
+    const maxCompetitorTotal = Math.max(
+      ...sermData.competitors.positive.map(item => item.total),
+      ...sermData.competitors.negative.map(item => item.total),
+    );
+
+    const MetricCard = ({ label, value, sub, color = "#FFDD2D" }) => (
+      <div className="rounded-2xl p-4 min-w-0" style={{ backgroundColor: "#151518", border: "1px solid #2F3137" }}>
+        <div className="text-xs font-medium" style={{ color: "#9CA3AF" }}>{label}</div>
+        <div className="text-2xl font-bold mt-2 break-words" style={{ color }}>{value}</div>
+        {sub && <div className="text-xs mt-1 leading-relaxed" style={{ color: "#6B7280" }}>{sub}</div>}
+      </div>
+    );
+
+    const ProgressRow = ({ label, value, max = 100, color = "#FFDD2D", suffix = "%" }) => (
+      <div>
+        <div className="flex items-center justify-between gap-3 text-xs mb-1.5">
+          <span className="truncate" style={{ color: "#D1D5DB" }}>{label}</span>
+          <span className="font-semibold shrink-0" style={{ color }}>{value}{suffix}</span>
+        </div>
+        <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: "#2C2C2E" }}>
+          <div className="h-full rounded-full" style={{ width: `${Math.min(100, (value / max) * 100)}%`, backgroundColor: color }} />
+        </div>
+      </div>
+    );
+
+    const ToneBadge = ({ tone }) => {
+      const isPositive = tone === "Позитив";
+      const color = isPositive ? "#22C55E" : "#9CA3AF";
+      return (
+        <span className="inline-flex items-center rounded-lg px-2 py-1 text-xs font-medium"
+          style={{ backgroundColor: `${color}1A`, color }}>
+          {tone}
+        </span>
+      );
+    };
+
+    const renderSummary = () => (
+      <div className="space-y-5">
+        <div className="grid gap-4 grid-two-col">
+          {sermData.engines.map((engine) => (
+            <Card key={engine.id}>
+              <div className="flex items-start justify-between gap-4 mb-5">
+                <div>
+                  <h3 className="text-xl font-bold text-white">{engine.name}</h3>
+                  <p className="text-sm mt-1" style={{ color: "#9CA3AF" }}>{engine.region}, {sermReportMeta.depth}</p>
+                </div>
+                <span className="px-3 py-1 rounded-lg text-xs font-semibold" style={{ color: engine.color, backgroundColor: `${engine.color}1A` }}>
+                  {engine.bshDelta}
+                </span>
+              </div>
+              <div className="grid gap-3 grid-serm-mini">
+                <MetricCard label="BSH" value={`${engine.bsh}%`} sub="интегральный индекс" color={engine.color} />
+                <MetricCard label="Позитив" value={`${engine.positive}%`} sub={engine.positiveDelta} color="#22C55E" />
+                <MetricCard label="Негатив" value={`${engine.negative}%`} sub={engine.negativeDelta} color="#EF4444" />
+                <MetricCard label="Негативных позиций" value={engine.negativePages} sub={`${engine.negativePagesDelta} к прошлому замеру`} color="#F97316" />
+              </div>
+              <div className="mt-5 rounded-2xl p-4" style={{ backgroundColor: "#111113", border: "1px solid #2F3137" }}>
+                <p className="text-sm leading-relaxed" style={{ color: "#D1D5DB" }}>{engine.insight}</p>
+              </div>
+            </Card>
+          ))}
+        </div>
+
+        <Card>
+          <CardHeader title="Распределение целевых долей" subtitle="Пороговые KPI из отчета по поисковым системам" />
+          <div className="grid gap-5 grid-two-col">
+            {sermData.engines.map((engine) => (
+              <div key={engine.id} className="rounded-2xl p-4" style={{ backgroundColor: "#151518", border: "1px solid #2F3137" }}>
+                <div className="font-semibold text-white mb-4">{engine.name}</div>
+                <div className="space-y-3">
+                  <ProgressRow label="Позитив" value={engine.target.positive} color="#22C55E" />
+                  <ProgressRow label="Нейтральные" value={engine.target.neutral} color="#9CA3AF" />
+                  <ProgressRow label="Негатив" value={engine.target.negative} color="#EF4444" />
+                  <ProgressRow label="Собственные ресурсы" value={engine.target.own} color="#FFDD2D" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
+    );
+
+    const renderSerp = () => (
+      <div className="space-y-5">
+        <div className="grid gap-4 grid-two-col">
+          {sermData.traffic.map((engine) => (
+            <Card key={engine.engine}>
+              <CardHeader title={`Трафик: ${engine.engine}`} subtitle={`${engine.total} визитов, собственные ресурсы: ${engine.ownShare}%`} />
+              <div className="space-y-4">
+                {engine.series.map((item) => (
+                  <ProgressRow key={item.label} label={item.label} value={item.share} color={item.color} />
+                ))}
+              </div>
+              <div className="mt-5 grid gap-2">
+                {engine.types.map((type) => (
+                  <div key={type.type} className="flex items-center justify-between gap-3 text-sm rounded-xl px-3 py-2" style={{ backgroundColor: "#151518" }}>
+                    <span className="truncate" style={{ color: "#D1D5DB" }}>{type.type}</span>
+                    <span className="shrink-0 font-semibold" style={{ color: type.delta >= 0 ? "#22C55E" : "#EF4444" }}>
+                      {type.share}% · {type.delta > 0 ? "+" : ""}{type.delta}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          ))}
+        </div>
+
+        <Card>
+          <CardHeader title="Запросы с частотностью" subtitle="Основные поисковые формулировки из отчета" />
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm min-w-[620px]">
+              <thead>
+                <tr style={{ borderBottom: "1px solid #374151" }}>
+                  <th className="text-left py-3 font-medium" style={{ color: "#9CA3AF" }}>Запрос</th>
+                  <th className="text-right py-3 font-medium" style={{ color: "#9CA3AF" }}>Частотность</th>
+                  <th className="text-right py-3 font-medium" style={{ color: "#9CA3AF" }}>Дельта</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sermData.keywords.map((item) => (
+                  <tr key={item.query} style={{ borderBottom: "1px solid #2C2C2E" }}>
+                    <td className="py-3 pr-4 text-white">{item.query}</td>
+                    <td className="py-3 text-right font-semibold" style={{ color: "#FFDD2D" }}>{item.freq}</td>
+                    <td className="py-3 text-right font-semibold" style={{ color: item.delta > 0 ? "#22C55E" : item.delta < 0 ? "#EF4444" : "#9CA3AF" }}>
+                      {item.delta > 0 ? "+" : ""}{item.delta}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+
+        <Card>
+          <CardHeader title="Домены в выдаче" subtitle="Кто чаще всего появляется в ТОП-10" />
+          <div className="grid gap-3 grid-serm-domains">
+            {sermData.domains.map((domain) => (
+              <div key={domain.domain} className="rounded-2xl p-4" style={{ backgroundColor: "#151518", border: "1px solid #2F3137" }}>
+                <div className="text-sm font-semibold text-white truncate">{domain.domain}</div>
+                <div className="text-xs mt-1" style={{ color: "#9CA3AF" }}>{domain.type}</div>
+                <div className="flex items-end justify-between gap-3 mt-4">
+                  <div>
+                    <div className="text-2xl font-bold" style={{ color: "#FFDD2D" }}>{domain.totalUrls}</div>
+                    <div className="text-xs" style={{ color: "#6B7280" }}>позиций всего</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-lg font-semibold text-white">{domain.uniqueUrls}</div>
+                    <div className="text-xs" style={{ color: "#6B7280" }}>уникальных URL</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
+    );
+
+    const renderProblems = () => (
+      <div className="space-y-5">
+        <div className="grid gap-4 grid-serm-metrics">
+          <MetricCard label="Проблемный домен" value="banki.ru" sub="все негативные URL из списка" color="#EF4444" />
+          <MetricCard label="Негативных URL" value="4" sub="агрегировано по Яндексу и Google" color="#F97316" />
+          <MetricCard label="Лучшая позиция негатива" value="#1" sub="по оборотным запросам" color="#EF4444" />
+        </div>
+
+        <Card>
+          <CardHeader title="URL с негативом" subtitle="Приоритеты для вытеснения и работы с поведенческими факторами" />
+          <div className="space-y-3">
+            {sermData.negativeSources.map((item, index) => (
+              <div key={item.url} className="rounded-2xl p-4" style={{ backgroundColor: "#151518", border: "1px solid #2F3137" }}>
+                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold" style={{ backgroundColor: "rgba(239,68,68,0.16)", color: "#EF4444" }}>{index + 1}</span>
+                      <h4 className="font-semibold text-white truncate">{item.domain}</h4>
+                    </div>
+                    <p className="text-xs mt-2 break-all" style={{ color: "#9CA3AF" }}>{item.url}</p>
+                    <p className="text-xs mt-2 leading-relaxed" style={{ color: "#6B7280" }}>{item.queries}</p>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 min-w-[220px]">
+                    <MetricCard label="Появлений" value={item.appearances} color="#FFDD2D" />
+                    <MetricCard label="Трафик" value={item.traffic} color="#F97316" />
+                    <MetricCard label="Позиция" value={`#${item.bestPosition}`} color="#EF4444" />
+                  </div>
+                </div>
+                <div className="text-xs mt-3" style={{ color: "#9CA3AF" }}>Поисковые системы: {item.engines}</div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
+    );
+
+    const renderRatings = () => (
+      <div className="space-y-5">
+        <Card>
+          <CardHeader title="Рейтинги на площадках" subtitle="Карточки, которые видны в поисковой выдаче" />
+          <div className="grid gap-3 grid-serm-domains">
+            {sermData.ratings.map((item) => (
+              <div key={item.site} className="rounded-2xl p-4" style={{ backgroundColor: "#151518", border: "1px solid #2F3137" }}>
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="text-sm font-semibold text-white truncate">{item.site}</div>
+                    <div className="text-xs mt-1" style={{ color: "#9CA3AF" }}>позиция #{item.position} в выдаче</div>
+                  </div>
+                  <ToneBadge tone={item.tone} />
+                </div>
+                <div className="text-3xl font-bold mt-5" style={{ color: "#FFDD2D" }}>{item.rating}</div>
+                <div className="flex gap-1 mt-2" style={{ color: "#FFDD2D" }}>
+                  {[1, 2, 3, 4, 5].map(star => <StarIcon key={star} filled={star <= Math.round(item.rating)} />)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        <div className="grid gap-4 grid-two-col">
+          <Card>
+            <CardHeader title="Источники ORM" subtitle="Тональность по площадкам за май" />
+            <div className="space-y-4">
+              {sermData.ormSources.map((item) => (
+                <div key={item.source}>
+                  <div className="flex items-center justify-between text-sm mb-2">
+                    <span className="font-medium text-white">{item.source}</span>
+                    <span style={{ color: "#9CA3AF" }}>{item.total}</span>
+                  </div>
+                  <div className="flex h-2 rounded-full overflow-hidden" style={{ backgroundColor: "#2C2C2E" }}>
+                    <div style={{ width: `${(item.positive / item.total) * 100}%`, backgroundColor: "#22C55E" }} />
+                    <div style={{ width: `${(item.neutral / item.total) * 100}%`, backgroundColor: "#6B7280" }} />
+                    <div style={{ width: `${(item.negative / item.total) * 100}%`, backgroundColor: "#EF4444" }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          <Card>
+            <CardHeader title="Темы отзывов" subtitle="Что чаще всего звучит в позитиве и негативе" />
+            <div className="grid gap-5">
+              <div>
+                <div className="text-sm font-semibold mb-3" style={{ color: "#EF4444" }}>Негатив</div>
+                <div className="space-y-3">
+                  {sermData.topics.negative.map((item) => (
+                    <ProgressRow key={item.label} label={item.label} value={item.value} max={maxNegativeTopic} color="#EF4444" suffix="" />
+                  ))}
+                </div>
+              </div>
+              <div>
+                <div className="text-sm font-semibold mb-3" style={{ color: "#22C55E" }}>Позитив</div>
+                <div className="space-y-3">
+                  {sermData.topics.positive.map((item) => (
+                    <ProgressRow key={item.label} label={item.label} value={item.value} max={maxPositiveTopic} color="#22C55E" suffix="" />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </Card>
+        </div>
+      </div>
+    );
+
+    const CompetitorBlock = ({ title, rows, color, conclusion }) => (
+      <Card>
+        <CardHeader title={title} subtitle={conclusion} />
+        <div className="space-y-4">
+          {rows.map((item) => (
+            <div key={item.bank} className="rounded-2xl p-4" style={{ backgroundColor: "#151518", border: "1px solid #2F3137" }}>
+              <div className="flex items-center justify-between gap-3 mb-3">
+                <span className="font-semibold text-white">{item.bank}</span>
+                <span className="text-lg font-bold" style={{ color }}>{item.total}</span>
+              </div>
+              <div className="h-2 rounded-full overflow-hidden mb-3" style={{ backgroundColor: "#2C2C2E" }}>
+                <div className="h-full rounded-full" style={{ width: `${(item.total / maxCompetitorTotal) * 100}%`, backgroundColor: color }} />
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {sermData.competitors.categories.map((category, idx) => (
+                  <div key={category} className="text-xs flex items-center justify-between gap-2 rounded-lg px-2 py-1.5" style={{ backgroundColor: "#1C1C1E", color: "#9CA3AF" }}>
+                    <span className="truncate">{category}</span>
+                    <span className="font-semibold text-white">{item.values[idx]}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </Card>
+    );
+
+    const renderCompetitors = () => (
+      <div className="grid gap-4 grid-two-col">
+        <CompetitorBlock title="Позитив по конкурентам" rows={sermData.competitors.positive} color="#22C55E" conclusion={sermData.competitors.positiveConclusion} />
+        <CompetitorBlock title="Негатив по конкурентам" rows={sermData.competitors.negative} color="#EF4444" conclusion={sermData.competitors.negativeConclusion} />
+      </div>
+    );
+
+    const renderPlan = () => (
+      <div className="space-y-5">
+        <div className="grid gap-4 grid-two-col">
+          {sermData.plan.map((item) => (
+            <Card key={item.engine}>
+              <div className="flex items-center justify-between gap-3 mb-5">
+                <h3 className="text-xl font-bold text-white">{item.engine}</h3>
+                <span className="px-3 py-1 rounded-lg text-xs font-semibold" style={{ backgroundColor: `${item.accent}1A`, color: item.accent }}>приоритет</span>
+              </div>
+              <div className="rounded-2xl p-4 mb-4" style={{ backgroundColor: "#151518", border: "1px solid #2F3137" }}>
+                <div className="text-sm font-semibold" style={{ color: item.accent }}>{item.priority}</div>
+              </div>
+              <div className="space-y-3">
+                {item.actions.map((action, index) => (
+                  <div key={action} className="flex items-start gap-3 text-sm leading-relaxed" style={{ color: "#D1D5DB" }}>
+                    <span className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 text-xs font-bold" style={{ backgroundColor: `${item.accent}1A`, color: item.accent }}>{index + 1}</span>
+                    <span>{action}</span>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          ))}
+        </div>
+
+        <Card>
+          <CardHeader title="Контентный KPI" subtitle="Что уже выполнено за май" />
+          <div className="grid gap-4 grid-serm-metrics">
+            <MetricCard label="Опубликовано контента" value="20" sub="план закрыт полностью" color="#22C55E" />
+            <MetricCard label="Banki.ru" value="4.5" sub="рост с 4.47" color="#FFDD2D" />
+            <MetricCard label="Sravni.ru" value="4.69" sub="снижение с 4.7" color="#F59E0B" />
+          </div>
+          <p className="text-sm leading-relaxed mt-5" style={{ color: "#D1D5DB" }}>{sermData.kpiInsight}</p>
+        </Card>
+      </div>
+    );
+
+    const renderActiveSermSection = () => {
+      switch (selectedSermEntry.id) {
+        case "serp":
+          return renderSerp();
+        case "problems":
+          return renderProblems();
+        case "ratings":
+          return renderRatings();
+        case "competitors":
+          return renderCompetitors();
+        case "plan":
+          return renderPlan();
+        default:
+          return renderSummary();
+      }
+    };
 
     return (
       <div className="space-y-6">
@@ -369,23 +959,27 @@ export default function App() {
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 pl-2">
           <div>
             <h2 className="text-2xl md:text-3xl font-bold text-white">Репутация в поиске</h2>
-            <p className="text-sm mt-2 max-w-2xl" style={{ color: "#9CA3AF" }}>SERM-отчет по выдаче, источникам, рейтингам, конкурентам и плану работ за май 2026.</p>
+            <p className="text-sm mt-2 max-w-2xl" style={{ color: "#9CA3AF" }}>
+              Нативный SERM-раздел по поисковой выдаче, рейтингам, конкурентам и плану работ за {sermReportMeta.period}.
+            </p>
           </div>
-          <a href={reportSrc} target="_blank" rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-xl w-fit"
-            style={{ backgroundColor: "#2C2C2E", border: "1px solid #374151", color: "#D1D5DB" }}
-            onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#FFDD2D"; e.currentTarget.style.color = "#000"; }}
-            onMouseLeave={e => { e.currentTarget.style.backgroundColor = "#2C2C2E"; e.currentTarget.style.color = "#D1D5DB"; }}
-          >Открыть отчет <ExternalLink className="w-3.5 h-3.5" /></a>
+          <div className="flex flex-wrap gap-2">
+            {[sermReportMeta.date, `сравнение: ${sermReportMeta.compareDate}`, sermReportMeta.depth].map((chip) => (
+              <span key={chip} className="px-3 py-2 rounded-xl text-xs font-medium"
+                style={{ backgroundColor: "#1C1C1E", border: "1px solid #374151", color: "#D1D5DB" }}>
+                {chip}
+              </span>
+            ))}
+          </div>
         </div>
 
         <div className="grid gap-3 grid-serm-tabs">
           {sermEntryPoints.map((entry) => {
             const Icon = entry.icon;
-            const isActive = entry.anchor === selectedSermEntry.anchor;
+            const isActive = entry.id === selectedSermEntry.id;
 
             return (
-              <button key={entry.anchor} type="button" onClick={() => setSelectedSermEntry(entry)}
+              <button key={entry.id} type="button" onClick={() => setSelectedSermEntry(entry)}
                 className="flex items-center gap-3 rounded-2xl p-4 text-left"
                 style={{
                   backgroundColor: isActive ? "rgba(255,221,45,0.12)" : "#1C1C1E",
@@ -406,17 +1000,7 @@ export default function App() {
           })}
         </div>
 
-        <div className="overflow-hidden rounded-3xl" style={{ border: "1px solid #374151", backgroundColor: "#F5F7FA", boxShadow: "0 14px 42px rgba(0,0,0,0.36)" }}>
-          <iframe
-            key={selectedSermEntry.anchor}
-            ref={reportFrameRef}
-            title={`SERM отчет: ${selectedSermEntry.label}`}
-            src={reportSrc}
-            onLoad={scrollSermReportToAnchor}
-            className="w-full block"
-            style={{ height: "min(82vh, 960px)", minHeight: "680px", border: 0, backgroundColor: "#F5F7FA" }}
-          />
-        </div>
+        {renderActiveSermSection()}
       </div>
     );
   };
@@ -667,9 +1251,9 @@ export default function App() {
                   const Icon = entry.icon;
 
                   return (
-                    <button key={entry.anchor} type="button" onClick={() => openSermReport(entry)}
+                    <button key={entry.id} type="button" onClick={() => openSermReport(entry)}
                       className="group text-left rounded-3xl p-5"
-                      style={{ backgroundColor: "#1C1C1E", border: "1px solid #374151", minHeight: "142px", boxShadow: "0 14px 42px rgba(0,0,0,0.36)" }}
+                      style={{ backgroundColor: "#1C1C1E", border: "1px solid #374151", minHeight: "214px", boxShadow: "0 14px 42px rgba(0,0,0,0.36)" }}
                       onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(255,221,45,0.45)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
                       onMouseLeave={e => { e.currentTarget.style.borderColor = "#374151"; e.currentTarget.style.transform = "translateY(0)"; }}
                     >
@@ -682,6 +1266,14 @@ export default function App() {
                       <div className="mt-4">
                         <h4 className="text-base font-semibold text-white">{entry.label}</h4>
                         <p className="text-xs leading-relaxed mt-2" style={{ color: "#9CA3AF" }}>{entry.meta}</p>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2 mt-4">
+                        {entry.stats.map((stat) => (
+                          <div key={stat.label} className="rounded-xl px-2.5 py-2 min-w-0" style={{ backgroundColor: "#151518", border: "1px solid #2F3137" }}>
+                            <div className="text-[10px] leading-tight truncate" style={{ color: "#6B7280" }}>{stat.label}</div>
+                            <div className="text-xs font-semibold mt-1 truncate" style={{ color: entry.tone }}>{stat.value}</div>
+                          </div>
+                        ))}
                       </div>
                     </button>
                   );
@@ -969,6 +1561,9 @@ export default function App() {
         .grid-two-col { grid-template-columns: 1fr; }
         .grid-serm-entry { grid-template-columns: 1fr; }
         .grid-serm-tabs { grid-template-columns: 1fr; }
+        .grid-serm-metrics { grid-template-columns: 1fr; }
+        .grid-serm-mini { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid-serm-domains { grid-template-columns: 1fr; }
         .grid-reviews { grid-template-columns: 1fr; }
         @media (min-width: 640px) {
           .grid-top-3 { grid-template-columns: repeat(3, 1fr); }
@@ -976,11 +1571,14 @@ export default function App() {
           .grid-two-col { grid-template-columns: repeat(2, 1fr); }
           .grid-serm-entry { grid-template-columns: repeat(2, 1fr); }
           .grid-serm-tabs { grid-template-columns: repeat(2, 1fr); }
+          .grid-serm-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+          .grid-serm-domains { grid-template-columns: repeat(2, minmax(0, 1fr)); }
           .grid-reviews { grid-template-columns: repeat(3, 1fr); }
         }
         @media (min-width: 1024px) {
           .grid-serm-entry { grid-template-columns: repeat(3, 1fr); }
           .grid-serm-tabs { grid-template-columns: repeat(3, 1fr); }
+          .grid-serm-domains { grid-template-columns: repeat(5, minmax(0, 1fr)); }
         }
         @media (max-width: 639px) {
           .ui-card:hover { transform: none; }
