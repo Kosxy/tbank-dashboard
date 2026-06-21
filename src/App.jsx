@@ -346,7 +346,6 @@ const sermEntryPoints = [
     icon: CheckCircle2,
     tone: "#22C55E",
     meta: "Ключевые показатели и общий вывод",
-    primaryMetric: "BSH: 92.9% / 85.2%",
     insight: "Яндекс растет, Google просел из-за banki.ru в ТОП-10.",
     visual: {
       max: 100,
@@ -362,7 +361,6 @@ const sermEntryPoints = [
     icon: ExternalLink,
     tone: "#FFDD2D",
     meta: "Запросы, домены и распределение трафика",
-    primaryMetric: "Свой трафик: 53% / 75%",
     insight: "tbank.ru лидирует, но агрегаторы держат заметную долю выдачи.",
     visual: {
       max: 100,
@@ -378,7 +376,6 @@ const sermEntryPoints = [
     icon: AlertCircle,
     tone: "#EF4444",
     meta: "URL с негативом в ТОП-10",
-    primaryMetric: "4 URL banki.ru",
     insight: "Главный риск - отзывы на позициях #1 по оборотным запросам.",
     visual: {
       max: 10,
@@ -394,7 +391,6 @@ const sermEntryPoints = [
     icon: MessageSquare,
     tone: "#A855F7",
     meta: "Отзовики, оценки и темы ORM",
-    primaryMetric: "Banki 4.5 · Sravni 4.69",
     insight: "План контента закрыт, Banki растет, Sravni слегка просел.",
     visual: {
       max: 5,
@@ -410,7 +406,6 @@ const sermEntryPoints = [
     icon: TrendingUp,
     tone: "#60A5FA",
     meta: "Позитив и негатив по банкам",
-    primaryMetric: "Т-Банк: 13 / 13",
     insight: "Паритет позитива и негатива; ключевая тема - поддержка.",
     visual: {
       max: 15,
@@ -426,7 +421,6 @@ const sermEntryPoints = [
     icon: Lightbulb,
     tone: "#F59E0B",
     meta: "Приоритеты по Яндексу и Google",
-    primaryMetric: "20 публикаций",
     insight: "Фокус - продвинуть позитив на banki.ru и вытеснить негатив.",
     visual: {
       max: 100,
@@ -1391,11 +1385,8 @@ export default function App() {
                       onMouseLeave={e => { e.currentTarget.style.borderColor = "#374151"; e.currentTarget.style.transform = "translateY(0)"; }}
                     >
                       <div className="h-1 w-10 rounded-full mb-4" style={{ backgroundColor: entry.tone }} />
-                      <div className="flex items-start justify-between gap-3">
+                      <div>
                         <span className="text-sm font-semibold text-white">{entry.label}</span>
-                        <span className="text-[10px] font-semibold px-2 py-1 rounded-lg leading-tight" style={{ color: entry.tone, backgroundColor: `${entry.tone}1A`, maxWidth: "58%", textAlign: "right" }}>
-                          {entry.primaryMetric}
-                        </span>
                       </div>
                       <SermEntryMiniChart entry={entry} />
                       <p className="text-xs leading-relaxed mt-4" style={{ color: "#9CA3AF" }}>{entry.insight}</p>
