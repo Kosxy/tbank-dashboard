@@ -453,15 +453,6 @@ const sermOverviewWidgets = [
       { label: "Google", score: 7.3, display: "7.3%", zone: "риск", previous: "было 5.5%", delta: "+1.8 п.п.", color: "#EF4444", deltaColor: "#EF4444", note: "banki.ru в ТОП-10" },
     ],
   },
-  {
-    title: "Публикации",
-    caption: "выполнение контентного плана",
-    max: 20,
-    scale: "direct",
-    items: [
-      { label: "Контент", score: 20, display: "20/20", zone: "выполнено", previous: "план 20", delta: "100%", color: "#F59E0B", zoneColor: "#22C55E", deltaColor: "#22C55E", note: "объем закрыт" },
-    ],
-  },
 ];
 
 const reviews = [
@@ -534,12 +525,12 @@ const SermEntryMiniChart = ({ entry }) => (
           <div className="flex items-center justify-between gap-3 mb-1.5">
             <span className="text-xs font-medium truncate" style={{ color: "#D1D5DB" }}>{row.label}</span>
             <span className="flex items-center gap-2 shrink-0">
-              <span className="text-xs font-bold" style={{ color: "#F3F4F6" }}>{row.display}</span>
+              <span className="text-xs font-bold" style={{ color: row.color }}>{row.display}</span>
               <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-md" style={{ color: row.color, backgroundColor: `${row.color}1A` }}>{row.delta}</span>
             </span>
           </div>
           <div className="relative h-2.5 rounded-full overflow-visible" style={{ backgroundColor: "#2C2C2E" }}>
-            <div className="h-full rounded-full" style={{ width: `${width}%`, backgroundColor: "#E5E7EB" }} />
+            <div className="h-full rounded-full" style={{ width: `${width}%`, backgroundColor: row.color }} />
             {previousWidth !== null && (
               <div className="absolute top-[-3px] h-4 w-[2px] rounded-full" style={{ left: `${previousWidth}%`, backgroundColor: "#9CA3AF", opacity: 0.9 }} />
             )}
@@ -1401,8 +1392,9 @@ export default function App() {
                       onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(255,221,45,0.45)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
                       onMouseLeave={e => { e.currentTarget.style.borderColor = "#374151"; e.currentTarget.style.transform = "translateY(0)"; }}
                     >
-                      <div>
+                      <div className="flex items-start justify-between gap-3">
                         <span className="text-sm font-semibold text-white">{entry.label}</span>
+                        <ChevronRight className="w-4 h-4 shrink-0 mt-0.5" style={{ color: "#6B7280" }} />
                       </div>
                       <SermEntryMiniChart entry={entry} />
                       <p className="text-xs leading-relaxed mt-4" style={{ color: "#9CA3AF" }}>{entry.insight}</p>
@@ -1701,7 +1693,7 @@ export default function App() {
           .grid-top-3 { grid-template-columns: repeat(3, 1fr); }
           .grid-timeline { grid-template-columns: repeat(2, 1fr); }
           .grid-two-col { grid-template-columns: repeat(2, 1fr); }
-          .grid-serm-overview { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+          .grid-serm-overview { grid-template-columns: repeat(2, minmax(0, 1fr)); }
           .grid-serm-entry { grid-template-columns: repeat(2, 1fr); }
           .grid-serm-tabs { grid-template-columns: repeat(2, 1fr); }
           .grid-serm-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
