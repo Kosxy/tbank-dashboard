@@ -549,9 +549,9 @@ const SermEntryMiniChart = ({ entry }) => (
 const SermOverviewWidget = ({ widget }) => (
   <div className="rounded-3xl p-4" style={{ backgroundColor: "#1C1C1E", border: "1px solid #374151", boxShadow: "0 14px 42px rgba(0,0,0,0.32)" }}>
     <div className="mb-4">
-      <div>
+      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <div className="text-sm font-semibold text-white">{widget.title}</div>
-        <div className="text-xs mt-1" style={{ color: "#6B7280" }}>{widget.caption}</div>
+        <div className="text-xs sm:text-right" style={{ color: "#6B7280" }}>{widget.caption}</div>
       </div>
     </div>
     <div className={`grid gap-0 ${widget.items.length > 1 ? "grid-serm-overview-items" : ""}`} style={{ gridTemplateColumns: widget.items.length > 1 ? undefined : "1fr" }}>
