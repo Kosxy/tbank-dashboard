@@ -348,6 +348,13 @@ const sermEntryPoints = [
     meta: "Ключевые показатели и общий вывод",
     primaryMetric: "BSH: 92.9% / 85.2%",
     insight: "Яндекс растет, Google просел из-за banki.ru в ТОП-10.",
+    visual: {
+      max: 100,
+      rows: [
+        { label: "Яндекс", value: 92.9, previous: 90.9, display: "92.9%", previousLabel: "было 90.9%", delta: "+2 п.п.", color: "#22C55E" },
+        { label: "Google", value: 85.2, previous: 89, display: "85.2%", previousLabel: "было 89%", delta: "-3.8 п.п.", color: "#60A5FA" },
+      ],
+    },
   },
   {
     id: "serp",
@@ -357,6 +364,13 @@ const sermEntryPoints = [
     meta: "Запросы, домены и распределение трафика",
     primaryMetric: "Свой трафик: 53% / 75%",
     insight: "tbank.ru лидирует, но агрегаторы держат заметную долю выдачи.",
+    visual: {
+      max: 100,
+      rows: [
+        { label: "Яндекс", value: 53, previous: 39, display: "53%", previousLabel: "было 39%", delta: "+14 п.п.", color: "#FFDD2D" },
+        { label: "Google", value: 75, previous: 77, display: "75%", previousLabel: "было 77%", delta: "-2 п.п.", color: "#60A5FA" },
+      ],
+    },
   },
   {
     id: "problems",
@@ -366,6 +380,13 @@ const sermEntryPoints = [
     meta: "URL с негативом в ТОП-10",
     primaryMetric: "4 URL banki.ru",
     insight: "Главный риск - отзывы на позициях #1 по оборотным запросам.",
+    visual: {
+      max: 10,
+      rows: [
+        { label: "Яндекс", value: 3, previous: 4, display: "3", previousLabel: "было 4", delta: "-1", color: "#22C55E" },
+        { label: "Google", value: 8, previous: 6, display: "8", previousLabel: "было 6", delta: "+2", color: "#EF4444" },
+      ],
+    },
   },
   {
     id: "ratings",
@@ -375,6 +396,13 @@ const sermEntryPoints = [
     meta: "Отзовики, оценки и темы ORM",
     primaryMetric: "Banki 4.5 · Sravni 4.69",
     insight: "План контента закрыт, Banki растет, Sravni слегка просел.",
+    visual: {
+      max: 5,
+      rows: [
+        { label: "Banki", value: 4.5, previous: 4.47, display: "4.5", previousLabel: "было 4.47", delta: "+0.03", color: "#A855F7" },
+        { label: "Sravni", value: 4.69, previous: 4.7, display: "4.69", previousLabel: "было 4.7", delta: "-0.01", color: "#F59E0B" },
+      ],
+    },
   },
   {
     id: "competitors",
@@ -384,6 +412,13 @@ const sermEntryPoints = [
     meta: "Позитив и негатив по банкам",
     primaryMetric: "Т-Банк: 13 / 13",
     insight: "Паритет позитива и негатива; ключевая тема - поддержка.",
+    visual: {
+      max: 15,
+      rows: [
+        { label: "Позитив", value: 13, previous: 15, display: "13", previousLabel: "Альфа 15", delta: "vs 15", color: "#22C55E" },
+        { label: "Негатив", value: 13, previous: 10, display: "13", previousLabel: "Сбер 10", delta: "vs 10", color: "#EF4444" },
+      ],
+    },
   },
   {
     id: "plan",
@@ -393,6 +428,13 @@ const sermEntryPoints = [
     meta: "Приоритеты по Яндексу и Google",
     primaryMetric: "20 публикаций",
     insight: "Фокус - продвинуть позитив на banki.ru и вытеснить негатив.",
+    visual: {
+      max: 100,
+      rows: [
+        { label: "Контент", value: 100, display: "100%", delta: "20/20", color: "#22C55E" },
+        { label: "Фокус", value: 50, display: "2", delta: "системы", color: "#F59E0B" },
+      ],
+    },
   },
 ];
 
@@ -454,6 +496,38 @@ const CardHeader = ({ title, subtitle, methodology }) => {
     </div>
   );
 };
+
+const SermEntryMiniChart = ({ entry }) => (
+  <div className="mt-4 space-y-3">
+    {entry.visual.rows.map((row) => {
+      const width = Math.min(100, (row.value / entry.visual.max) * 100);
+      const previousWidth = row.previous === undefined ? null : Math.min(100, (row.previous / entry.visual.max) * 100);
+
+      return (
+        <div key={row.label}>
+          <div className="flex items-center justify-between gap-3 mb-1.5">
+            <span className="text-xs font-medium truncate" style={{ color: "#D1D5DB" }}>{row.label}</span>
+            <span className="flex items-center gap-2 shrink-0">
+              <span className="text-xs font-bold" style={{ color: row.color }}>{row.display}</span>
+              <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-md" style={{ color: row.color, backgroundColor: `${row.color}1A` }}>{row.delta}</span>
+            </span>
+          </div>
+          <div className="relative h-2.5 rounded-full overflow-visible" style={{ backgroundColor: "#2C2C2E" }}>
+            <div className="h-full rounded-full" style={{ width: `${width}%`, backgroundColor: row.color }} />
+            {previousWidth !== null && (
+              <div className="absolute top-[-3px] h-4 w-[2px] rounded-full" style={{ left: `${previousWidth}%`, backgroundColor: "#F3F4F6", opacity: 0.85 }} />
+            )}
+          </div>
+          {row.previousLabel && (
+            <div className="flex justify-end mt-1">
+              <span className="text-[10px]" style={{ color: "#6B7280" }}>{row.previousLabel}</span>
+            </div>
+          )}
+        </div>
+      );
+    })}
+  </div>
+);
 
 const StarIcon = ({ filled }) => (
   <svg className="w-3 h-3" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
@@ -1243,18 +1317,19 @@ export default function App() {
                   return (
                     <button key={entry.id} type="button" onClick={() => openSermReport(entry)}
                       className="group text-left rounded-3xl p-5"
-                      style={{ backgroundColor: "#1C1C1E", border: "1px solid #374151", minHeight: "148px", boxShadow: "0 14px 42px rgba(0,0,0,0.36)" }}
+                      style={{ backgroundColor: "#1C1C1E", border: "1px solid #374151", minHeight: "224px", boxShadow: "0 14px 42px rgba(0,0,0,0.36)" }}
                       onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(255,221,45,0.45)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
                       onMouseLeave={e => { e.currentTarget.style.borderColor = "#374151"; e.currentTarget.style.transform = "translateY(0)"; }}
                     >
                       <div className="h-1 w-10 rounded-full mb-4" style={{ backgroundColor: entry.tone }} />
-                      <div>
+                      <div className="flex items-start justify-between gap-3">
                         <span className="text-sm font-semibold text-white">{entry.label}</span>
+                        <span className="text-[10px] font-semibold px-2 py-1 rounded-lg leading-tight" style={{ color: entry.tone, backgroundColor: `${entry.tone}1A`, maxWidth: "58%", textAlign: "right" }}>
+                          {entry.primaryMetric}
+                        </span>
                       </div>
-                      <div className="mt-5">
-                        <div className="text-2xl font-bold leading-tight" style={{ color: entry.tone }}>{entry.primaryMetric}</div>
-                        <p className="text-xs leading-relaxed mt-3" style={{ color: "#9CA3AF" }}>{entry.insight}</p>
-                      </div>
+                      <SermEntryMiniChart entry={entry} />
+                      <p className="text-xs leading-relaxed mt-4" style={{ color: "#9CA3AF" }}>{entry.insight}</p>
                     </button>
                   );
                 })}
