@@ -557,17 +557,14 @@ const SermEntryMiniChart = ({ entry }) => (
 
 const SermOverviewWidget = ({ widget }) => (
   <div className="rounded-3xl p-4" style={{ backgroundColor: "#1C1C1E", border: "1px solid #374151", boxShadow: "0 14px 42px rgba(0,0,0,0.32)" }}>
-    <div className="flex items-start justify-between gap-3 mb-4">
+    <div className="mb-4">
       <div>
         <div className="text-sm font-semibold text-white">{widget.title}</div>
         <div className="text-xs mt-1" style={{ color: "#6B7280" }}>{widget.caption}</div>
       </div>
-      <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: "#2C2C2E" }}>
-        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: "#D1D5DB" }} />
-      </div>
     </div>
-    <div className="grid gap-3">
-      {widget.items.map((item) => {
+    <div>
+      {widget.items.map((item, index) => {
         const zoneColor = item.zoneColor || item.color;
         const rawRatio = widget.max ? item.score / widget.max : 0;
         const normalizedRatio = widget.scale === "inverse" ? 1 - rawRatio : rawRatio;
@@ -576,7 +573,15 @@ const SermOverviewWidget = ({ widget }) => (
         const gaugeSize = widget.items.length > 1 ? 88 : 108;
 
         return (
-          <div key={item.label} className="rounded-2xl p-4 min-w-0 flex items-center gap-4" style={{ backgroundColor: "#17181B", border: "1px solid #2F3137" }}>
+          <div
+            key={item.label}
+            className="min-w-0 flex items-center gap-4"
+            style={{
+              paddingTop: index === 0 ? 0 : "16px",
+              marginTop: index === 0 ? 0 : "16px",
+              borderTop: index === 0 ? "none" : "1px solid #2F3137",
+            }}
+          >
             <div className="relative shrink-0" style={{ width: `${gaugeSize}px`, height: `${gaugeSize}px` }}>
               <div
                 className="absolute inset-0 rounded-full"
@@ -584,7 +589,7 @@ const SermOverviewWidget = ({ widget }) => (
                   background: `conic-gradient(#E5E7EB 0deg ${gaugeAngle}, rgba(255,255,255,0.08) ${gaugeAngle} 360deg)`,
                 }}
               />
-              <div className="absolute inset-[10px] rounded-full" style={{ backgroundColor: "#161618", border: "1px solid rgba(255,255,255,0.06)" }} />
+              <div className="absolute inset-[10px] rounded-full" style={{ backgroundColor: "#1C1C1E", border: "1px solid rgba(255,255,255,0.06)" }} />
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-2">
                 <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: "#6B7280" }}>{item.label}</span>
                 <span className="text-lg font-bold mt-1 leading-none" style={{ color: "#F3F4F6" }}>{item.display}</span>
