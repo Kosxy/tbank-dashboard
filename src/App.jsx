@@ -1374,7 +1374,6 @@ export default function App() {
                       onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(255,221,45,0.45)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
                       onMouseLeave={e => { e.currentTarget.style.borderColor = "#374151"; e.currentTarget.style.transform = "translateY(0)"; }}
                     >
-                      <div className="h-1 w-10 rounded-full mb-4" style={{ backgroundColor: entry.tone }} />
                       <div>
                         <span className="text-sm font-semibold text-white">{entry.label}</span>
                       </div>
