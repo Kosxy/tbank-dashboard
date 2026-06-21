@@ -1687,9 +1687,7 @@ export default function App() {
           position: relative;
         }
         .serm-overview-item + .serm-overview-item {
-          border-top: 1px solid #2F3137;
           margin-top: 16px;
-          padding-top: 16px;
         }
         .grid-serm-entry { grid-template-columns: 1fr; }
         .grid-serm-tabs { grid-template-columns: 1fr; }
@@ -1703,17 +1701,6 @@ export default function App() {
           .grid-two-col { grid-template-columns: repeat(2, 1fr); }
           .grid-serm-overview { grid-template-columns: repeat(2, minmax(0, 1fr)); }
           .grid-serm-overview-items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-          .grid-serm-overview-items::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            width: 1px;
-            background: #2F3137;
-            transform: translateX(-0.5px);
-            pointer-events: none;
-          }
           .serm-overview-item:first-child {
             padding-right: 24px;
           }
@@ -1721,9 +1708,7 @@ export default function App() {
             justify-content: center;
           }
           .serm-overview-item + .serm-overview-item {
-            border-top: none;
             margin-top: 0;
-            padding-top: 0;
             padding-left: 24px;
           }
           .grid-serm-entry { grid-template-columns: repeat(2, 1fr); }
