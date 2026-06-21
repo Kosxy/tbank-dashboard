@@ -438,6 +438,35 @@ const sermEntryPoints = [
   },
 ];
 
+const sermOverviewWidgets = [
+  {
+    title: "Здоровье выдачи",
+    caption: "выше - лучше",
+    max: 100,
+    rows: [
+      { label: "Яндекс", value: 92.9, previous: 90.9, display: "92.9%", previousLabel: "было 90.9%", delta: "+2 п.п.", color: "#22C55E", deltaColor: "#22C55E" },
+      { label: "Google", value: 85.2, previous: 89, display: "85.2%", previousLabel: "было 89%", delta: "-3.8 п.п.", color: "#60A5FA", deltaColor: "#EF4444" },
+    ],
+  },
+  {
+    title: "Негатив",
+    caption: "ниже - лучше",
+    max: 10,
+    rows: [
+      { label: "Яндекс", value: 2.7, previous: 3.6, display: "2.7%", previousLabel: "было 3.6%", delta: "-0.9 п.п.", color: "#22C55E", deltaColor: "#22C55E" },
+      { label: "Google", value: 7.3, previous: 5.5, display: "7.3%", previousLabel: "было 5.5%", delta: "+1.8 п.п.", color: "#EF4444", deltaColor: "#EF4444" },
+    ],
+  },
+  {
+    title: "Публикации",
+    caption: "выполнение плана",
+    max: 20,
+    rows: [
+      { label: "Контент", value: 20, display: "20/20", delta: "100%", color: "#F59E0B", deltaColor: "#22C55E" },
+    ],
+  },
+];
+
 const reviews = [
   { id: 1, author: "Кредитная линия", text: "Позитивный сигнал мая: менеджер быстро разобрался с начислением по кредитной линии и помог клиенту снять спорный вопрос.", rating: 5, date: "01 Май 2026" },
   { id: 2, author: "Оборотный кредит", text: "Свежая зона риска: клиент описывает непонятные списания и просит более детальную выписку по каждому начислению.", rating: 1, date: "29 Май 2026" },
@@ -526,6 +555,49 @@ const SermEntryMiniChart = ({ entry }) => (
         </div>
       );
     })}
+  </div>
+);
+
+const SermOverviewWidget = ({ widget }) => (
+  <div className="rounded-3xl p-4" style={{ backgroundColor: "#1C1C1E", border: "1px solid #374151", boxShadow: "0 14px 42px rgba(0,0,0,0.32)" }}>
+    <div className="flex items-start justify-between gap-3 mb-4">
+      <div>
+        <div className="text-sm font-semibold text-white">{widget.title}</div>
+        <div className="text-xs mt-1" style={{ color: "#6B7280" }}>{widget.caption}</div>
+      </div>
+      <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: `${widget.rows[0].color}1A` }}>
+        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: widget.rows[0].color }} />
+      </div>
+    </div>
+    <div className="space-y-3">
+      {widget.rows.map((row) => {
+        const width = Math.min(100, (row.value / widget.max) * 100);
+        const previousWidth = row.previous === undefined ? null : Math.min(100, (row.previous / widget.max) * 100);
+
+        return (
+          <div key={row.label}>
+            <div className="flex items-center justify-between gap-3 mb-1.5">
+              <span className="text-xs font-medium" style={{ color: "#D1D5DB" }}>{row.label}</span>
+              <span className="flex items-center gap-2 shrink-0">
+                <span className="text-sm font-bold" style={{ color: row.color }}>{row.display}</span>
+                <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-md" style={{ color: row.deltaColor, backgroundColor: `${row.deltaColor}1A` }}>{row.delta}</span>
+              </span>
+            </div>
+            <div className="relative h-3 rounded-full overflow-visible" style={{ backgroundColor: "#2C2C2E" }}>
+              <div className="h-full rounded-full" style={{ width: `${width}%`, backgroundColor: row.color }} />
+              {previousWidth !== null && (
+                <div className="absolute top-[-3px] h-[18px] w-[2px] rounded-full" style={{ left: `${previousWidth}%`, backgroundColor: "#F3F4F6", opacity: 0.85 }} />
+              )}
+            </div>
+            {row.previousLabel && (
+              <div className="flex justify-end mt-1">
+                <span className="text-[10px]" style={{ color: "#6B7280" }}>{row.previousLabel}</span>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
   </div>
 );
 
@@ -1298,19 +1370,16 @@ export default function App() {
 
             {/* ═══ SECTION 4: Search Reputation ═══ */}
             <div className="space-y-4 pt-4">
-              <div className="pl-2 mb-2 flex flex-col md:flex-row md:items-end md:justify-between gap-2">
+              <div className="pl-2 mb-2">
                 <div>
                   <h3 className="text-lg font-semibold text-white">Репутация в поиске</h3>
                   <p className="text-sm mt-1" style={{ color: "#6B7280" }}>Май 2026: Яндекс усилился, Google просел из-за banki.ru в ТОП-10</p>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  {["BSH 92.9% / 85.2%", "негатив 2.7% / 7.3%", "20 публикаций"].map((metric) => (
-                    <span key={metric} className="px-3 py-1.5 rounded-xl text-xs font-medium"
-                      style={{ backgroundColor: "#1C1C1E", border: "1px solid #374151", color: "#D1D5DB" }}>
-                      {metric}
-                    </span>
-                  ))}
-                </div>
+              </div>
+              <div className="grid gap-4 grid-serm-overview">
+                {sermOverviewWidgets.map((widget) => (
+                  <SermOverviewWidget key={widget.title} widget={widget} />
+                ))}
               </div>
               <div className="grid gap-4 grid-serm-entry">
                 {sermEntryPoints.map((entry) => {
@@ -1614,6 +1683,7 @@ export default function App() {
         .grid-top-3 { grid-template-columns: 1fr; }
         .grid-timeline { grid-template-columns: 1fr; }
         .grid-two-col { grid-template-columns: 1fr; }
+        .grid-serm-overview { grid-template-columns: 1fr; }
         .grid-serm-entry { grid-template-columns: 1fr; }
         .grid-serm-tabs { grid-template-columns: 1fr; }
         .grid-serm-metrics { grid-template-columns: 1fr; }
@@ -1624,6 +1694,7 @@ export default function App() {
           .grid-top-3 { grid-template-columns: repeat(3, 1fr); }
           .grid-timeline { grid-template-columns: repeat(2, 1fr); }
           .grid-two-col { grid-template-columns: repeat(2, 1fr); }
+          .grid-serm-overview { grid-template-columns: repeat(3, minmax(0, 1fr)); }
           .grid-serm-entry { grid-template-columns: repeat(2, 1fr); }
           .grid-serm-tabs { grid-template-columns: repeat(2, 1fr); }
           .grid-serm-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
