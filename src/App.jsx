@@ -548,7 +548,7 @@ const SermEntryMiniChart = ({ entry }) => (
 );
 
 const SermOverviewWidget = ({ widget }) => (
-  <div className="rounded-3xl p-4" style={{ backgroundColor: "#1C1C1E", border: "1px solid #374151", boxShadow: "0 14px 42px rgba(0,0,0,0.32)" }}>
+  <div className="rounded-3xl p-4" style={{ backgroundColor: "#1C1C1E", border: "1px solid transparent", boxShadow: "0 14px 42px rgba(0,0,0,0.32)" }}>
     <div className="mb-4">
       <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <div className="text-sm font-semibold text-white">{widget.title}</div>
@@ -575,7 +575,6 @@ const SermOverviewWidget = ({ widget }) => (
                 className="absolute inset-0 rounded-full"
                 style={{
                   background: `conic-gradient(${item.color} 0deg ${gaugeAngle}, rgba(255,255,255,0.08) ${gaugeAngle} 360deg)`,
-                  boxShadow: `0 0 18px ${item.color}22`,
                 }}
               />
               <div className="absolute inset-[10px] rounded-full" style={{ backgroundColor: "#1C1C1E", border: "1px solid rgba(255,255,255,0.06)" }} />
@@ -1390,9 +1389,9 @@ export default function App() {
                   return (
                     <button key={entry.id} type="button" onClick={() => openSermReport(entry)}
                       className="group text-left rounded-3xl p-5"
-                      style={{ backgroundColor: "#1C1C1E", border: "1px solid #374151", minHeight: "224px", boxShadow: "0 14px 42px rgba(0,0,0,0.36)" }}
-                      onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(255,221,45,0.45)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
-                      onMouseLeave={e => { e.currentTarget.style.borderColor = "#374151"; e.currentTarget.style.transform = "translateY(0)"; }}
+                      style={{ backgroundColor: "#1C1C1E", border: "1px solid transparent", minHeight: "224px", boxShadow: "0 14px 42px rgba(0,0,0,0.36)", transition: "transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease" }}
+                      onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#202124"; e.currentTarget.style.boxShadow = "0 18px 48px rgba(0,0,0,0.42)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+                      onMouseLeave={e => { e.currentTarget.style.backgroundColor = "#1C1C1E"; e.currentTarget.style.boxShadow = "0 14px 42px rgba(0,0,0,0.36)"; e.currentTarget.style.transform = "translateY(0)"; }}
                     >
                       <div className="flex items-start justify-between gap-3">
                         <span className="text-sm font-semibold text-white">{entry.label}</span>
@@ -1685,7 +1684,10 @@ export default function App() {
         .grid-timeline { grid-template-columns: 1fr; }
         .grid-two-col { grid-template-columns: 1fr; }
         .grid-serm-overview { grid-template-columns: 1fr; }
-        .grid-serm-overview-items { grid-template-columns: 1fr; }
+        .grid-serm-overview-items {
+          grid-template-columns: 1fr;
+          position: relative;
+        }
         .serm-overview-item + .serm-overview-item {
           border-top: 1px solid #2F3137;
           margin-top: 16px;
@@ -1703,13 +1705,25 @@ export default function App() {
           .grid-two-col { grid-template-columns: repeat(2, 1fr); }
           .grid-serm-overview { grid-template-columns: repeat(2, minmax(0, 1fr)); }
           .grid-serm-overview-items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+          .grid-serm-overview-items::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 1px;
+            background: #2F3137;
+            transform: translateX(-0.5px);
+            pointer-events: none;
+          }
+          .serm-overview-item:first-child {
+            padding-right: 24px;
+          }
           .serm-overview-item + .serm-overview-item {
             border-top: none;
             margin-top: 0;
             padding-top: 0;
-            border-left: 1px solid #2F3137;
-            margin-left: 16px;
-            padding-left: 16px;
+            padding-left: 24px;
           }
           .grid-serm-entry { grid-template-columns: repeat(2, 1fr); }
           .grid-serm-tabs { grid-template-columns: repeat(2, 1fr); }
