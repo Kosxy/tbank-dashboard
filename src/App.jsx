@@ -346,11 +346,8 @@ const sermEntryPoints = [
     icon: CheckCircle2,
     tone: "#22C55E",
     meta: "Ключевые показатели и общий вывод",
-    stats: [
-      { label: "BSH Яндекс", value: "92.9%" },
-      { label: "BSH Google", value: "85.2%" },
-      { label: "Негатив", value: "2.7% / 7.3%" },
-    ],
+    primaryMetric: "BSH: 92.9% / 85.2%",
+    insight: "Яндекс растет, Google просел из-за banki.ru в ТОП-10.",
   },
   {
     id: "serp",
@@ -358,11 +355,8 @@ const sermEntryPoints = [
     icon: ExternalLink,
     tone: "#FFDD2D",
     meta: "Запросы, домены и распределение трафика",
-    stats: [
-      { label: "Запросов", value: "10" },
-      { label: "ТОП-домен", value: "tbank.ru" },
-      { label: "Свой трафик", value: "53% / 75%" },
-    ],
+    primaryMetric: "Свой трафик: 53% / 75%",
+    insight: "tbank.ru лидирует, но агрегаторы держат заметную долю выдачи.",
   },
   {
     id: "problems",
@@ -370,11 +364,8 @@ const sermEntryPoints = [
     icon: AlertCircle,
     tone: "#EF4444",
     meta: "URL с негативом в ТОП-10",
-    stats: [
-      { label: "Негативных URL", value: "4" },
-      { label: "Домен", value: "banki.ru" },
-      { label: "Лучшая позиция", value: "#1" },
-    ],
+    primaryMetric: "4 URL banki.ru",
+    insight: "Главный риск - отзывы на позициях #1 по оборотным запросам.",
   },
   {
     id: "ratings",
@@ -382,11 +373,8 @@ const sermEntryPoints = [
     icon: MessageSquare,
     tone: "#A855F7",
     meta: "Отзовики, оценки и темы ORM",
-    stats: [
-      { label: "Карточек", value: "5" },
-      { label: "Banki.ru", value: "4.5" },
-      { label: "Sravni", value: "4.69" },
-    ],
+    primaryMetric: "Banki 4.5 · Sravni 4.69",
+    insight: "План контента закрыт, Banki растет, Sravni слегка просел.",
   },
   {
     id: "competitors",
@@ -394,11 +382,8 @@ const sermEntryPoints = [
     icon: TrendingUp,
     tone: "#60A5FA",
     meta: "Позитив и негатив по банкам",
-    stats: [
-      { label: "Позитив Т-Банка", value: "13" },
-      { label: "Негатив Т-Банка", value: "13" },
-      { label: "Лидер позитива", value: "Альфа" },
-    ],
+    primaryMetric: "Т-Банк: 13 / 13",
+    insight: "Паритет позитива и негатива; ключевая тема - поддержка.",
   },
   {
     id: "plan",
@@ -406,11 +391,8 @@ const sermEntryPoints = [
     icon: Lightbulb,
     tone: "#F59E0B",
     meta: "Приоритеты по Яндексу и Google",
-    stats: [
-      { label: "Контента", value: "20" },
-      { label: "Направлений", value: "2" },
-      { label: "Фокус", value: "banki.ru" },
-    ],
+    primaryMetric: "20 публикаций",
+    insight: "Фокус - продвинуть позитив на banki.ru и вытеснить негатив.",
   },
 ];
 
@@ -1242,38 +1224,36 @@ export default function App() {
 
             {/* ═══ SECTION 4: Search Reputation ═══ */}
             <div className="space-y-4 pt-4">
-              <div className="pl-2 mb-2">
-                <h3 className="text-lg font-semibold text-white">Репутация в поиске</h3>
-                <p className="text-sm mt-1" style={{ color: "#6B7280" }}>SERM-отчет по поисковой выдаче, отзовикам, конкурентам и плану работ</p>
+              <div className="pl-2 mb-2 flex flex-col md:flex-row md:items-end md:justify-between gap-2">
+                <div>
+                  <h3 className="text-lg font-semibold text-white">Репутация в поиске</h3>
+                  <p className="text-sm mt-1" style={{ color: "#6B7280" }}>Май 2026: Яндекс усилился, Google просел из-за banki.ru в ТОП-10</p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {["BSH 92.9% / 85.2%", "негатив 2.7% / 7.3%", "20 публикаций"].map((metric) => (
+                    <span key={metric} className="px-3 py-1.5 rounded-xl text-xs font-medium"
+                      style={{ backgroundColor: "#1C1C1E", border: "1px solid #374151", color: "#D1D5DB" }}>
+                      {metric}
+                    </span>
+                  ))}
+                </div>
               </div>
               <div className="grid gap-4 grid-serm-entry">
                 {sermEntryPoints.map((entry) => {
-                  const Icon = entry.icon;
-
                   return (
                     <button key={entry.id} type="button" onClick={() => openSermReport(entry)}
                       className="group text-left rounded-3xl p-5"
-                      style={{ backgroundColor: "#1C1C1E", border: "1px solid #374151", minHeight: "214px", boxShadow: "0 14px 42px rgba(0,0,0,0.36)" }}
+                      style={{ backgroundColor: "#1C1C1E", border: "1px solid #374151", minHeight: "148px", boxShadow: "0 14px 42px rgba(0,0,0,0.36)" }}
                       onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(255,221,45,0.45)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
                       onMouseLeave={e => { e.currentTarget.style.borderColor = "#374151"; e.currentTarget.style.transform = "translateY(0)"; }}
                     >
-                      <div className="flex items-start justify-between gap-4">
-                        <span className="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0" style={{ backgroundColor: `${entry.tone}1A`, color: entry.tone }}>
-                          <Icon className="w-5 h-5" />
-                        </span>
-                        <ChevronRight className="w-4 h-4 shrink-0 mt-1" style={{ color: "#4B5563" }} />
+                      <div className="h-1 w-10 rounded-full mb-4" style={{ backgroundColor: entry.tone }} />
+                      <div>
+                        <span className="text-sm font-semibold text-white">{entry.label}</span>
                       </div>
-                      <div className="mt-4">
-                        <h4 className="text-base font-semibold text-white">{entry.label}</h4>
-                        <p className="text-xs leading-relaxed mt-2" style={{ color: "#9CA3AF" }}>{entry.meta}</p>
-                      </div>
-                      <div className="grid grid-cols-3 gap-2 mt-4">
-                        {entry.stats.map((stat) => (
-                          <div key={stat.label} className="rounded-xl px-2.5 py-2 min-w-0" style={{ backgroundColor: "#151518", border: "1px solid #2F3137" }}>
-                            <div className="text-[10px] leading-tight truncate" style={{ color: "#6B7280" }}>{stat.label}</div>
-                            <div className="text-xs font-semibold mt-1 truncate" style={{ color: entry.tone }}>{stat.value}</div>
-                          </div>
-                        ))}
+                      <div className="mt-5">
+                        <div className="text-2xl font-bold leading-tight" style={{ color: entry.tone }}>{entry.primaryMetric}</div>
+                        <p className="text-xs leading-relaxed mt-3" style={{ color: "#9CA3AF" }}>{entry.insight}</p>
                       </div>
                     </button>
                   );
