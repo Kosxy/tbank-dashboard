@@ -469,8 +469,8 @@ const reviews = [
 
 const Card = ({ children, className = "", style, ...props }) => (
   <div
-    className={`ui-card border rounded-3xl p-6 shadow-2xl ${className}`}
-    style={{ backgroundColor: "#1C1C1E", borderColor: "#374151", ...style }}
+    className={`ui-card rounded-3xl p-6 shadow-2xl ${className}`}
+    style={{ backgroundColor: "#1C1C1E", ...style }}
     {...props}
   >
     {children}
@@ -479,7 +479,7 @@ const Card = ({ children, className = "", style, ...props }) => (
 
 const InfoPopup = ({ text, onClose }) => (
   <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(0,0,0,0.7)" }} onClick={onClose}>
-    <div className="relative w-full max-w-md rounded-2xl p-6" style={{ backgroundColor: "#1C1C1E", border: "1px solid #374151" }} onClick={e => e.stopPropagation()}>
+    <div className="relative w-full max-w-md rounded-2xl p-6" style={{ backgroundColor: "#1C1C1E", border: "1px solid transparent" }} onClick={e => e.stopPropagation()}>
       <button onClick={onClose} className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center rounded-lg"
         style={{ backgroundColor: "#2C2C2E", color: "#9CA3AF" }}
         onMouseEnter={e => { e.currentTarget.style.color = "#fff"; }}
@@ -550,10 +550,8 @@ const SermEntryMiniChart = ({ entry }) => (
 const SermOverviewWidget = ({ widget }) => (
   <div className="rounded-3xl p-4" style={{ backgroundColor: "#1C1C1E", border: "1px solid transparent", boxShadow: "0 14px 42px rgba(0,0,0,0.32)" }}>
     <div className="mb-4">
-      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-        <div className="text-sm font-semibold text-white">{widget.title}</div>
-        <div className="text-xs sm:text-right" style={{ color: "#6B7280" }}>{widget.caption}</div>
-      </div>
+      <div className="text-sm font-semibold text-white">{widget.title}</div>
+      <div className="text-xs mt-1" style={{ color: "#E5E7EB" }}>{widget.caption}</div>
     </div>
     <div className={`grid gap-0 ${widget.items.length > 1 ? "grid-serm-overview-items" : ""}`} style={{ gridTemplateColumns: widget.items.length > 1 ? undefined : "1fr" }}>
       {widget.items.map((item) => {
@@ -737,7 +735,7 @@ export default function App() {
     );
 
     const MetricCard = ({ label, value, sub, color = "#FFDD2D" }) => (
-      <div className="rounded-2xl p-4 min-w-0" style={{ backgroundColor: "#151518", border: "1px solid #2F3137" }}>
+      <div className="rounded-2xl p-4 min-w-0" style={{ backgroundColor: "#151518", border: "1px solid transparent" }}>
         <div className="text-xs font-medium" style={{ color: "#9CA3AF" }}>{label}</div>
         <div className="text-2xl font-bold mt-2 break-words" style={{ color }}>{value}</div>
         {sub && <div className="text-xs mt-1 leading-relaxed" style={{ color: "#6B7280" }}>{sub}</div>}
@@ -787,7 +785,7 @@ export default function App() {
                 <MetricCard label="Негатив" value={`${engine.negative}%`} sub={engine.negativeDelta} color="#EF4444" />
                 <MetricCard label="Негативных позиций" value={engine.negativePages} sub={`${engine.negativePagesDelta} к прошлому замеру`} color="#F97316" />
               </div>
-              <div className="mt-5 rounded-2xl p-4" style={{ backgroundColor: "#111113", border: "1px solid #2F3137" }}>
+              <div className="mt-5 rounded-2xl p-4" style={{ backgroundColor: "#111113", border: "1px solid transparent" }}>
                 <p className="text-sm leading-relaxed" style={{ color: "#D1D5DB" }}>{engine.insight}</p>
               </div>
             </Card>
@@ -798,7 +796,7 @@ export default function App() {
           <CardHeader title="Распределение целевых долей" subtitle="Пороговые KPI из отчета по поисковым системам" />
           <div className="grid gap-5 grid-two-col">
             {sermData.engines.map((engine) => (
-              <div key={engine.id} className="rounded-2xl p-4" style={{ backgroundColor: "#151518", border: "1px solid #2F3137" }}>
+              <div key={engine.id} className="rounded-2xl p-4" style={{ backgroundColor: "#151518", border: "1px solid transparent" }}>
                 <div className="font-semibold text-white mb-4">{engine.name}</div>
                 <div className="space-y-3">
                   <ProgressRow label="Позитив" value={engine.target.positive} color="#22C55E" />
@@ -868,7 +866,7 @@ export default function App() {
           <CardHeader title="Домены в выдаче" subtitle="Кто чаще всего появляется в ТОП-10" />
           <div className="grid gap-3 grid-serm-domains">
             {sermData.domains.map((domain) => (
-              <div key={domain.domain} className="rounded-2xl p-4" style={{ backgroundColor: "#151518", border: "1px solid #2F3137" }}>
+              <div key={domain.domain} className="rounded-2xl p-4" style={{ backgroundColor: "#151518", border: "1px solid transparent" }}>
                 <div className="text-sm font-semibold text-white truncate">{domain.domain}</div>
                 <div className="text-xs mt-1" style={{ color: "#9CA3AF" }}>{domain.type}</div>
                 <div className="flex items-end justify-between gap-3 mt-4">
@@ -900,7 +898,7 @@ export default function App() {
           <CardHeader title="URL с негативом" subtitle="Приоритеты для вытеснения и работы с поведенческими факторами" />
           <div className="space-y-3">
             {sermData.negativeSources.map((item, index) => (
-              <div key={item.url} className="rounded-2xl p-4" style={{ backgroundColor: "#151518", border: "1px solid #2F3137" }}>
+              <div key={item.url} className="rounded-2xl p-4" style={{ backgroundColor: "#151518", border: "1px solid transparent" }}>
                 <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-3">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
@@ -930,7 +928,7 @@ export default function App() {
           <CardHeader title="Рейтинги на площадках" subtitle="Карточки, которые видны в поисковой выдаче" />
           <div className="grid gap-3 grid-serm-domains">
             {sermData.ratings.map((item) => (
-              <div key={item.site} className="rounded-2xl p-4" style={{ backgroundColor: "#151518", border: "1px solid #2F3137" }}>
+              <div key={item.site} className="rounded-2xl p-4" style={{ backgroundColor: "#151518", border: "1px solid transparent" }}>
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="text-sm font-semibold text-white truncate">{item.site}</div>
@@ -997,7 +995,7 @@ export default function App() {
         <CardHeader title={title} subtitle={conclusion} />
         <div className="space-y-4">
           {rows.map((item) => (
-            <div key={item.bank} className="rounded-2xl p-4" style={{ backgroundColor: "#151518", border: "1px solid #2F3137" }}>
+            <div key={item.bank} className="rounded-2xl p-4" style={{ backgroundColor: "#151518", border: "1px solid transparent" }}>
               <div className="flex items-center justify-between gap-3 mb-3">
                 <span className="font-semibold text-white">{item.bank}</span>
                 <span className="text-lg font-bold" style={{ color }}>{item.total}</span>
@@ -1035,7 +1033,7 @@ export default function App() {
                 <h3 className="text-xl font-bold text-white">{item.engine}</h3>
                 <span className="px-3 py-1 rounded-lg text-xs font-semibold" style={{ backgroundColor: `${item.accent}1A`, color: item.accent }}>приоритет</span>
               </div>
-              <div className="rounded-2xl p-4 mb-4" style={{ backgroundColor: "#151518", border: "1px solid #2F3137" }}>
+              <div className="rounded-2xl p-4 mb-4" style={{ backgroundColor: "#151518", border: "1px solid transparent" }}>
                 <div className="text-sm font-semibold" style={{ color: item.accent }}>{item.priority}</div>
               </div>
               <div className="space-y-3">
@@ -1097,7 +1095,7 @@ export default function App() {
           <div className="flex flex-wrap gap-2">
             {[sermReportMeta.date, `сравнение: ${sermReportMeta.compareDate}`, sermReportMeta.depth].map((chip) => (
               <span key={chip} className="px-3 py-2 rounded-xl text-xs font-medium"
-                style={{ backgroundColor: "#1C1C1E", border: "1px solid #374151", color: "#D1D5DB" }}>
+                style={{ backgroundColor: "#1C1C1E", border: "1px solid transparent", color: "#D1D5DB" }}>
                 {chip}
               </span>
             ))}
@@ -1114,7 +1112,7 @@ export default function App() {
                 className="flex items-center gap-3 rounded-2xl p-4 text-left"
                 style={{
                   backgroundColor: isActive ? "rgba(255,221,45,0.12)" : "#1C1C1E",
-                  border: isActive ? "1px solid rgba(255,221,45,0.45)" : "1px solid #374151",
+                  border: "1px solid transparent",
                   color: "#E5E7EB",
                   minHeight: "82px",
                 }}
@@ -1152,7 +1150,7 @@ export default function App() {
           <h1 className="text-3xl md:text-4xl font-bold text-white leading-tight">Аналитика репутации кредитов для бизнеса Т-Банка</h1>
           <p className="mt-3 mb-5 max-w-2xl leading-relaxed" style={{ color: "#9CA3AF" }}>Комплексный анализ репутации, сравнение с рынком и историческая динамика</p>
           <div className="flex items-center gap-3">
-            <div className="px-5 py-2 rounded-xl text-sm font-medium flex items-center gap-2.5" style={{ backgroundColor: "#1C1C1E", border: "1px solid #374151", color: "#D1D5DB" }}>
+            <div className="px-5 py-2 rounded-xl text-sm font-medium flex items-center gap-2.5" style={{ backgroundColor: "#1C1C1E", border: "1px solid transparent", color: "#D1D5DB" }}>
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: "#22C55E", animation: "ping 1s cubic-bezier(0,0,0.2,1) infinite" }}></span>
                 <span className="relative inline-flex rounded-full h-2 w-2" style={{ backgroundColor: "#22C55E" }}></span>
@@ -1161,7 +1159,7 @@ export default function App() {
             </div>
             <button onClick={() => setActiveView("sources")}
               className="px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-1.5"
-              style={{ backgroundColor: "#2C2C2E", border: "1px solid #374151", color: "#D1D5DB" }}
+              style={{ backgroundColor: "#2C2C2E", border: "1px solid transparent", color: "#D1D5DB" }}
               onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#FFDD2D"; e.currentTarget.style.color = "#000"; }}
               onMouseLeave={e => { e.currentTarget.style.backgroundColor = "#2C2C2E"; e.currentTarget.style.color = "#D1D5DB"; }}
             ><ExternalLink className="w-3.5 h-3.5" /> Источники</button>
@@ -1288,7 +1286,7 @@ export default function App() {
 
               <div className="grid gap-4 grid-timeline">
                 {timelineEvents.map((ev, idx) => (
-                  <Card key={idx} className="p-5 flex flex-col justify-between" style={{ borderRadius: "16px", borderColor: "rgba(55,65,81,0.6)", backgroundColor: "rgba(28,28,30,0.8)", backdropFilter: "blur(8px)" }}>
+                  <Card key={idx} className="p-5 flex flex-col justify-between" style={{ borderRadius: "16px", borderColor: "transparent", backgroundColor: "rgba(28,28,30,0.8)", backdropFilter: "blur(8px)" }}>
                     <div>
                       <div className="text-xs font-bold mb-2" style={{ color: "#6B7280" }}>{ev.date}</div>
                       <h4 className="text-base font-semibold mb-2" style={{ color: ev.type === "positive" ? "#22C55E" : ev.type === "forecast" ? "#FFDD2D" : "#EF4444" }}>{ev.title}</h4>
@@ -1338,7 +1336,7 @@ export default function App() {
                         "Автоматическое подтягивание оборотов из других банков при скоринге.",
                         "Одобрение бизнесу младше 6 месяцев без залога — уникально на рынке."
                       ].map((text, i) => (
-                        <li key={i} className="flex gap-2 text-xs p-2.5 rounded-xl" style={{ color: "#D1D5DB", backgroundColor: "rgba(44,44,46,0.4)", border: "1px solid #374151" }}>
+                        <li key={i} className="flex gap-2 text-xs p-2.5 rounded-xl" style={{ color: "#D1D5DB", backgroundColor: "rgba(44,44,46,0.4)", border: "1px solid transparent" }}>
                           <CheckCircle2 className="w-4 h-4 shrink-0" style={{ color: "#22C55E" }} /> {text}
                         </li>
                       ))}
@@ -1352,13 +1350,13 @@ export default function App() {
                         "6-е место в BIBR 2025 — отставание от ПСБ, Альфа и Точки по UX.",
                         "Непрозрачность отказов: часть клиентов получают отказ без объяснения причин."
                       ].map((text, i) => (
-                        <li key={i} className="flex gap-2 text-xs p-2.5 rounded-xl" style={{ color: "#D1D5DB", backgroundColor: "rgba(44,44,46,0.4)", border: "1px solid #374151" }}>
+                        <li key={i} className="flex gap-2 text-xs p-2.5 rounded-xl" style={{ color: "#D1D5DB", backgroundColor: "rgba(44,44,46,0.4)", border: "1px solid transparent" }}>
                           <AlertCircle className="w-4 h-4 shrink-0" style={{ color: "#EF4444" }} /> {text}
                         </li>
                       ))}
                     </ul>
                   </div>
-                  <div className="flex gap-3 items-start mt-2 p-4 rounded-xl" style={{ backgroundColor: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.28)" }}>
+                  <div className="flex gap-3 items-start mt-2 p-4 rounded-xl" style={{ backgroundColor: "rgba(34,197,94,0.12)", border: "1px solid transparent" }}>
                     <Lightbulb className="w-5 h-5 shrink-0 mt-0.5" style={{ color: "#22C55E" }} />
                     <div>
                       <h5 className="text-xs font-bold mb-1 uppercase tracking-wide" style={{ color: "#22C55E" }}>Ключевой инсайт</h5>
@@ -1504,7 +1502,7 @@ export default function App() {
               <div className="grid gap-4 grid-reviews">
                 {reviews.map((review) => (
                   <div key={review.id} className="flex items-start gap-4 p-4"
-                    style={{ backgroundColor: "#1C1C1E", border: "1px solid #374151", borderRadius: "16px" }}
+                    style={{ backgroundColor: "#1C1C1E", border: "1px solid transparent", borderRadius: "16px" }}
                   >
                     <div className="p-2 rounded-xl" style={{ backgroundColor: review.rating >= 4 ? "rgba(255,221,45,0.1)" : "#1F2937", color: review.rating >= 4 ? "#FFDD2D" : "#9CA3AF" }}>
                       <MessageSquare className="w-5 h-5" />
@@ -1534,7 +1532,7 @@ export default function App() {
       {/* Month detail popup — rendered at root level */}
       {selectedMonth && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(0,0,0,0.75)" }} onClick={() => setSelectedMonth(null)}>
-          <div className="relative w-full max-w-2xl rounded-2xl p-6 overflow-y-auto" style={{ backgroundColor: "#1C1C1E", border: "1px solid #374151", maxHeight: "90vh" }} onClick={e => e.stopPropagation()}>
+          <div className="relative w-full max-w-2xl rounded-2xl p-6 overflow-y-auto" style={{ backgroundColor: "#1C1C1E", border: "1px solid transparent", maxHeight: "90vh" }} onClick={e => e.stopPropagation()}>
             <button onClick={() => setSelectedMonth(null)} className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center rounded-lg"
               style={{ backgroundColor: "#2C2C2E", color: "#9CA3AF" }}
               onMouseEnter={e => { e.currentTarget.style.color = "#fff"; }}
@@ -1572,22 +1570,22 @@ export default function App() {
               <h4 className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: "#6B7280" }}>Топ-3 темы месяца</h4>
               <div className="flex flex-wrap gap-2">
                 {selectedMonth.topThemes.map((t, i) => (
-                  <span key={i} className="text-xs px-3 py-1.5 rounded-lg" style={{ backgroundColor: "#2C2C2E", color: "#D1D5DB", border: "1px solid #374151" }}>{t}</span>
+                  <span key={i} className="text-xs px-3 py-1.5 rounded-lg" style={{ backgroundColor: "#2C2C2E", color: "#D1D5DB", border: "1px solid transparent" }}>{t}</span>
                 ))}
               </div>
             </div>
 
-            <div className="mb-3 p-4 rounded-xl" style={{ backgroundColor: "rgba(255,221,45,0.08)", border: "1px solid rgba(255,221,45,0.15)" }}>
+            <div className="mb-3 p-4 rounded-xl" style={{ backgroundColor: "rgba(255,221,45,0.08)", border: "1px solid transparent" }}>
               <h4 className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: "#22C55E" }}>Позитивная цитата</h4>
               <p className="text-sm leading-relaxed italic" style={{ color: "#D1D5DB" }}>«{selectedMonth.quote}»</p>
             </div>
 
-            <div className="mb-3 p-4 rounded-xl" style={{ backgroundColor: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.15)" }}>
+            <div className="mb-3 p-4 rounded-xl" style={{ backgroundColor: "rgba(239,68,68,0.06)", border: "1px solid transparent" }}>
               <h4 className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: "#EF4444" }}>Негативная цитата</h4>
               <p className="text-sm leading-relaxed italic" style={{ color: "#D1D5DB" }}>«{selectedMonth.negQuote}»</p>
             </div>
 
-            <div className="mb-5 p-4 rounded-xl" style={{ backgroundColor: "rgba(168,85,247,0.08)", border: "1px solid rgba(168,85,247,0.2)" }}>
+            <div className="mb-5 p-4 rounded-xl" style={{ backgroundColor: "rgba(168,85,247,0.08)", border: "1px solid transparent" }}>
               <h4 className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: "#A855F7" }}>Точка роста</h4>
               <p className="text-sm leading-relaxed" style={{ color: "#D1D5DB" }}>{selectedMonth.growthPoint}</p>
             </div>
@@ -1718,6 +1716,9 @@ export default function App() {
           }
           .serm-overview-item:first-child {
             padding-right: 24px;
+          }
+          .serm-overview-item {
+            justify-content: center;
           }
           .serm-overview-item + .serm-overview-item {
             border-top: none;
