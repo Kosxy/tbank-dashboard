@@ -141,6 +141,17 @@ const sourcesData = [
   { id: 8, name: "Sravni.ru: кредиты для бизнеса Т-Банка", type: "Сравнение условий", link: "https://www.sravni.ru/biznes-kredity/bank/t-bank/", date: "Июн 2026" },
 ];
 
+const sermReportPath = `${import.meta.env.BASE_URL}reports/credit-report-may-2026.html`;
+
+const sermEntryPoints = [
+  { label: "Сводка репутации", anchor: "kpi-root", icon: CheckCircle2, tone: "#22C55E", meta: "Ключевые показатели и общий вывод" },
+  { label: "Поисковая выдача", anchor: "summary-wrap", icon: ExternalLink, tone: "#FFDD2D", meta: "Сводка по запросам и тональности" },
+  { label: "Проблемные источники", anchor: "top-negative-wrap", icon: AlertCircle, tone: "#EF4444", meta: "ТОП URL с негативными позициями" },
+  { label: "Рейтинги и отзывы", anchor: "ratings-root", icon: MessageSquare, tone: "#A855F7", meta: "Отзовики, оценки и тональность" },
+  { label: "Конкуренты", anchor: "competitors-block", icon: TrendingUp, tone: "#60A5FA", meta: "Позитив и негатив по конкурентам" },
+  { label: "План работ", anchor: "conclusions-plan-yandex", icon: Lightbulb, tone: "#F59E0B", meta: "Действия по Яндексу и Google" },
+];
+
 const reviews = [
   { id: 1, author: "Кредитная линия", text: "Позитивный сигнал мая: менеджер быстро разобрался с начислением по кредитной линии и помог клиенту снять спорный вопрос.", rating: 5, date: "01 Май 2026" },
   { id: 2, author: "Оборотный кредит", text: "Свежая зона риска: клиент описывает непонятные списания и просит более детальную выписку по каждому начислению.", rating: 1, date: "29 Май 2026" },
@@ -259,9 +270,11 @@ const EventLabel = ({ viewBox, value }) => {
 
 export default function App() {
   const [activeView, setActiveView] = useState("main");
+  const [selectedSermEntry, setSelectedSermEntry] = useState(sermEntryPoints[0]);
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const hoveredBarIndex = useRef(null);
+  const reportFrameRef = useRef(null);
 
   useEffect(() => {
     const onScroll = () => {
@@ -317,6 +330,97 @@ export default function App() {
     </div>
   );
 
+  const openSermReport = (entry) => {
+    setSelectedSermEntry(entry);
+    setActiveView("serm");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const scrollSermReportToAnchor = () => {
+    const frame = reportFrameRef.current;
+    const anchor = selectedSermEntry.anchor;
+
+    try {
+      const doc = frame?.contentDocument || frame?.contentWindow?.document;
+      const scrollToTarget = () => {
+        const target = doc?.getElementById(anchor);
+        if (target) target.scrollIntoView({ block: "start" });
+        frame?.contentWindow?.history.replaceState(null, "", `#${anchor}`);
+      };
+
+      window.setTimeout(scrollToTarget, 160);
+      window.setTimeout(scrollToTarget, 700);
+    } catch {
+      // If the browser blocks iframe access, the hash in src still opens the report.
+    }
+  };
+
+  const renderSermView = () => {
+    const reportSrc = `${sermReportPath}#${selectedSermEntry.anchor}`;
+
+    return (
+      <div className="space-y-6">
+        <button onClick={() => setActiveView("main")}
+          className="flex items-center gap-2 text-sm mb-4" style={{ color: "#9CA3AF" }}
+          onMouseEnter={e => { e.currentTarget.style.color = "#FFDD2D"; }}
+          onMouseLeave={e => { e.currentTarget.style.color = "#9CA3AF"; }}
+        ><ArrowLeft className="w-4 h-4" /> Назад к сводке</button>
+
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 pl-2">
+          <div>
+            <h2 className="text-2xl md:text-3xl font-bold text-white">Репутация в поиске</h2>
+            <p className="text-sm mt-2 max-w-2xl" style={{ color: "#9CA3AF" }}>SERM-отчет по выдаче, источникам, рейтингам, конкурентам и плану работ за май 2026.</p>
+          </div>
+          <a href={reportSrc} target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-xl w-fit"
+            style={{ backgroundColor: "#2C2C2E", border: "1px solid #374151", color: "#D1D5DB" }}
+            onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#FFDD2D"; e.currentTarget.style.color = "#000"; }}
+            onMouseLeave={e => { e.currentTarget.style.backgroundColor = "#2C2C2E"; e.currentTarget.style.color = "#D1D5DB"; }}
+          >Открыть отчет <ExternalLink className="w-3.5 h-3.5" /></a>
+        </div>
+
+        <div className="grid gap-3 grid-serm-tabs">
+          {sermEntryPoints.map((entry) => {
+            const Icon = entry.icon;
+            const isActive = entry.anchor === selectedSermEntry.anchor;
+
+            return (
+              <button key={entry.anchor} type="button" onClick={() => setSelectedSermEntry(entry)}
+                className="flex items-center gap-3 rounded-2xl p-4 text-left"
+                style={{
+                  backgroundColor: isActive ? "rgba(255,221,45,0.12)" : "#1C1C1E",
+                  border: isActive ? "1px solid rgba(255,221,45,0.45)" : "1px solid #374151",
+                  color: "#E5E7EB",
+                  minHeight: "82px",
+                }}
+              >
+                <span className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: `${entry.tone}1A`, color: entry.tone }}>
+                  <Icon className="w-5 h-5" />
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-sm font-semibold text-white">{entry.label}</span>
+                  <span className="block text-xs mt-1 leading-snug" style={{ color: "#9CA3AF" }}>{entry.meta}</span>
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="overflow-hidden rounded-3xl" style={{ border: "1px solid #374151", backgroundColor: "#F5F7FA", boxShadow: "0 14px 42px rgba(0,0,0,0.36)" }}>
+          <iframe
+            key={selectedSermEntry.anchor}
+            ref={reportFrameRef}
+            title={`SERM отчет: ${selectedSermEntry.label}`}
+            src={reportSrc}
+            onLoad={scrollSermReportToAnchor}
+            className="w-full block"
+            style={{ height: "min(82vh, 960px)", minHeight: "680px", border: 0, backgroundColor: "#F5F7FA" }}
+          />
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="app-shell min-h-screen p-4 md:p-8 overflow-x-hidden" style={{ color: "#E5E7EB" }}>
       <div className="max-w-7xl mx-auto space-y-7 md:space-y-8">
@@ -349,7 +453,7 @@ export default function App() {
           </div>
         </div>
 
-        {activeView === "sources" ? renderSourcesView() : (
+        {activeView === "sources" ? renderSourcesView() : activeView === "serm" ? renderSermView() : (
           <>
             {/* ═══ SECTION 1: Top Metrics ═══ */}
             <div className="grid gap-6 grid-top-3">
@@ -550,6 +654,39 @@ export default function App() {
                   </div>
                 </div>
               </Card>
+            </div>
+
+            {/* ═══ SECTION 4: Search Reputation ═══ */}
+            <div className="space-y-4 pt-4">
+              <div className="pl-2 mb-2">
+                <h3 className="text-lg font-semibold text-white">Репутация в поиске</h3>
+                <p className="text-sm mt-1" style={{ color: "#6B7280" }}>SERM-отчет по поисковой выдаче, отзовикам, конкурентам и плану работ</p>
+              </div>
+              <div className="grid gap-4 grid-serm-entry">
+                {sermEntryPoints.map((entry) => {
+                  const Icon = entry.icon;
+
+                  return (
+                    <button key={entry.anchor} type="button" onClick={() => openSermReport(entry)}
+                      className="group text-left rounded-3xl p-5"
+                      style={{ backgroundColor: "#1C1C1E", border: "1px solid #374151", minHeight: "142px", boxShadow: "0 14px 42px rgba(0,0,0,0.36)" }}
+                      onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(255,221,45,0.45)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+                      onMouseLeave={e => { e.currentTarget.style.borderColor = "#374151"; e.currentTarget.style.transform = "translateY(0)"; }}
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <span className="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0" style={{ backgroundColor: `${entry.tone}1A`, color: entry.tone }}>
+                          <Icon className="w-5 h-5" />
+                        </span>
+                        <ChevronRight className="w-4 h-4 shrink-0 mt-1" style={{ color: "#4B5563" }} />
+                      </div>
+                      <div className="mt-4">
+                        <h4 className="text-base font-semibold text-white">{entry.label}</h4>
+                        <p className="text-xs leading-relaxed mt-2" style={{ color: "#9CA3AF" }}>{entry.meta}</p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             {/* ═══ SECTION 4: Forecasts & Market ═══ */}
@@ -830,12 +967,20 @@ export default function App() {
         .grid-top-3 { grid-template-columns: 1fr; }
         .grid-timeline { grid-template-columns: 1fr; }
         .grid-two-col { grid-template-columns: 1fr; }
+        .grid-serm-entry { grid-template-columns: 1fr; }
+        .grid-serm-tabs { grid-template-columns: 1fr; }
         .grid-reviews { grid-template-columns: 1fr; }
         @media (min-width: 640px) {
           .grid-top-3 { grid-template-columns: repeat(3, 1fr); }
           .grid-timeline { grid-template-columns: repeat(2, 1fr); }
           .grid-two-col { grid-template-columns: repeat(2, 1fr); }
+          .grid-serm-entry { grid-template-columns: repeat(2, 1fr); }
+          .grid-serm-tabs { grid-template-columns: repeat(2, 1fr); }
           .grid-reviews { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (min-width: 1024px) {
+          .grid-serm-entry { grid-template-columns: repeat(3, 1fr); }
+          .grid-serm-tabs { grid-template-columns: repeat(3, 1fr); }
         }
         @media (max-width: 639px) {
           .ui-card:hover { transform: none; }
